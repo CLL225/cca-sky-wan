@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/cca-kb/design_experience.schema.json",
+  "title": "DesignExperience",
+  "description": "A traceable piece of expert design experience for TCP/QUIC congestion control.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "experience_type",
+    "problem_context",
+    "design_rationale",
+    "design_decision",
+    "mechanism",
+    "tradeoffs",
+    "applicability",
+    "evidence",
+    "knowledge_status",
+    "metadata"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^exp-[0-9]{3}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "experience_type": {
+      "type": "string",
+      "enum": [
+        "mechanism_design",
+        "parameter_design",
+        "problem_analysis",
+        "tradeoff_analysis",
+        "evaluation_method",
+        "system_design"
+      ]
+    },
+    "problem_context": { "$ref": "#/$defs/problemContext" },
+    "design_rationale": { "$ref": "#/$defs/designRationale" },
+    "design_decision": { "$ref": "#/$defs/designDecision" },
+    "mechanism": { "$ref": "#/$defs/mechanism" },
+    "tradeoffs": { "$ref": "#/$defs/tradeoffs" },
+    "failure_modes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "applicability": { "$ref": "#/$defs/applicability" },
+    "parameter_guidance": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/parameterGuidance" }
+    },
+    "evaluation": { "$ref": "#/$defs/evaluation" },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evidenceRef" }
+    },
+    "knowledge_status": {
+      "type": "string",
+      "enum": ["source_reported", "cross_source_synthesis", "inference"]
+    },
+    "related_experiences": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^exp-[0-9]{3}$" }
+    },
+    "metadata": { "$ref": "#/$defs/metadata" }
+  },
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "problemContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "network_conditions": { "$ref": "#/$defs/stringArray" },
+        "observed_symptoms": { "$ref": "#/$defs/stringArray" },
+        "underlying_cause": { "type": "string" }
+      }
+    },
+    "designRationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "motivation": { "type": "string" },
+        "problem_analysis": { "type": "string" },
+        "reasoning_chain": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "designDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selected_mechanism": { "type": "string" },
+        "alternatives_considered": { "$ref": "#/$defs/stringArray" },
+        "why_selected": { "type": "string" }
+      }
+    },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "control_signals": { "$ref": "#/$defs/stringArray" },
+        "control_actions": { "$ref": "#/$defs/stringArray" },
+        "state_variables": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "tradeoffs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "benefits": { "$ref": "#/$defs/stringArray" },
+        "costs": { "$ref": "#/$defs/stringArray" },
+        "limitations": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "suitable_conditions": { "$ref": "#/$defs/stringArray" },
+        "unsuitable_conditions": { "$ref": "#/$defs/stringArray" },
+        "assumptions": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "parameterGuidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parameter", "guidance"],
+      "properties": {
+        "parameter": { "type": "string", "minLength": 1 },
+        "guidance": { "type": "string", "minLength": 1 },
+        "rationale": { "type": "string" },
+        "source_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^src-[0-9]{3}$" }
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "metrics": { "$ref": "#/$defs/stringArray" },
+        "expected_effects": { "$ref": "#/$defs/stringArray" },
+        "evaluation_conditions": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_type", "locator", "supports", "evidence_level"],
+      "properties": {
+        "source_id": { "type": "string", "pattern": "^src-[0-9]{3}$" },
+        "source_type": {
+          "type": "string",
+          "enum": ["paper", "rfc", "code", "technical_report", "experiment", "other"]
+        },
+        "locator": { "type": "string" },
+        "supports": { "$ref": "#/$defs/stringArray" },
+        "evidence_level": { "type": "string", "enum": ["A", "B", "C", "D"] }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "tags": { "$ref": "#/$defs/stringArray" }
+      }
+    }
+  }
+}

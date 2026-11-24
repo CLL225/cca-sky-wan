@@ -1,0 +1,33 @@
+source_id: src-002
+title: "QUIC Loss Detection and Congestion Control"
+source_type: rfc
+authors:
+  - Jana Iyengar
+  - Ian Swett
+year: 2021
+url: "https://www.rfc-editor.org/rfc/rfc9002"
+doi: "10.17487/RFC9002"
+venue: "IETF RFC 9002"
+version: "RFC 9002"
+locators:
+  - type: section
+    value: "5. Estimating the Round-Trip Time"
+  - type: section
+    value: "6.1.1. Packet Threshold"
+  - type: section
+    value: "6.1.2. Time Threshold"
+  - type: section
+    value: "6.2. Probe Timeout"
+  - type: section
+    value: "7.3. Congestion Control States"
+  - type: section
+    value: "7.6. Persistent Congestion"
+  - type: section
+    value: "7.7. Pacing"
+related_experiences:
+  - exp-006
+  - exp-008
+  - exp-007
+metadata:
+  collected_at: "2026-11-09"
+  notes: "QUIC recovery and default NewReno-like congestion controller."

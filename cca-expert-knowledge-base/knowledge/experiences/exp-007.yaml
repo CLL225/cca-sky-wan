@@ -1,0 +1,199 @@
+id: exp-007
+title: "问题分析：为什么“丢包即拥塞”的假设会误导设计"
+experience_type: problem_analysis
+
+problem_context:
+  network_conditions:
+    - random-loss
+    - bufferbloat
+    - high-bdp
+    - shallow-buffer
+    - congestion-loss
+  observed_symptoms:
+    - "同样是一次丢包，随机链路错误与瓶颈队列溢出被发送方同等对待"
+    - "以丢包为信号的算法在无线或随机丢包路径上吞吐量骤降"
+    - "算法为了探测带宽反复填满队列，造成持续高排队时延"
+    - "在高 BDP 路径上，丢包式算法的恢复周期很长，带宽利用率不足"
+  underlying_cause: |
+    丢包是一个滞后、二值且原因含混的信号。它隐含地假设“丢包几乎总是由
+    瓶颈拥塞引起”，但该假设在随机丢包、深缓冲区、高 BDP 和浅缓冲区等
+    环境中并不成立。信号与真实拥塞程度之间的偏差，是不同算法设计分歧的根源。
+
+design_rationale:
+  motivation: |
+    把“选择什么拥塞信号”本身作为设计问题来分析，说明不同算法为什么在
+    不同网络条件下表现不同，并给出面向新设计的问题拆解框架。
+  problem_analysis: |
+    基于丢包的控制器把路由器的队列溢出当作拥塞的充分信号。该假设在四类
+    条件下失效：
+    （1）随机丢包：丢包与瓶颈负载无关，降速只会浪费容量；
+    （2）深缓冲区：队列必须先膨胀到溢出才产生信号，导致 bufferbloat；
+    （3）高 BDP：AIMD 每 RTT 的增长有限，从丢包中恢复需要很多个 RTT；
+    （4）浅缓冲区：少量突发即可溢出，丢包可能发生在平均利用率并不高时。
+    ECN 把信号提前到队列超过阈值时，并把“是否拥塞”扩展为“拥塞程度”；
+    时延/排队时延信号直接反映队列；带宽/RTT 模型则不依赖丢包来估计路径容量。
+  reasoning_chain:
+    - "丢包式控制把‘队列溢出’当作拥塞的唯一证据，这需要丢包主要由拥塞引起的假设。"
+    - "随机丢包破坏该假设，导致不必要的降速。"
+    - "深缓冲路径上，丢包出现得太晚，算法会先制造大量排队时延。"
+    - "高 BDP 路径上，丢包后的 AIMD 恢复速度与 BDP 不匹配。"
+    - "ECN、排队时延与带宽/RTT 模型分别提供了更早、更直接或更完整的信号。"
+    - "因此不存在对所有环境最优的单一信号；设计应显式列出信号假设与失效条件。"
+
+design_decision:
+  selected_mechanism: |
+    本条经验不主张单一机制，而是给出信号选择框架：按部署环境评估丢包、
+    ECN、排队时延、带宽/RTT 模型各自的假设、提前量和可观测性，再选择或组合信号。
+  alternatives_considered:
+    - "丢包信号：部署最广、无需网络支持，但滞后且原因含混。"
+    - "ECN/多比特反馈：信号更早且可表达程度，但需要网络设备支持。"
+    - "排队时延：直接反映队列，但测量噪声与 ACK 压缩会影响估计。"
+    - "带宽/RTT 模型：不依赖丢包，但对交付速率样本与 pacing 有要求。"
+  why_selected: |
+    不同失效条件对应不同信号；把假设显式化，可以避免把一个环境中的
+    成功经验错误迁移到另一个环境，也便于组合多种信号。
+
+mechanism:
+  description: |
+    可用信号谱系：
+    - 丢包：二值、滞后，适合“丢包≈拥塞”的路径，代表 Reno/CUBIC 基线；
+    - ECN：在队列超过阈值时提前标记，单比特可经 DCTCP 类机制恢复程度信息；
+    - 排队时延：由 RTT_standing - RTT_min 估计，直接对应队列，代表 Copa；
+    - 带宽/RTT 模型：由交付速率与最小 RTT 估计 BDP，代表 BBR。
+    设计新算法时，应先明确目标网络中的主要失效条件，再选择能观测到该条件
+    且假设成立的最小信号集合。
+  control_signals:
+    - "丢包事件（重复 ACK / 超时）"
+    - "ECN-CE 标记与标记比例"
+    - "排队时延（RTT_standing - RTT_min）"
+    - "交付速率与最小 RTT"
+  control_actions:
+    - "按所选信号调整窗口或速率"
+    - "在多种信号之间切换或组合"
+    - "为信号失效设置降级路径"
+  state_variables:
+    - "丢包计数与恢复状态"
+    - "CE 标记比例"
+    - "RTT_min / RTT_standing"
+    - "BtlBw 估计"
+
+tradeoffs:
+  benefits:
+    - "把算法差异解释为信号假设差异，便于跨场景迁移和比较"
+    - "能在设计早期识别失效条件，而不是等实验暴露问题"
+    - "支持组合信号：例如用 ECN 提前反馈，用丢包作为后备"
+  costs:
+    - "多信号组合增加状态、参数和实现复杂度"
+    - "不同信号的更新周期与噪声特性不同，融合需要额外设计"
+    - "信号选择依赖部署条件，难以给出普适最优方案"
+  limitations:
+    - "本条是跨来源综合，不是某一篇论文作者的单一结论"
+    - "信号谱系不覆盖所有可能的拥塞指示（如基于机器学习的策略）"
+    - "组合信号之间的相互干扰仍需逐案验证"
+
+failure_modes:
+  - "在随机丢包路径上继续使用丢包信号，导致吞吐量与利用率下降。"
+  - "在深缓冲路径上只使用丢包信号，长期维持高排队时延。"
+  - "在浅缓冲路径上使用激进的窗口增长，突发造成丢包。"
+  - "ECN 部署不完整时，算法在 ECN 与丢包模式之间行为不一致。"
+  - "时延信号被 ACK 压缩或反向路径排队污染，导致误判。"
+
+applicability:
+  suitable_conditions:
+    - "设计新拥塞控制算法或把已有算法迁移到新网络环境"
+    - "需要解释不同算法在相同场景下表现差异"
+    - "需要在丢包、ECN、时延和模型信号之间做选择"
+  unsuitable_conditions:
+    - "只需要复现某个标准算法的具体行为（应直接查阅该标准）"
+    - "网络不支持所选信号且无法修改部署"
+  assumptions:
+    - "设计者能够描述目标网络的主要失效条件"
+    - "所选信号在目标环境中可观测且测量误差可控"
+
+evaluation:
+  metrics:
+    - "吞吐量"
+    - "排队时延"
+    - "丢包率"
+    - "公平性"
+    - "收敛速度"
+  expected_effects:
+    - "按失效条件选择信号后，算法在目标环境中的关键指标应优于盲目沿用丢包信号"
+    - "信号假设被显式记录后，跨环境迁移的风险更可评估"
+  evaluation_conditions:
+    - "需要在包含随机丢包、深缓冲、高 BDP、浅缓冲的多种拓扑上分别验证"
+    - "应避免只在单一环境中验证后推广"
+
+evidence:
+  - source_id: src-001
+    source_type: rfc
+    locator: "3.1 Slow Start and Congestion Avoidance"
+    supports:
+      - "标准 TCP 把丢包作为拥塞信号并执行 AIMD 的基线行为"
+    evidence_level: A
+  - source_id: src-002
+    source_type: rfc
+    locator: "7. Congestion Control"
+    supports:
+      - "QUIC 默认拥塞控制器仍是 NewReno 类、以丢包为主要信号的证据"
+    evidence_level: A
+  - source_id: src-003
+    source_type: rfc
+    locator: "5. Explicit Congestion Notification in IP; 6.1. TCP"
+    supports:
+      - "ECN 提供比丢包更早的显式拥塞信号"
+    evidence_level: A
+  - source_id: src-004
+    source_type: paper
+    locator: "Congestion Control on the Internet; Modeling the Network Path"
+    supports:
+      - "把丢包等同于拥塞会导致 bufferbloat 和随机丢包下的吞吐损失"
+      - "用带宽与 RTT 模型替代丢包信号的设计动机"
+    evidence_level: A
+  - source_id: src-006
+    source_type: paper
+    locator: "3. CUBIC Congestion Control"
+    supports:
+      - "标准 AIMD 在高 BDP 路径上增长过慢，需要改变窗口增长律"
+    evidence_level: A
+  - source_id: src-008
+    source_type: paper
+    locator: "3.1. Algorithm"
+    supports:
+      - "从单比特 ECN 标记恢复拥塞程度，并按程度比例反应"
+    evidence_level: A
+  - source_id: src-009
+    source_type: paper
+    locator: "2. Copa Algorithm; 2.2. Competing with Buffer-Filling Schemes"
+    supports:
+      - "使用排队时延与目标速率作为拥塞信号的设计"
+      - "缓冲区填充型算法在时延上的代价"
+    evidence_level: A
+
+knowledge_status: cross_source_synthesis
+
+related_experiences:
+  - exp-001
+  - exp-002
+  - exp-003
+  - exp-004
+  - exp-005
+  - exp-006
+  - exp-008
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - random-loss
+    - bufferbloat
+    - high-bdp
+    - shallow-buffer
+    - congestion-loss
+    - limitation-of-existing
+    - assumption-limits
+    - symptom-cause
+    - key-signal
+    - goal-conflict
+    - throughput-vs-latency
+    - utilization-vs-fairness

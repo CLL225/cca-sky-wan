@@ -1,0 +1,31 @@
+source_id: src-006
+title: "CUBIC: A New TCP-Friendly High-Speed TCP Variant"
+source_type: paper
+authors:
+  - Sangtae Ha
+  - Injong Rhee
+  - Lisong Xu
+year: 2008
+url: "https://doi.org/10.1145/1400097.1400105"
+doi: "10.1145/1400097.1400105"
+venue: "ACM SIGOPS Operating Systems Review 42(5)"
+version: "SIGOPS OSR, July 2008"
+locators:
+  - type: section
+    value: "3. CUBIC Congestion Control"
+  - type: section
+    value: "3.3 TCP-friendly region"
+  - type: section
+    value: "3.4 Concave region"
+  - type: section
+    value: "3.5 Convex region"
+  - type: section
+    value: "3.6 Multiplicative decrease"
+  - type: section
+    value: "3.7 Fast Convergence"
+related_experiences:
+  - exp-002
+  - exp-007
+metadata:
+  collected_at: "2026-11-09"
+  notes: "Original CUBIC design paper; uses C=0.4 and beta=0.2."

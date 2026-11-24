@@ -1,0 +1,190 @@
+id: exp-008
+title: "用 Pacing 把窗口预算摊平到时间轴上"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - burst-traffic
+    - shallow-buffer
+    - queue-buildup
+    - datacenter-low-latency
+  observed_symptoms:
+    - "即使平均速率不超过瓶颈，集中发送的突发也会造成瞬时排队和丢包"
+    - "突发在浅缓冲区路径上尤其容易触发丢包"
+    - "大量包同时到达会加剧 ACK 压缩和测量偏差"
+    - "仅靠拥塞窗口限制在途量，无法约束包在时间上的分布"
+  underlying_cause: |
+    窗口式拥塞控制只限制“在途字节数”，不限制“发送时刻”。当应用或协议栈
+    一次把整个窗口交给网络时，即使平均速率合适，瞬时突发也可能超过路径
+    可吸收能力，造成短期拥塞、丢包和队列振荡。
+
+design_rationale:
+  motivation: |
+    通过在时间上均匀发送，把窗口预算摊平，降低瞬时突发造成的丢包和排队时延，
+    同时保持拥塞窗口所允许的平均发送速率。
+  problem_analysis: |
+    对窗口式控制器，平均速率可以近似为 cwnd / RTT。若发送方以很短的间隔
+    发出一串包，局部速率远高于平均值；在瓶颈处这会形成突发队列。
+    Pacing 用漏桶或时间片调度按目标速率逐个发送，使到达过程更平滑，
+    也降低 ACK 压缩和测量噪声。
+  reasoning_chain:
+    - "窗口只给出在途预算，不给出包间间隔。"
+    - "突发会让瞬时到达速率超过瓶颈，即使长期平均速率合规。"
+    - "按 cwnd/RTT 或估计带宽计算包间隔并匀速发送，可消除突发。"
+    - "节奏器需要与拥塞控制器协同，不能绕过 cwnd 限制。"
+    - "过慢的 pacing 会低估可用带宽，因此需要略高于 1 的补偿系数和突发上限。"
+
+design_decision:
+  selected_mechanism: |
+    发送节拍器（pacer）：按拥塞控制器给出的速率计算包间隔，
+    使用漏桶/时间片调度发送；限制瞬时突发（如不超过初始窗口），
+    并与 cwnd 检查协同。
+  alternatives_considered:
+    - "不做 pacing，直接在 cwnd 允许时突发发送：实现简单但突发风险高。"
+    - "仅依赖 AQM/队列管理吸收突发：需要网络侧支持，且浅缓冲区无法完全吸收。"
+    - "固定低速 pacing：会低估可用带宽，降低吞吐。"
+  why_selected: |
+    Pacing 是发送端可独立部署的机制，能与任何窗口式控制器组合；
+    它直接作用于突发这一根因，而不是事后依赖队列或丢包反馈。
+
+mechanism:
+  description: |
+    Pacing 为发送队列维护目标速率与下一个可发送时刻。对窗口式控制器，
+    目标速率可近似为 N × cwnd / smoothed_rtt（N 略大于 1，例如 1.25），
+    或直接采用控制器给出的 pacing rate（如 BBR 的 pacing_gain × BtlBw）。
+    发送方按包大小与速率计算包间隔，使用漏桶/时间轮/高精度定时器调度；
+    漏桶容量限制最大突发。ACK-only 包通常不应被 pacing，以免延迟 ACK 返回。
+    实现上常与 TSO/GSO 等分段卸载协同，避免一次注入过多包。
+  control_signals:
+    - "拥塞窗口或控制器给出的 pacing rate"
+    - "smoothed_rtt"
+    - "包大小与可用发送信用"
+    - "当前调度时间"
+  control_actions:
+    - "计算并执行包间间隔"
+    - "限制瞬时突发大小"
+    - "在 cwnd 允许范围内调度发送"
+  state_variables:
+    - "pacing rate"
+    - "next send time / 令牌数"
+    - "burst budget"
+    - "pacing_gain"
+
+tradeoffs:
+  benefits:
+    - "显著降低突发造成的瞬时队列和丢包"
+    - "在浅缓冲区路径上提高稳定性"
+    - "使到达过程更平滑，减少 ACK 压缩与测量偏差"
+    - "可与不同拥塞控制器组合"
+  costs:
+    - "需要较细粒度的定时与调度，增加 CPU 和实现复杂度"
+    - "定时器精度不足或调度抖动会让实际速率偏离目标"
+    - "pacing 速率设置过低会浪费窗口、降低吞吐"
+    - "与 TSO/GSO、多队列和中断合并的交互需要小心"
+  limitations:
+    - "pacing 只能平滑发送，不能弥补错误的窗口或速率判断"
+    - "过大的突发上限会削弱 pacing 效果"
+    - "ACK-only 包不适合 pacing，需单独处理"
+    - "路径 RTT 快速变化时，基于 cwnd/RTT 的速率需要及时更新"
+
+failure_modes:
+  - "pacing 速率明显低于可用带宽，导致链路利用率不足。"
+  - "定时器粒度粗，包仍以批次发出，突发没有被真正消除。"
+  - "漏桶容量过大，允许一次发送过多包。"
+  - "pacing 与 cwnd 检查顺序错误，可能绕过拥塞窗口限制。"
+  - "对 ACK 包也做 pacing，延迟 ACK 返回并拖慢恢复。"
+
+applicability:
+  suitable_conditions:
+    - "窗口式拥塞控制且发送端可控制发包时刻"
+    - "浅缓冲区、突发敏感或需要低排队时延的路径"
+    - "高线速、需要平滑到达过程的数据中心或骨干网络"
+  unsuitable_conditions:
+    - "无法获得可靠时钟或定时精度的实现"
+    - "应用本身以极低速率发送且突发不构成问题"
+  assumptions:
+    - "发送端能够按包或按字节调度发送时刻"
+    - "cwnd、RTT 或控制器速率估计可用"
+    - "pacing 不会绕过拥塞窗口约束"
+
+parameter_guidance:
+  - parameter: "pacing_rate"
+    guidance: "窗口式控制器可令 rate = N × cwnd / smoothed_rtt，N 取略大于 1（RFC 9002 示例为 1.25）。"
+    rationale: "N>1 补偿 RTT 抖动和调度误差，避免因速率略低而低估窗口；N 过大则增加队列压力。"
+    source_ids: ["src-002"]
+  - parameter: "burst_limit"
+    guidance: "突发上限建议不超过初始拥塞窗口；只有确认路径能吸收更大突发时才提高。"
+    rationale: "限制漏桶瞬时容量，避免 pacing 退化为突发发送。"
+    source_ids: ["src-002"]
+  - parameter: "bbr_pacing_gain"
+    guidance: "BBR 以 pacing_gain × BtlBw 作为 pacing rate；不同状态使用不同增益。"
+    rationale: "把速率控制与状态机结合：Startup 用高增益快速探测，ProbeBW 用 1.25/0.75/1.0 循环。"
+    source_ids: ["src-004", "src-005"]
+  - parameter: "ack_only_packets"
+    guidance: "只包含 ACK 的包通常不应被 pacing。"
+    rationale: "避免延迟 ACK 返回，影响对端恢复和本端测量。"
+    source_ids: ["src-002"]
+
+evaluation:
+  metrics:
+    - "突发造成的丢包率"
+    - "排队时延"
+    - "吞吐量与链路利用率"
+    - "ACK 压缩程度"
+  expected_effects:
+    - "瞬时队列峰值下降，浅缓冲区丢包减少"
+    - "在相同平均速率下获得更平滑的到达过程"
+    - "配合 BBR 等速率控制器时减少超发突发"
+  evaluation_conditions:
+    - "RFC 9002 的 pacing 规范与实现建议"
+    - "BBR 论文中的部署与测量经验"
+    - "Linux 实现的 pacing 与 TSO/GSO 协同"
+
+evidence:
+  - source_id: src-002
+    source_type: rfc
+    locator: "7.7. Pacing"
+    supports:
+      - "发送方应基于拥塞控制器输入 pacing，并限制突发"
+      - "rate = N × cwnd / smoothed_rtt 与 1.25 示例"
+      - "ACK-only 包不应被 pacing"
+      - "漏桶实现与突发上限"
+    evidence_level: A
+  - source_id: src-004
+    source_type: paper
+    locator: "The BBR Algorithm; ProbeBW; Startup"
+    supports:
+      - "BBR 用 pacing rate 与增益调度实施速率控制"
+    evidence_level: A
+  - source_id: src-005
+    source_type: code
+    locator: "net/ipv4/tcp_bbr.c::bbr_set_pacing_rate / bbr_update_cycle_phase / bbr_tso_segs_goal"
+    supports:
+      - "pacing rate 的计算与 ProbeBW 增益循环"
+      - "TSO 分段与 pacing 的协同"
+    evidence_level: A
+
+knowledge_status: cross_source_synthesis
+
+related_experiences:
+  - exp-001
+  - exp-006
+  - exp-007
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - burst-traffic
+    - shallow-buffer
+    - queue-buildup
+    - datacenter-low-latency
+    - pacing
+    - rate-control
+    - low-overhead
+    - parameter-coupling
+    - pacing-rate
+    - bbr
+    - quic
+    - low-latency
+    - throughput

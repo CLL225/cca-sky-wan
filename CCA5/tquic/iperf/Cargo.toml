@@ -1,0 +1,22 @@
+[package]
+name = "tquic-perf"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tquic = { path = "..", version = "1.5.0"}
+clap = { version = "4.0", features = ["derive"] } # 命令行解析
+mio = { version = "0.8", features = ["os-ext", "net"] } # 异步 I/O 驱动
+log = "0.4"
+env_logger = "0.10"
+nix = {version = "0.30.1", features = ["socket", "net", "uio"] }
+bytes = "1"
+md5 = "0.7"
+slab = "0.4"
+rustc-hash = "1.1"
+rand = "0.8"
+rand_distr = "0.4"
+
+[[bin]]
+name="tquic_perf"
+path="src/main.rs"

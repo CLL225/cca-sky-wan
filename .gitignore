@@ -1,0 +1,31 @@
+# Build artifacts
+target/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+
+# Experiment outputs and logs
+outputs/
+*.log
+*.orig
+CCA5/bin/results/
+CCA5/bin/server.log
+CCA5/bin/.server_meta
+final_test*/
+test_top10/
+robust_*/
+
+# Binaries and runtime certificates
+CCA5/bin/tquic_client
+CCA5/bin/tquic_server
+CCA5/bin/cert.key
+CCA5/bin/cert.crt

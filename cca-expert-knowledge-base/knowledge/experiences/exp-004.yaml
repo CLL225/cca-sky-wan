@@ -1,0 +1,186 @@
+id: exp-004
+title: "以排队时延目标和速率反馈控制窗口（Copa）"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - bufferbloat
+    - queue-buildup
+    - bandwidth-variation
+    - rtt-variation
+  observed_symptoms:
+    - "以填满缓冲区为目标的拥塞控制造成持续高排队时延"
+    - "纯时延控制器（如 Vegas）在缓冲区填满型算法竞争下失去带宽"
+    - "不同 RTT 的流在吞吐上存在不公平"
+    - "应用既希望低时延，又希望在多种网络下保持吞吐"
+  underlying_cause: |
+    现有算法或者只优化吞吐（填满队列），或者只优化时延而在竞争中吃亏。
+    Copa 从网络效用最大化目标出发，把吞吐和排队时延放进同一个目标函数，
+    并用目标速率与当前速率的比较来调整窗口。
+
+design_rationale:
+  motivation: |
+    提出一种既能在多种网络条件下保持高吞吐、又能维持很低排队时延的
+    端到端拥塞控制，并在与缓冲区填充型算法竞争时不处于劣势。
+  problem_analysis: |
+    Copa 选择效用函数 U = log λ - δ·log d，其中 λ 是平均吞吐，d 是
+    （超出传播时延的）排队时延，δ 控制时延相对吞吐的权重。在该模型下，
+    最大化 U 的目标速率为 λ_t = 1/(δ·d_q)，d_q 是测得的平均排队时延。
+    Copa 通过比较当前速率 λ = cwnd/RTT_standing 与 λ_t，决定增加还是减小 cwnd。
+  reasoning_chain:
+    - "显式建模吞吐与时延的效用权衡，而不是把丢包当作唯一信号。"
+    - "用近期最小 RTT 估计 standing queue，用长期最小 RTT 估计传播时延。"
+    - "以目标速率 λ_t 为反馈目标，向它调整 cwnd。"
+    - "用 velocity 参数加快离开稳态时的收敛，稳态时 v=1。"
+    - "检测到缓冲区填充型竞争流时切换到 competitive mode，调整 δ。"
+
+design_decision:
+  selected_mechanism: |
+    基于排队时延的目标速率控制：用 RTT_standing 与 RTT_min 估计 d_q，
+    计算 λ_t = 1/(δ·d_q)，按 (λ - λ_t) 的符号调整 cwnd，并配合 velocity
+    参数、pacing 与 competitive mode。
+  alternatives_considered:
+    - "Cubic/NewReno 等缓冲区填充型算法：时延高。"
+    - "Vegas 等纯时延算法：在与填满型算法竞争时吞吐吃亏。"
+    - "BBR 等基于带宽/RTT 模型的算法：Copa 认为其目标不同，且论文报告其在某些公平性指标上的差异。"
+  why_selected: |
+    目标函数直接表达吞吐与时延的权衡；目标速率只依赖可观测的 RTT 与 cwnd；
+    竞争模式使低时延策略在存在填满型流时仍能获得带宽。
+
+mechanism:
+  description: |
+    Copa 在每个 ACK 上估计 RTT_standing（最近 srtt/2 时间窗口内的最小 RTT）
+    和 RTT_min（较长时间窗口内的最小 RTT，论文取 10 秒与流龄的较小值），
+    得到 d_q = RTT_standing - RTT_min 与 λ_t = 1/(δ·d_q)。若 λ = cwnd/RTT_standing
+    不超过 λ_t，则 cwnd ← cwnd + v/(δ·cwnd)；否则 cwnd ← cwnd - v/(δ·cwnd)。
+    velocity v 初始为 1，方向连续保持三个 RTT 后翻倍，方向改变则重置为 1。
+    发送方以约 2·cwnd/RTT_standing 的速率 pacing。默认模式 δ=0.5；
+    若最近 5 个 RTT 内没有观察到“接近空队列”，则切换到 competitive mode，
+    对 1/δ 做 AIMD，以匹配缓冲区填充型算法的激进程度。
+  control_signals:
+    - "RTT_standing（近期最小 RTT）"
+    - "RTT_min（长期最小 RTT）"
+    - "排队时延 d_q"
+    - "当前速率 λ = cwnd/RTT_standing"
+    - "最近 5 个 RTT 的队列空置情况"
+  control_actions:
+    - "按目标速率调整 cwnd"
+    - "设置 pacing 速率"
+    - "在默认模式与 competitive mode 之间切换"
+    - "对 1/δ 执行 AIMD"
+  state_variables:
+    - "cwnd"
+    - "δ"
+    - "v（velocity）"
+    - "RTT_standing"
+    - "RTT_min"
+    - "direction"
+    - "mode"
+
+tradeoffs:
+  benefits:
+    - "在稳态下维持很低的排队时延"
+    - "通过速度参数在离开稳态时快速收敛"
+    - "论文报告与 Cubic 共存时 Copa 获益而 Cubic 平均吞吐不受显著损害"
+    - "在 RTT 公平性实验中优于 Cubic 等基线"
+  costs:
+    - "依赖对 RTT_min 与 RTT_standing 的可靠估计；ACK 压缩和路径抖动会影响判断"
+    - "competitive mode 需要对 1/δ 做额外控制，增加状态和参数"
+    - "pacing 需要发送端支持较细粒度的发送调度"
+    - "目标速率模型假设排队时延可测且与拥塞相关"
+  limitations:
+    - "在路径变化频繁时，长期 RTT_min 可能过期（论文用 10 秒窗口处理路径变化）"
+    - "与高度不同的 RTT 或极端无线环境下的表现需要额外验证"
+    - "competitive mode 的切换依赖启发式空队列检测"
+
+failure_modes:
+  - "ACK 压缩或反向路径排队会抬高 RTT_standing，使 d_q 估计偏大。"
+  - "路径改变后 RTT_min 未及时刷新，目标速率计算出现偏差。"
+  - "竞争流存在但空队列检测误判时，Copa 可能在默认模式与竞争模式间振荡。"
+  - "δ 设置不当会在时延与吞吐之间偏离期望工作点。"
+
+applicability:
+  suitable_conditions:
+    - "能够测量 RTT 并区分传播时延与排队时延的路径"
+    - "希望显式控制排队时延、同时保持吞吐的通用互联网场景"
+    - "存在 Cubic/NewReno 等缓冲区填充型竞争流的部署"
+  unsuitable_conditions:
+    - "路径排队时延不可观测或 RTT 测量严重失真的环境"
+    - "需要严格控制发送突发但无法 pacing 的实现"
+  assumptions:
+    - "排队时延近似等于 RTT_standing - RTT_min"
+    - "发送速率可由 cwnd/RTT_standing 表示"
+    - "接收端 ACK 能及时反映数据交付"
+
+parameter_guidance:
+  - parameter: "delta"
+    guidance: "默认模式 δ=0.5；competitive mode 中 δ ≤ 0.5，并随竞争检测动态调整。"
+    rationale: "δ 决定吞吐与时延的相对权重；δ 越大越偏好低时延，但可能降低吞吐。"
+    source_ids: ["src-009"]
+  - parameter: "velocity"
+    guidance: "v 初始为 1；方向连续保持三个 RTT 后翻倍，方向改变则重置。"
+    rationale: "加速远离稳态时的收敛，同时在稳态保持 v=1 以避免过度振荡。"
+    source_ids: ["src-009"]
+  - parameter: "rtt_windows"
+    guidance: "RTT_standing 取最近 srtt/2 窗口的最小值；RTT_min 取 10 秒与流龄的较小值。"
+    rationale: "近期窗口用于抵御 ACK 压缩和抖动，长期窗口用于估计传播时延并适应路径变化。"
+    source_ids: ["src-009"]
+  - parameter: "pacing_rate"
+    guidance: "以约 2·cwnd/RTT_standing 的速率 pacing。"
+    rationale: "避免突发；2 倍系数用于补偿 pacing 实现的不精确。"
+    source_ids: ["src-009"]
+  - parameter: "empty_queue_detector"
+    guidance: "若最近 5 个 RTT 内出现 d_q < 0.1·(RTT_max - RTT_min)，视为接近空队列。"
+    rationale: "仅 Copa 流共存时队列应周期性接近空；若长期不空，说明存在填满型竞争流。"
+    source_ids: ["src-009"]
+
+evaluation:
+  metrics:
+    - "吞吐量"
+    - "排队时延"
+    - "Jain 公平性指数"
+    - "RTT 公平性"
+  expected_effects:
+    - "稳态排队时延显著低于缓冲区填充型算法"
+    - "与 Cubic 共存时获得较好带宽份额"
+    - "在 RTT 不同的流之间实现更好的公平性"
+  evaluation_conditions:
+    - "论文中的仿真、Mahimahi 模拟链路与真实网络实验"
+    - "与 Cubic、Vegas、BBR、PCC 等基线比较"
+
+evidence:
+  - source_id: src-009
+    source_type: paper
+    locator: "2. Copa Algorithm; 2.1. Target Rate and Update Rule; 2.2. Competing with Buffer-Filling Schemes; 3. Dynamics of Copa; 5.3. RTT-fairness"
+    supports:
+      - "效用函数与目标速率 λ_t = 1/(δ·d_q)"
+      - "cwnd 调整规则、velocity 参数与 pacing"
+      - "competitive mode 与空队列检测"
+      - "论文报告的吞吐、时延、公平性与共存实验结果"
+    evidence_level: A
+
+knowledge_status: source_reported
+
+related_experiences:
+  - exp-001
+  - exp-005
+  - exp-007
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - bufferbloat
+    - queue-buildup
+    - bandwidth-variation
+    - rtt-variation
+    - rtt-measurement
+    - min-rtt-estimation
+    - rate-control
+    - cwnd-control
+    - pacing
+    - gain-control
+    - copa
+    - low-latency
+    - fairness
+    - coexistence

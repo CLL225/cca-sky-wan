@@ -1,0 +1,171 @@
+id: exp-003
+title: "从单比特 ECN 标记中恢复多比特拥塞程度（DCTCP）"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - datacenter-low-latency
+    - incast
+    - queue-buildup
+    - shallow-buffer
+  observed_symptoms:
+    - "数据中心交换机缓冲区浅，队列一堆积就会丢包或造成毫秒级排队时延"
+    - "标准 TCP 对单个拥塞标记就窗口减半，造成队列大幅振荡和吞吐损失"
+    - "多个端口共享缓冲区时，少数拥塞端口的队列会挤压其他端口的可用缓冲"
+    - "Incast 场景下大量同步短流冲击同一队列，容易超时"
+  underlying_cause: |
+    标准 TCP 把拥塞标记当作二值信号，只反应“是否拥塞”，不反应“拥塞程度”。
+    在浅缓冲区、高线速的数据中心网络中，队列波动很快，二值反应会导致
+    窗口和队列大幅振荡，并浪费共享缓冲区。
+
+design_rationale:
+  motivation: |
+    在商品化浅缓冲区交换机上同时获得高突发容忍度、低时延和高吞吐。
+  problem_analysis: |
+    作者指出，关键不是某个固定的控制律，而是从单比特 CE 标记序列中恢复
+    “队列超过标记阈值的概率”，即多比特的拥塞程度信息。接收方准确回传
+    标记序列，发送方据此估计标记比例 α，并按比例减小窗口。
+  reasoning_chain:
+    - "队列长度超过阈值 K 即标记 CE，使发送方尽早获知队列超调。"
+    - "接收方逐包反馈是否被标记，保留标记序列而不是只回传一个二值信号。"
+    - "发送方估计最近一个窗口的标记比例 α。"
+    - "窗口按 (1 - α/2) 减小：轻微拥塞时轻微降速，严重拥塞时接近减半。"
+    - "低队列占用为突发流量保留缓冲区余量，减少丢包和超时。"
+
+design_decision:
+  selected_mechanism: |
+    基于 ECN 的多比特反馈：交换机按瞬时队列阈值标记 CE，接收方精确回传标记，
+    发送方维护标记比例 α 并按比例减小窗口。
+  alternatives_considered:
+    - "标准 TCP 的 ECN 反应：每次标记都窗口减半，反应过强。"
+    - "基于排队时延的控制器：高线速下测量微小队列时延噪声大。"
+    - "调整 RED 参数：仍只提供二值反应。"
+  why_selected: |
+    复用现有 ECN 机制，只需交换机按固定阈值标记、接收方如实回传，
+    就能把单比特序列转化为拥塞程度估计；无需修改交换机硬件语义。
+
+mechanism:
+  description: |
+    DCTCP 有三部分。交换机：到达包的瞬时队列占用超过固定阈值 K 时标记 CE，
+    否则不标记。接收方：使用 ECN-Echo 精确反映标记序列；在延迟 ACK 下用
+    两状态状态机决定是否设置 ECE，发送方可据此重建标记游程。发送方：
+    每个窗口更新一次 α ← (1-g)·α + g·F，其中 F 是本窗口被标记包的比例，
+    g 是平滑权重；收到标记 ACK 时执行 cwnd ← cwnd·(1 - α/2)。其余 TCP
+    机制（慢启动、加性增长、丢包恢复）保持不变。
+  control_signals:
+    - "CE 标记序列（由接收方通过 ECN-Echo 回传）"
+    - "每个窗口的标记比例 F"
+    - "平滑后的标记概率 α"
+  control_actions:
+    - "按 α 比例减小拥塞窗口"
+    - "保持加性增长与标准恢复机制"
+  state_variables:
+    - "α（标记概率估计）"
+    - "g（EWMA 权重）"
+    - "K（交换机标记阈值）"
+
+tradeoffs:
+  benefits:
+    - "在浅缓冲区交换机上维持低队列占用和低时延"
+    - "按拥塞程度比例降速，窗口振荡远小于标准 TCP"
+    - "提前标记减少突发导致的丢包与超时"
+    - "复用标准 ECN 头字段与交换机能力，部署改动小"
+  costs:
+    - "需要支持 ECN 的交换机和正确配置的标记阈值 K"
+    - "需要接收方准确回传标记序列，延迟 ACK 实现更复杂"
+    - "α 是统计估计，参数 g 和 K 会影响响应速度和稳定性"
+    - "主要针对 RTT 较小、流数量有限的数据中心环境"
+  limitations:
+    - "交换机必须支持按瞬时队列长度标记 CE"
+    - "标记阈值与缓冲区配置耦合，跨厂商配置需要校准"
+    - "对非 DCTCP 的竞争流不具备同样的比例反应能力"
+
+failure_modes:
+  - "Incast 规模超过缓冲区可吸收范围时，DCTCP 也无法避免丢包。"
+  - "K 设置过高会延迟拥塞反馈，导致队列堆积；过低则频繁标记、降低吞吐。"
+  - "ECN 配置或回传错误会使 α 估计失真。"
+  - "RTT 差异大或流数量很多时，按窗口估计 α 的假设变弱。"
+
+applicability:
+  suitable_conditions:
+    - "数据中心等低 RTT、浅缓冲区、支持 ECN 的网络"
+    - "多短流、Incast 和共享缓冲区的场景"
+    - "希望同时降低排队时延并保持吞吐的部署"
+  unsuitable_conditions:
+    - "网络设备不支持 ECN 或无法配置标记阈值"
+    - "RTT 很大且流数量极多的广域网络（DCTCP 的设计假设不成立）"
+  assumptions:
+    - "交换机可按瞬时队列长度设置 CE"
+    - "接收方能够回传每个包的标记信息"
+    - "发送方每个窗口可统计一次标记比例"
+
+parameter_guidance:
+  - parameter: "K"
+    guidance: "交换机标记阈值，按瞬时队列占用超过 K 即标记 CE。"
+    rationale: "K 决定开始反馈的队列水平；论文在浅缓冲区数据中心场景中选择很小的 K。"
+    source_ids: ["src-008"]
+  - parameter: "g"
+    guidance: "α 的 EWMA 权重，0 < g < 1，每个窗口更新一次。"
+    rationale: "g 越大，对最近一个窗口的拥塞程度反应越快，但估计噪声也越大。"
+    source_ids: ["src-008"]
+  - parameter: "window_decrease"
+    guidance: "cwnd ← cwnd·(1 - α/2)。"
+    rationale: "α 接近 0 时轻微降速，α=1 时等价于 TCP 的减半，实现按拥塞程度比例反应。"
+    source_ids: ["src-008"]
+
+evaluation:
+  metrics:
+    - "排队时延"
+    - "吞吐量"
+    - "丢包率与超时"
+    - "短流完成时间"
+  expected_effects:
+    - "队列占用保持在标记阈值 K 附近"
+    - "相比 TCP+RED 显著降低排队时延和丢包"
+    - "在 Incast 和缓冲区压力场景中减少超时"
+  evaluation_conditions:
+    - "论文中的数据中心实验、Incast、队列堆积与缓冲区压力微基准"
+    - "与 TCP、TCP+RED 等基线对比"
+
+evidence:
+  - source_id: src-008
+    source_type: paper
+    locator: "3.1. Algorithm; 3.2. Benefits; 3.3. Analysis; 3.4. Guidelines for choosing parameters"
+    supports:
+      - "交换机按瞬时队列阈值标记 CE 的设计"
+      - "接收方精确回传标记序列、发送方估计 α"
+      - "cwnd ← cwnd·(1 - α/2) 的比例反应"
+      - "浅缓冲区、Incast 与低时延场景的收益"
+    evidence_level: A
+  - source_id: src-003
+    source_type: rfc
+    locator: "5. Explicit Congestion Notification in IP; 6.1. TCP; 6.1.2. The TCP Sender; 6.1.3. The TCP Receiver"
+    supports:
+      - "DCTCP 复用的 CE、ECN-Echo 与 CWR 机制"
+      - "标准 ECN 接收方与发送方的基线行为"
+    evidence_level: A
+
+knowledge_status: cross_source_synthesis
+
+related_experiences:
+  - exp-005
+  - exp-007
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - datacenter-low-latency
+    - incast
+    - queue-buildup
+    - shallow-buffer
+    - ecn-handling
+    - multi-bit-feedback
+    - explicit-signal
+    - cwnd-control
+    - marking-threshold
+    - smoothing-coefficient
+    - dctcp
+    - low-latency
+    - throughput
+    - queue-control

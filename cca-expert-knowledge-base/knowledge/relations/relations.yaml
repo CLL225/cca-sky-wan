@@ -1,0 +1,83 @@
+# Typed relations between design experiences.
+#
+# related_experiences inside each experience remains the free-form list;
+# this file records how records relate, so retrieval can explain why a
+# neighbouring experience is useful.
+relations:
+  - from_id: exp-001
+    to_id: exp-005
+    relation: alternative_to
+    note: BBR replaces loss-triggered AIMD with bandwidth/RTT model-based control.
+    knowledge_status: source_reported
+
+  - from_id: exp-002
+    to_id: exp-005
+    relation: extends
+    note: CUBIC keeps Reno's loss response but replaces the linear window growth law.
+    knowledge_status: source_reported
+
+  - from_id: exp-003
+    to_id: exp-005
+    relation: alternative_to
+    note: DCTCP keeps TCP's window structure but uses ECN extent instead of loss as the signal.
+    knowledge_status: source_reported
+
+  - from_id: exp-004
+    to_id: exp-001
+    relation: alternative_to
+    note: Copa uses queueing delay and a target-rate objective rather than a bandwidth/RTT model.
+    knowledge_status: source_reported
+
+  - from_id: exp-006
+    to_id: exp-005
+    relation: extends
+    note: QUIC's default controller is NewReno-like, with clarified loss detection and recovery.
+    knowledge_status: source_reported
+
+  - from_id: exp-007
+    to_id: exp-001
+    relation: synthesizes
+    note: The problem analysis draws on BBR's critique of loss as a congestion proxy.
+    knowledge_status: cross_source_synthesis
+
+  - from_id: exp-007
+    to_id: exp-002
+    relation: synthesizes
+    note: CUBIC illustrates a scaled loss-based response on high-BDP paths.
+    knowledge_status: cross_source_synthesis
+
+  - from_id: exp-007
+    to_id: exp-003
+    relation: synthesizes
+    note: DCTCP illustrates an explicit, early, proportional congestion signal.
+    knowledge_status: cross_source_synthesis
+
+  - from_id: exp-007
+    to_id: exp-004
+    relation: synthesizes
+    note: Copa illustrates delay-based control against buffer-filling behaviour.
+    knowledge_status: cross_source_synthesis
+
+  - from_id: exp-007
+    to_id: exp-005
+    relation: synthesizes
+    note: Reno/AIMD defines the loss-based baseline whose assumptions are examined.
+    knowledge_status: cross_source_synthesis
+
+  - from_id: exp-007
+    to_id: exp-006
+    relation: synthesizes
+    note: QUIC's default loss-based controller shows the assumption persists in new transports.
+    knowledge_status: cross_source_synthesis
+
+  - from_id: exp-008
+    to_id: exp-001
+    relation: complements
+    note: BBR's rate control depends on pacing; pacing is the enforcement mechanism.
+    knowledge_status: source_reported
+
+  - from_id: exp-008
+    to_id: exp-006
+    relation: complements
+    note: RFC 9002 recommends pacing alongside window-based congestion control.
+    knowledge_status: source_reported

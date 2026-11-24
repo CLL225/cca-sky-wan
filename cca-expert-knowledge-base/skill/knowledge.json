@@ -1,0 +1,2882 @@
+{
+  "schema_version": 1,
+  "generated_from": "knowledge/",
+  "bilingual_lexicon": {
+    "随机丢包": [
+      "random",
+      "loss"
+    ],
+    "拥塞丢包": [
+      "congestion",
+      "loss"
+    ],
+    "丢包检测": [
+      "loss",
+      "detection"
+    ],
+    "丢包响应": [
+      "loss",
+      "response"
+    ],
+    "带宽估计": [
+      "bandwidth",
+      "estimation"
+    ],
+    "带宽时延积": [
+      "bandwidth",
+      "delay",
+      "product",
+      "bdp"
+    ],
+    "最小往返时延": [
+      "min",
+      "rtt"
+    ],
+    "拥塞窗口": [
+      "congestion",
+      "window",
+      "cwnd"
+    ],
+    "发送速率": [
+      "sending",
+      "rate"
+    ],
+    "发送节拍": [
+      "p",
+      "a",
+      "c",
+      "i",
+      "n",
+      "g"
+    ],
+    "拥塞控制": [
+      "congestion",
+      "control"
+    ],
+    "缓冲区膨胀": [
+      "b",
+      "u",
+      "f",
+      "f",
+      "e",
+      "r",
+      "b",
+      "l",
+      "o",
+      "a",
+      "t"
+    ],
+    "浅缓冲区": [
+      "shallow",
+      "buffer"
+    ],
+    "缓冲区": [
+      "buffer"
+    ],
+    "数据中心": [
+      "data",
+      "center",
+      "datacenter"
+    ],
+    "高带宽时延积": [
+      "high",
+      "bdp"
+    ],
+    "多流竞争": [
+      "multi",
+      "flow",
+      "competition"
+    ],
+    "状态机": [
+      "state",
+      "machine"
+    ],
+    "公平性": [
+      "fairness"
+    ],
+    "吞吐量": [
+      "throughput"
+    ],
+    "稳定性": [
+      "stability"
+    ],
+    "收敛": [
+      "convergence"
+    ],
+    "鲁棒性": [
+      "robustness"
+    ],
+    "探测": [
+      "probing"
+    ],
+    "启动": [
+      "startup"
+    ],
+    "退出": [
+      "exit"
+    ],
+    "时延": [
+      "delay",
+      "latency"
+    ],
+    "往返时延": [
+      "rtt"
+    ],
+    "丢包": [
+      "loss"
+    ],
+    "拥塞": [
+      "congestion"
+    ],
+    "带宽": [
+      "bandwidth"
+    ],
+    "队列": [
+      "queue"
+    ],
+    "无线": [
+      "wireless"
+    ],
+    "突发": [
+      "burst"
+    ],
+    "路径": [
+      "path"
+    ],
+    "增益": [
+      "gain"
+    ],
+    "阈值": [
+      "threshold"
+    ],
+    "参数": [
+      "parameter"
+    ],
+    "机制": [
+      "mechanism"
+    ],
+    "证据": [
+      "evidence"
+    ]
+  },
+  "stopwords": [
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "been",
+    "but",
+    "by",
+    "can",
+    "could",
+    "do",
+    "does",
+    "for",
+    "from",
+    "had",
+    "has",
+    "have",
+    "how",
+    "i",
+    "if",
+    "in",
+    "into",
+    "is",
+    "it",
+    "its",
+    "may",
+    "might",
+    "more",
+    "most",
+    "no",
+    "not",
+    "of",
+    "on",
+    "or",
+    "our",
+    "over",
+    "should",
+    "so",
+    "such",
+    "than",
+    "that",
+    "the",
+    "their",
+    "them",
+    "then",
+    "there",
+    "these",
+    "they",
+    "this",
+    "those",
+    "to",
+    "under",
+    "up",
+    "use",
+    "used",
+    "using",
+    "was",
+    "we",
+    "were",
+    "what",
+    "when",
+    "which",
+    "while",
+    "who",
+    "will",
+    "with",
+    "would"
+  ],
+  "taxonomy": [
+    {
+      "id": "network_problem",
+      "name": "网络问题与现象 / Network problems",
+      "description": "拥塞控制需要处理的网络条件和可观察现象。",
+      "tags": [
+        {
+          "id": "high-bdp",
+          "label": "高带宽时延积 / High BDP"
+        },
+        {
+          "id": "random-loss",
+          "label": "随机丢包 / Random loss"
+        },
+        {
+          "id": "congestion-loss",
+          "label": "拥塞丢包 / Congestion loss"
+        },
+        {
+          "id": "shallow-buffer",
+          "label": "浅缓冲区 / Shallow buffer"
+        },
+        {
+          "id": "bufferbloat",
+          "label": "缓冲区膨胀 / Bufferbloat"
+        },
+        {
+          "id": "burst-traffic",
+          "label": "突发流量 / Burst traffic"
+        },
+        {
+          "id": "rtt-variation",
+          "label": "RTT 波动 / RTT variation"
+        },
+        {
+          "id": "path-change",
+          "label": "路径变化 / Path change"
+        },
+        {
+          "id": "bandwidth-variation",
+          "label": "可用带宽变化 / Bandwidth variation"
+        },
+        {
+          "id": "multi-flow-competition",
+          "label": "多流竞争 / Multi-flow competition"
+        },
+        {
+          "id": "reverse-path-congestion",
+          "label": "反向路径拥塞 / Reverse-path congestion"
+        },
+        {
+          "id": "wireless-loss",
+          "label": "无线不可靠传输 / Wireless loss"
+        },
+        {
+          "id": "datacenter-low-latency",
+          "label": "数据中心低时延需求 / Datacenter low latency"
+        },
+        {
+          "id": "incast",
+          "label": "Incast"
+        },
+        {
+          "id": "queue-buildup",
+          "label": "队列堆积 / Queue buildup"
+        }
+      ]
+    },
+    {
+      "id": "design_goal",
+      "name": "设计目标与约束 / Design goals",
+      "description": "算法需要实现或权衡的目标。",
+      "tags": [
+        {
+          "id": "throughput",
+          "label": "吞吐量 / Throughput"
+        },
+        {
+          "id": "low-latency",
+          "label": "低时延 / Low latency"
+        },
+        {
+          "id": "fairness",
+          "label": "公平性 / Fairness"
+        },
+        {
+          "id": "convergence",
+          "label": "收敛速度 / Convergence"
+        },
+        {
+          "id": "stability",
+          "label": "稳定性 / Stability"
+        },
+        {
+          "id": "robustness",
+          "label": "鲁棒性 / Robustness"
+        },
+        {
+          "id": "utilization",
+          "label": "带宽利用率 / Utilization"
+        },
+        {
+          "id": "low-overhead",
+          "label": "低控制开销 / Low overhead"
+        },
+        {
+          "id": "adaptability",
+          "label": "对网络变化的适应能力 / Adaptability"
+        },
+        {
+          "id": "coexistence",
+          "label": "多流共存能力 / Coexistence"
+        }
+      ]
+    },
+    {
+      "id": "problem_analysis",
+      "name": "设计动机与问题分析 / Problem analysis",
+      "description": "专家如何定义问题、解释现象和识别关键信号。",
+      "tags": [
+        {
+          "id": "limitation-of-existing",
+          "label": "现有算法的不足 / Limits of existing designs"
+        },
+        {
+          "id": "assumption-limits",
+          "label": "传统设计假设的局限 / Limits of assumptions"
+        },
+        {
+          "id": "symptom-cause",
+          "label": "现象背后的原因 / Symptom-cause analysis"
+        },
+        {
+          "id": "key-signal",
+          "label": "关键观测信号 / Key signal"
+        },
+        {
+          "id": "goal-conflict",
+          "label": "设计目标之间的冲突 / Goal conflict"
+        }
+      ]
+    },
+    {
+      "id": "mechanism",
+      "name": "控制机制设计 / Control mechanisms",
+      "description": "具体的控制机制和设计模式。",
+      "tags": [
+        {
+          "id": "bandwidth-estimation",
+          "label": "带宽估计 / Bandwidth estimation"
+        },
+        {
+          "id": "rtt-measurement",
+          "label": "RTT 与时延测量 / RTT measurement"
+        },
+        {
+          "id": "min-rtt-estimation",
+          "label": "最小 RTT 估计 / Min-RTT estimation"
+        },
+        {
+          "id": "loss-detection",
+          "label": "丢包检测 / Loss detection"
+        },
+        {
+          "id": "loss-response",
+          "label": "丢包响应 / Loss response"
+        },
+        {
+          "id": "ecn-handling",
+          "label": "ECN 信号处理 / ECN handling"
+        },
+        {
+          "id": "multi-bit-feedback",
+          "label": "多比特反馈 / Multi-bit feedback"
+        },
+        {
+          "id": "explicit-signal",
+          "label": "显式拥塞信号 / Explicit signal"
+        },
+        {
+          "id": "pacing",
+          "label": "发送节拍 / Pacing"
+        },
+        {
+          "id": "cwnd-control",
+          "label": "拥塞窗口控制 / Congestion window control"
+        },
+        {
+          "id": "rate-control",
+          "label": "发送速率控制 / Rate control"
+        },
+        {
+          "id": "probing",
+          "label": "探测机制 / Probing"
+        },
+        {
+          "id": "queue-control",
+          "label": "队列控制 / Queue control"
+        },
+        {
+          "id": "gain-control",
+          "label": "增益控制 / Gain control"
+        },
+        {
+          "id": "filtering",
+          "label": "滤波与估计 / Filtering and estimation"
+        },
+        {
+          "id": "state-machine",
+          "label": "状态机设计 / State machine"
+        },
+        {
+          "id": "startup-exit",
+          "label": "启动与退出 / Startup and exit"
+        },
+        {
+          "id": "network-state-identification",
+          "label": "网络状态识别 / Network state identification"
+        },
+        {
+          "id": "ack-based-recovery",
+          "label": "基于 ACK 的恢复 / ACK-based recovery"
+        },
+        {
+          "id": "packet-threshold",
+          "label": "包数阈值检测 / Packet threshold"
+        },
+        {
+          "id": "time-threshold",
+          "label": "时间阈值检测 / Time threshold"
+        },
+        {
+          "id": "persistent-congestion",
+          "label": "持续拥塞判定 / Persistent congestion"
+        }
+      ]
+    },
+    {
+      "id": "algorithm",
+      "name": "算法案例 / Algorithm cases",
+      "description": "作为设计经验案例的代表性算法。",
+      "tags": [
+        {
+          "id": "tcp-reno",
+          "label": "TCP Reno"
+        },
+        {
+          "id": "tcp-cubic",
+          "label": "TCP CUBIC"
+        },
+        {
+          "id": "bbr",
+          "label": "BBR"
+        },
+        {
+          "id": "copa",
+          "label": "Copa"
+        },
+        {
+          "id": "dctcp",
+          "label": "DCTCP"
+        },
+        {
+          "id": "quic",
+          "label": "QUIC"
+        }
+      ]
+    },
+    {
+      "id": "parameter",
+      "name": "参数与控制策略 / Parameters",
+      "description": "阈值、增益、周期和状态切换参数。",
+      "tags": [
+        {
+          "id": "gain-scheduling",
+          "label": "增益调度 / Gain scheduling"
+        },
+        {
+          "id": "threshold-selection",
+          "label": "阈值选择 / Threshold selection"
+        },
+        {
+          "id": "update-period",
+          "label": "更新周期 / Update period"
+        },
+        {
+          "id": "probe-period",
+          "label": "探测周期 / Probe period"
+        },
+        {
+          "id": "smoothing-coefficient",
+          "label": "平滑系数 / Smoothing coefficient"
+        },
+        {
+          "id": "state-transition-condition",
+          "label": "状态切换条件 / State transition condition"
+        },
+        {
+          "id": "parameter-coupling",
+          "label": "参数耦合 / Parameter coupling"
+        },
+        {
+          "id": "multiplicative-decrease-factor",
+          "label": "乘性减小因子 / Multiplicative decrease factor"
+        },
+        {
+          "id": "marking-threshold",
+          "label": "标记阈值 / Marking threshold"
+        },
+        {
+          "id": "pacing-rate",
+          "label": "节拍速率 / Pacing rate"
+        }
+      ]
+    },
+    {
+      "id": "tradeoff",
+      "name": "权衡、失败模式与边界 / Tradeoffs and failure modes",
+      "description": "收益、代价、失效条件和边界。",
+      "tags": [
+        {
+          "id": "throughput-vs-latency",
+          "label": "吞吐量与时延的权衡 / Throughput vs latency"
+        },
+        {
+          "id": "utilization-vs-fairness",
+          "label": "利用率与公平性的权衡 / Utilization vs fairness"
+        },
+        {
+          "id": "responsiveness-vs-stability",
+          "label": "快速响应与稳定性的权衡 / Responsiveness vs stability"
+        },
+        {
+          "id": "estimation-error",
+          "label": "估计误差 / Estimation error"
+        },
+        {
+          "id": "control-oscillation",
+          "label": "控制振荡 / Control oscillation"
+        },
+        {
+          "id": "multi-flow-unfairness",
+          "label": "多流不公平 / Multi-flow unfairness"
+        },
+        {
+          "id": "parameter-sensitivity",
+          "label": "参数敏感性 / Parameter sensitivity"
+        },
+        {
+          "id": "environmental-degradation",
+          "label": "环境变化导致退化 / Environmental degradation"
+        },
+        {
+          "id": "mechanism-interference",
+          "label": "机制相互干扰 / Mechanism interference"
+        },
+        {
+          "id": "bufferbloat-risk",
+          "label": "队列膨胀风险 / Bufferbloat risk"
+        }
+      ]
+    },
+    {
+      "id": "evaluation",
+      "name": "评估方法与证据 / Evaluation",
+      "description": "指标、环境、拓扑和实验条件。",
+      "tags": [
+        {
+          "id": "simulation",
+          "label": "仿真 / Simulation"
+        },
+        {
+          "id": "emulation",
+          "label": "模拟器 / Emulation"
+        },
+        {
+          "id": "testbed",
+          "label": "测试床 / Testbed"
+        },
+        {
+          "id": "production-trace",
+          "label": "生产网络测量 / Production trace"
+        },
+        {
+          "id": "analytical-model",
+          "label": "分析模型 / Analytical model"
+        },
+        {
+          "id": "metrics-throughput-delay",
+          "label": "吞吐/时延指标 / Throughput-delay metrics"
+        },
+        {
+          "id": "internet-deployment",
+          "label": "互联网部署 / Internet deployment"
+        }
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "id": "exp-001",
+      "title": "基于瓶颈带宽与传播时延模型的拥塞控制（BBR）",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "high-bdp",
+          "random-loss",
+          "bufferbloat",
+          "bandwidth-variation"
+        ],
+        "observed_symptoms": [
+          "丢包触发的拥塞控制把非拥塞丢包当成拥塞信号，导致吞吐量骤降",
+          "在高 BDP 路径上，丢包式 AIMD 需要很多个 RTT 才能重新填满管道",
+          "队列长期处于接近满的状态，排队时延高（bufferbloat）",
+          "浅缓冲区路径上，少量突发即可造成丢包"
+        ],
+        "underlying_cause": "BBR 作者认为，基于丢包的拥塞控制在建模层面有缺陷：它把丢包等同于拥塞，\n而可用发送速率实际上由瓶颈带宽和传播时延决定。丢包可能来自随机链路错误、\n缓冲区不足或突发，而不是瓶颈已经饱和。\n"
+      },
+      "design_rationale": {
+        "motivation": "让发送方稳定运行在“瓶颈带宽 × 传播时延”的 BDP 附近，在保持高吞吐的同时\n避免把瓶颈队列填满；并且不要求网络侧支持 ECN 或 AQM。\n",
+        "problem_analysis": "论文用两个路径参数描述网络：瓶颈带宽 BtlBw 与往返传播时延 RTprop。\n两者乘积给出在途数据量的最优值。只要持续估计这两个量，并让发送速率与\n在途数据量跟随估计值，就可以在不依赖丢包信号的情况下接近最优工作点。\n",
+        "reasoning_chain": [
+          "丢包只在队列溢出或非拥塞原因下发生，因此丢包是滞后且含混的拥塞信号。",
+          "路径长期的最大交付速率趋近瓶颈带宽；最小 RTT 趋近传播时延。",
+          "用 ACK 交付速率样本估计 BtlBw，用最小 RTT 窗口估计 RTprop。",
+          "用 pacing 速率控制发包时刻，用 cwnd 限制在途字节数。",
+          "用 Startup/Drain/ProbeBW/ProbeRTT 状态机处理启动、排空、带宽探测和 RTT 刷新。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "模型驱动的速率与窗口控制：BtlBw 与 RTprop 估计、pacing rate、\ncwnd 上限以及 Startup/Drain/ProbeBW/ProbeRTT 四状态机。\n",
+        "alternatives_considered": [
+          "基于丢包的 AIMD（Reno/CUBIC）：损失信号滞后，且会把随机丢包误判为拥塞。",
+          "纯时延/队列控制器：依赖队列时延信号，在缓冲区膨胀时难以区分传播时延与排队时延。"
+        ],
+        "why_selected": "直接建模路径的 BDP，使发送方可以运行在瓶颈速率附近并维持较小队列；\n同时不要求网络支持 ECN 或 AQM，可由发送端单边部署。\n"
+      },
+      "mechanism": {
+        "description": "BBR 在 ACK 上维护交付速率样本和 RTT 样本：BtlBw 取近期窗口内的最大交付速率，\nRTprop 取较长时间窗口（Linux 实现约 10 秒）内的最小 RTT。发送时以\npacing_rate = pacing_gain × BtlBw 控制发送间隔，以\ncwnd = cwnd_gain × BtlBw × RTprop 限制在途数据。状态机包括 Startup\n（以高增益快速提升速率）、Drain（排空启动阶段形成的队列）、ProbeBW\n（周期性用不同增益探测带宽）和 ProbeRTT（周期性压低在途数据以刷新 RTprop）。\n",
+        "control_signals": [
+          "ACK 交付速率样本（delivery rate）",
+          "RTT 样本与最小 RTT",
+          "在途字节数 inflight",
+          "是否达到满带宽 full_bw_reached"
+        ],
+        "control_actions": [
+          "设置 pacing 速率",
+          "设置拥塞窗口",
+          "状态机阶段切换",
+          "ProbeRTT 期间限制在途数据"
+        ],
+        "state_variables": [
+          "BtlBw（瓶颈带宽估计）",
+          "RTprop（传播时延估计）",
+          "pacing_gain",
+          "cwnd_gain",
+          "cycle phase / cycle index",
+          "full_bw / full_bw_cnt"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "在高 BDP 路径上可以达到更高的吞吐量",
+          "在最优工作点附近运行时瓶颈队列较小，排队时延低于丢包式算法",
+          "不要求网络支持 ECN 或 AQM，便于端到端部署",
+          "把随机丢包与拥塞区分开，非拥塞丢包不会直接触发窗口减半"
+        ],
+        "costs": [
+          "发送端需要具备 pacing 能力与较细粒度的发送调度",
+          "依赖 ACK 交付速率样本；ACK 聚合、压缩或反向路径拥塞会污染估计",
+          "ProbeRTT 周期性排空队列，会带来短时的吞吐下降和时延尖峰",
+          "Startup 阶段的高增益可能造成短时超发"
+        ],
+        "limitations": [
+          "模型假设瓶颈带宽与传播时延在估计窗口内近似可辨识",
+          "ACK 时钟不可用或严重失真的路径上，交付速率估计的可靠性下降",
+          "ProbeRTT 的测量结果有窗口有效期，路径快速变化时可能滞后"
+        ]
+      },
+      "failure_modes": [
+        "Startup 期间 pacing_gain 约为 2.885；若路径缓冲很小，快速提速率可能先造成丢包。",
+        "ACK 聚合使交付速率样本失真，BtlBw 估计可能偏高或偏低。",
+        "ProbeRTT 压低在途数据期间，吞吐暂时下降并出现时延尖峰。",
+        "路径频繁变化时，最小 RTT 窗口可能保留过期的 RTprop，直到 ProbeRTT 刷新。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "能够从 ACK 估计交付速率和 RTT 的路径",
+          "发送端可以 pacing 的传输实现",
+          "高 BDP、随机丢包或 bufferbloat 明显，且希望降低排队时延的场景"
+        ],
+        "unsuitable_conditions": [
+          "无法获得有意义 ACK 交付速率的场景",
+          "路径变化极快且无法及时刷新 RTprop 的场景（需要额外验证）"
+        ],
+        "assumptions": [
+          "瓶颈链路速率在估计窗口内近似稳定",
+          "传播时延存在可观测的下界",
+          "ACK 能反映数据交付进度"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "high_gain",
+          "guidance": "Startup 阶段使用约 2.885（2/ln2）的 pacing 增益，使每 RTT 带宽约翻倍。",
+          "rationale": "在启动阶段快速逼近 BtlBw，同时 Drain 阶段用其倒数排空形成的队列。",
+          "source_ids": [
+            "src-005"
+          ]
+        },
+        {
+          "parameter": "cwnd_gain",
+          "guidance": "Linux BBR 使用 2 作为 cwnd 增益，允许最多约 2 BDP 的在途数据。",
+          "rationale": "为 ACK 聚合和路径波动留出余量，避免因在途不足而低估带宽。",
+          "source_ids": [
+            "src-005"
+          ]
+        },
+        {
+          "parameter": "probe_bw_cycle",
+          "guidance": "ProbeBW 使用 8 个相位的增益序列（1.25、0.75、1.0 …），周期性地探测更高带宽。",
+          "rationale": "先轻微超发探测带宽，再回落到估计速率，避免长期填满队列。",
+          "source_ids": [
+            "src-004",
+            "src-005"
+          ]
+        },
+        {
+          "parameter": "probe_rtt_interval",
+          "guidance": "Linux 实现约每 10 秒进入一次 ProbeRTT，持续约 200 ms，并限制在途数据。",
+          "rationale": "刷新 RTprop 的下界；若长期不刷新，最小 RTT 可能包含旧路径的排队时延。",
+          "source_ids": [
+            "src-005"
+          ]
+        },
+        {
+          "parameter": "min_rtt_window",
+          "guidance": "RTprop 使用约 10 秒的滑动窗口最小值。",
+          "rationale": "窗口太短会受瞬时排队污染，太长则无法及时反映路径变化。",
+          "source_ids": [
+            "src-005"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "吞吐量",
+          "排队时延",
+          "丢包率",
+          "带宽利用率"
+        ],
+        "expected_effects": [
+          "在高 BDP 路径上接近瓶颈带宽",
+          "相比丢包式算法降低稳态排队时延",
+          "在存在随机丢包时避免吞吐量大幅下降"
+        ],
+        "evaluation_conditions": [
+          "论文报告的蜂窝网络、WiFi 与骨干网测量",
+          "论文报告的 YouTube 部署数据",
+          "Linux 实现与参考代码行为"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-004",
+          "source_type": "paper",
+          "locator": "Modeling the Network Path; The BBR Algorithm; Startup; Drain; ProbeBW; ProbeRTT",
+          "supports": [
+            "用 BtlBw 与 RTprop 建模路径并定义 BDP",
+            "四状态机的设计动机与行为",
+            "论文报告的高 BDP 与 bufferbloat 场景收益"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-005",
+          "source_type": "code",
+          "locator": "net/ipv4/tcp_bbr.c::bbr_update_bw / bbr_update_min_rtt / bbr_check_full_bw_reached / bbr_check_drain / bbr_update_cycle_phase / bbr_check_probe_rtt_done / bbr_set_pacing_rate / bbr_set_cwnd",
+          "supports": [
+            "BtlBw、min-RTT、full_bw 与状态机的具体实现",
+            "pacing 增益、cwnd 增益与 ProbeRTT 周期等参数取值"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "source_reported",
+      "related_experiences": [
+        "exp-005",
+        "exp-007",
+        "exp-008"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "high-bdp",
+          "random-loss",
+          "bufferbloat",
+          "bandwidth-variation",
+          "bandwidth-estimation",
+          "min-rtt-estimation",
+          "pacing",
+          "rate-control",
+          "gain-control",
+          "state-machine",
+          "startup-exit",
+          "bbr",
+          "throughput",
+          "low-latency",
+          "production-trace",
+          "metrics-throughput-delay"
+        ]
+      },
+      "search_text": "title: 基于瓶颈带宽与传播时延模型的拥塞控制（BBR）\nproblem: high-bdp random-loss bufferbloat bandwidth-variation 丢包触发的拥塞控制把非拥塞丢包当成拥塞信号，导致吞吐量骤降 在高 BDP 路径上，丢包式 AIMD 需要很多个 RTT 才能重新填满管道 队列长期处于接近满的状态，排队时延高（bufferbloat） 浅缓冲区路径上，少量突发即可造成丢包 BBR 作者认为，基于丢包的拥塞控制在建模层面有缺陷：它把丢包等同于拥塞，\n而可用发送速率实际上由瓶颈带宽和传播时延决定。丢包可能来自随机链路错误、\n缓冲区不足或突发，而不是瓶颈已经饱和。\n\nrationale: 让发送方稳定运行在“瓶颈带宽 × 传播时延”的 BDP 附近，在保持高吞吐的同时\n避免把瓶颈队列填满；并且不要求网络侧支持 ECN 或 AQM。\n 论文用两个路径参数描述网络：瓶颈带宽 BtlBw 与往返传播时延 RTprop。\n两者乘积给出在途数据量的最优值。只要持续估计这两个量，并让发送速率与\n在途数据量跟随估计值，就可以在不依赖丢包信号的情况下接近最优工作点。\n 丢包只在队列溢出或非拥塞原因下发生，因此丢包是滞后且含混的拥塞信号。 路径长期的最大交付速率趋近瓶颈带宽；最小 RTT 趋近传播时延。 用 ACK 交付速率样本估计 BtlBw，用最小 RTT 窗口估计 RTprop。 用 pacing 速率控制发包时刻，用 cwnd 限制在途字节数。 用 Startup/Drain/ProbeBW/ProbeRTT 状态机处理启动、排空、带宽探测和 RTT 刷新。\ndecision: 模型驱动的速率与窗口控制：BtlBw 与 RTprop 估计、pacing rate、\ncwnd 上限以及 Startup/Drain/ProbeBW/ProbeRTT 四状态机。\n 基于丢包的 AIMD（Reno/CUBIC）：损失信号滞后，且会把随机丢包误判为拥塞。 纯时延/队列控制器：依赖队列时延信号，在缓冲区膨胀时难以区分传播时延与排队时延。 直接建模路径的 BDP，使发送方可以运行在瓶颈速率附近并维持较小队列；\n同时不要求网络支持 ECN 或 AQM，可由发送端单边部署。\n\nmechanism: BBR 在 ACK 上维护交付速率样本和 RTT 样本：BtlBw 取近期窗口内的最大交付速率，\nRTprop 取较长时间窗口（Linux 实现约 10 秒）内的最小 RTT。发送时以\npacing_rate = pacing_gain × BtlBw 控制发送间隔，以\ncwnd = cwnd_gain × BtlBw × RTprop 限制在途数据。状态机包括 Startup\n（以高增益快速提升速率）、Drain（排空启动阶段形成的队列）、ProbeBW\n（周期性用不同增益探测带宽）和 ProbeRTT（周期性压低在途数据以刷新 RTprop）。\n ACK 交付速率样本（delivery rate） RTT 样本与最小 RTT 在途字节数 inflight 是否达到满带宽 full_bw_reached 设置 pacing 速率 设置拥塞窗口 状态机阶段切换 ProbeRTT 期间限制在途数据 BtlBw（瓶颈带宽估计） RTprop（传播时延估计） pacing_gain cwnd_gain cycle phase / cycle index full_bw / full_bw_cnt\ntradeoffs: 在高 BDP 路径上可以达到更高的吞吐量 在最优工作点附近运行时瓶颈队列较小，排队时延低于丢包式算法 不要求网络支持 ECN 或 AQM，便于端到端部署 把随机丢包与拥塞区分开，非拥塞丢包不会直接触发窗口减半 发送端需要具备 pacing 能力与较细粒度的发送调度 依赖 ACK 交付速率样本；ACK 聚合、压缩或反向路径拥塞会污染估计 ProbeRTT 周期性排空队列，会带来短时的吞吐下降和时延尖峰 Startup 阶段的高增益可能造成短时超发 模型假设瓶颈带宽与传播时延在估计窗口内近似可辨识 ACK 时钟不可用或严重失真的路径上，交付速率估计的可靠性下降 ProbeRTT 的测量结果有窗口有效期，路径快速变化时可能滞后\nfailure_modes: Startup 期间 pacing_gain 约为 2.885；若路径缓冲很小，快速提速率可能先造成丢包。 ACK 聚合使交付速率样本失真，BtlBw 估计可能偏高或偏低。 ProbeRTT 压低在途数据期间，吞吐暂时下降并出现时延尖峰。 路径频繁变化时，最小 RTT 窗口可能保留过期的 RTprop，直到 ProbeRTT 刷新。\napplicability: 能够从 ACK 估计交付速率和 RTT 的路径 发送端可以 pacing 的传输实现 高 BDP、随机丢包或 bufferbloat 明显，且希望降低排队时延的场景 无法获得有意义 ACK 交付速率的场景 路径变化极快且无法及时刷新 RTprop 的场景（需要额外验证） 瓶颈链路速率在估计窗口内近似稳定 传播时延存在可观测的下界 ACK 能反映数据交付进度\nparameters: high_gain cwnd_gain probe_bw_cycle probe_rtt_interval min_rtt_window Startup 阶段使用约 2.885（2/ln2）的 pacing 增益，使每 RTT 带宽约翻倍。 Linux BBR 使用 2 作为 cwnd 增益，允许最多约 2 BDP 的在途数据。 ProbeBW 使用 8 个相位的增益序列（1.25、0.75、1.0 …），周期性地探测更高带宽。 Linux 实现约每 10 秒进入一次 ProbeRTT，持续约 200 ms，并限制在途数据。 RTprop 使用约 10 秒的滑动窗口最小值。 在启动阶段快速逼近 BtlBw，同时 Drain 阶段用其倒数排空形成的队列。 为 ACK 聚合和路径波动留出余量，避免因在途不足而低估带宽。 先轻微超发探测带宽，再回落到估计速率，避免长期填满队列。 刷新 RTprop 的下界；若长期不刷新，最小 RTT 可能包含旧路径的排队时延。 窗口太短会受瞬时排队污染，太长则无法及时反映路径变化。\nevaluation: 吞吐量 排队时延 丢包率 带宽利用率 在高 BDP 路径上接近瓶颈带宽 相比丢包式算法降低稳态排队时延 在存在随机丢包时避免吞吐量大幅下降 论文报告的蜂窝网络、WiFi 与骨干网测量 论文报告的 YouTube 部署数据 Linux 实现与参考代码行为\ntags: high-bdp random-loss bufferbloat bandwidth-variation bandwidth-estimation min-rtt-estimation pacing rate-control gain-control state-machine startup-exit bbr throughput low-latency production-trace metrics-throughput-delay\nstatus: source_reported\ntype: mechanism_design",
+      "summary": "BBR 作者认为，基于丢包的拥塞控制在建模层面有缺陷：它把丢包等同于拥塞， 而可用发送速率实际上由瓶颈带宽和传播时延决定。丢包可能来自随机链路错误、 缓冲区不足或突发，而不是瓶颈已经饱和。 模型驱动的速率与窗口控制：BtlBw 与 RTprop 估计、pacing rate、 cwnd 上限以及 Startup/Drain/ProbeBW/ProbeRTT 四状态机。"
+    },
+    {
+      "id": "exp-002",
+      "title": "用时间驱动的三次窗口增长替代线性 AIMD（CUBIC）",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "high-bdp",
+          "congestion-loss",
+          "rtt-variation"
+        ],
+        "observed_symptoms": [
+          "Reno 的窗口每个 RTT 只增加约一个 MSS，高 BDP 路径上恢复和探测带宽极慢",
+          "窗口增长率以 RTT 次数计量，RTT 不同的流获得不同的增长机会",
+          "丢包后窗口减半，吞吐呈锯齿状，利用率不稳定"
+        ],
+        "underlying_cause": "标准 AIMD 的线性增长在高速长距网络中不足；窗口增长应当与真实时间挂钩，\n而不是与 RTT 次数挂钩，同时仍要保留与 Reno 竞争时的公平下界。\n"
+      },
+      "design_rationale": {
+        "motivation": "提高高速长距网络上的吞吐量和带宽利用率，同时保持与 Reno 的兼容性，\n并改善不同 RTT 流之间的公平性。\n",
+        "problem_analysis": "CUBIC 用自上次拥塞事件以来的时间 t 构造窗口目标\nW_cubic(t) = C · (t - K)^3 + W_max，其中 K 是再次达到 W_max 所需时间。\n由于增长由真实时间驱动，RTT 不同的流在相同时间内获得更可比的窗口增长；\n三次曲线在接近 W_max 时增长放缓，在超过 W_max 后重新加速探测新带宽。\n",
+        "reasoning_chain": [
+          "Reno 在高 BDP 下窗口增长太慢，需要更激进的增长函数。",
+          "使用时间的三次函数：接近上次饱和点时增长慢，远离时增长快。",
+          "单纯激进会损害与 Reno 的公平性，因此保留 TCP-friendly 区域。",
+          "新流需要更快获得带宽，因此加入 fast convergence 机制。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "三次窗口增长函数 + Reno-friendly 区域 + 乘性减小因子 β + fast convergence。\n",
+        "alternatives_considered": [
+          "Reno AIMD：高 BDP 下增长过慢。",
+          "BIC-TCP：CUBIC 的直接前身，使用二分搜索式增长，CUBIC 将其简化为三次函数。",
+          "HSTCP/STCP 等高带宽算法：改变 AIMD 参数或使用不同增长律。"
+        ],
+        "why_selected": "三次函数在靠近上次饱和点时降低增长速率，减少丢包；远离饱和点时加快增长，\n便于利用空闲带宽。Reno-friendly 区域保证在窗口较小时不劣于标准 TCP。\n"
+      },
+      "mechanism": {
+        "description": "CUBIC 维护 W_max（上次拥塞事件前的窗口）、epoch 起始时间和 K。\n收到新 ACK 时计算 target = W_cubic(t + RTT)。若当前 cwnd 低于 Reno\n在同一时刻应达到的窗口 W_est，则进入 Reno-friendly 区域，按等价 AIMD\n增长；否则根据 cwnd 与 W_max 的关系处于凹区（cwnd < W_max）或凸区\n（cwnd > W_max），按三次函数更新窗口。检测到丢包或 ECN 时，W_max 更新\n（启用 fast convergence 时进一步下调），cwnd 乘以 β。论文使用 C=0.4、\nβ=0.2；RFC 9438 推荐 C=0.4、β=0.7。\n",
+        "control_signals": [
+          "新 ACK 确认的数据量",
+          "平滑 RTT",
+          "距上次拥塞事件的时间",
+          "丢包或 ECN 拥塞事件"
+        ],
+        "control_actions": [
+          "更新 cwnd",
+          "更新 ssthresh",
+          "更新 W_max 与 epoch 状态",
+          "在 TCP-friendly/凹区/凸区之间切换"
+        ],
+        "state_variables": [
+          "W_max",
+          "W_last_max",
+          "K",
+          "epoch_start",
+          "origin_point",
+          "W_est",
+          "cwnd"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "高 BDP 路径上的窗口增长显著快于 Reno",
+          "接近 W_max 时增长放缓，降低丢包概率",
+          "Reno-friendly 区域保持与标准 TCP 的兼容性",
+          "fast convergence 让新流更快获得带宽"
+        ],
+        "costs": [
+          "β 小于 0.5 会减慢收敛速度，论文明确承认这一副作用",
+          "仍然以丢包/ECN 为主要拥塞信号，不能避免缓冲区膨胀",
+          "需要维护 W_max、K、epoch 等状态，实现比 Reno 复杂",
+          "三次根计算在早期实现中成本较高，需要使用 Newton-Raphson 等优化"
+        ],
+        "limitations": [
+          "对 RTT 公平性的改善是相对的，不是严格 RTT 公平",
+          "依赖准确的丢包或 ECN 事件检测",
+          "β 的选择在收敛速度与丢包持续时间之间存在权衡"
+        ]
+      },
+      "failure_modes": [
+        "浅缓冲区路径上，窗口增长过快仍可能先造成丢包。",
+        "多流 RTT 差异很大时，CUBIC 不能完全消除 RTT 不公平。",
+        "fast convergence 设计用于多流环境；单流且无其他流量时应关闭（RFC 9438）。",
+        "应用受限或 flight_size 远小于 cwnd 时，用 cwnd 计算新 ssthresh 可能把窗口压得过低（RFC 9438 讨论）。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "高速长距或高 BDP 路径",
+          "丢包或 ECN 能作为主要拥塞信号",
+          "需要与 Reno 共存并保持兼容性"
+        ],
+        "unsuitable_conditions": [
+          "以低时延为第一目标的数据中心网络（DCTCP 等更合适）",
+          "非拥塞丢包严重的无线路径，需要额外的丢包区分机制"
+        ],
+        "assumptions": [
+          "丢包或 ECN 事件能够反映拥塞",
+          "RTT 可测量且网络允许窗口式控制",
+          "发送方能够维护每次拥塞事件的历史状态"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "C",
+          "guidance": "CUBIC 增长常数，RFC 9438 推荐 C=0.4；论文也使用 0.4。",
+          "rationale": "决定远离饱和点时的增长速度，需要在高 BDP 利用率与稳定性之间平衡。",
+          "source_ids": [
+            "src-006",
+            "src-007"
+          ]
+        },
+        {
+          "parameter": "beta_cubic",
+          "guidance": "论文使用 β=0.2；RFC 9438 推荐 β=0.7，部署时必须明确采用的版本。",
+          "rationale": "β 越小，丢包后窗口降得越多、收敛越慢；β 越大，恢复更快但丢包可能持续多个 RTT。",
+          "source_ids": [
+            "src-006",
+            "src-007"
+          ]
+        },
+        {
+          "parameter": "alpha_cubic",
+          "guidance": "Reno-friendly 区域的等价 AIMD 加性因子取 α = 3(1-β)/(1+β)。",
+          "rationale": "使 CUBIC 在 TCP-friendly 区域的平均窗口与 Reno 相当。",
+          "source_ids": [
+            "src-006",
+            "src-007"
+          ]
+        },
+        {
+          "parameter": "fast_convergence",
+          "guidance": "在多流环境启用；当 cwnd < W_max 时把 W_max 下调为 cwnd·(1+β)/2。",
+          "rationale": "向新流释放带宽，加速新流收敛；单流环境启用会带来不必要的窗口收缩。",
+          "source_ids": [
+            "src-007"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "吞吐量",
+          "丢包率",
+          "Jain 公平性指数",
+          "收敛时间"
+        ],
+        "expected_effects": [
+          "高 BDP 路径上吞吐量高于 Reno",
+          "相比 BIC 具有更平滑的窗口曲线",
+          "与 Reno 共存时保持 Reno-friendly"
+        ],
+        "evaluation_conditions": [
+          "论文中的仿真与实验，包括高 BDP 链路和与 Reno/BIC/HSTCP 的对比",
+          "RFC 9438 总结的部署与互操作经验"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-006",
+          "source_type": "paper",
+          "locator": "3. CUBIC Congestion Control; 3.3 TCP-friendly region; 3.4 Concave region; 3.5 Convex region; 3.6 Multiplicative decrease; 3.7 Fast Convergence",
+          "supports": [
+            "三次窗口增长函数与 K 的定义",
+            "凹区、凸区与 TCP-friendly 区域的设计",
+            "论文采用 beta=0.2 及其收敛速度代价",
+            "fast convergence 的设计动机"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-007",
+          "source_type": "rfc",
+          "locator": "4.2. Window Increase Function; 4.3. Reno-Friendly Region; 4.6. Multiplicative Decrease; 4.7. Fast Convergence",
+          "supports": [
+            "当前标准化 CUBIC 的窗口增长与 Reno-friendly 公式",
+            "RFC 推荐 C=0.4、beta=0.7",
+            "fast convergence 的适用条件与 W_max 更新公式"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "cross_source_synthesis",
+      "related_experiences": [
+        "exp-005",
+        "exp-001",
+        "exp-007"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "high-bdp",
+          "congestion-loss",
+          "rtt-variation",
+          "cwnd-control",
+          "loss-response",
+          "multiplicative-decrease-factor",
+          "tcp-cubic",
+          "throughput",
+          "fairness",
+          "convergence",
+          "stability",
+          "control-oscillation",
+          "queue-buildup"
+        ]
+      },
+      "search_text": "title: 用时间驱动的三次窗口增长替代线性 AIMD（CUBIC）\nproblem: high-bdp congestion-loss rtt-variation Reno 的窗口每个 RTT 只增加约一个 MSS，高 BDP 路径上恢复和探测带宽极慢 窗口增长率以 RTT 次数计量，RTT 不同的流获得不同的增长机会 丢包后窗口减半，吞吐呈锯齿状，利用率不稳定 标准 AIMD 的线性增长在高速长距网络中不足；窗口增长应当与真实时间挂钩，\n而不是与 RTT 次数挂钩，同时仍要保留与 Reno 竞争时的公平下界。\n\nrationale: 提高高速长距网络上的吞吐量和带宽利用率，同时保持与 Reno 的兼容性，\n并改善不同 RTT 流之间的公平性。\n CUBIC 用自上次拥塞事件以来的时间 t 构造窗口目标\nW_cubic(t) = C · (t - K)^3 + W_max，其中 K 是再次达到 W_max 所需时间。\n由于增长由真实时间驱动，RTT 不同的流在相同时间内获得更可比的窗口增长；\n三次曲线在接近 W_max 时增长放缓，在超过 W_max 后重新加速探测新带宽。\n Reno 在高 BDP 下窗口增长太慢，需要更激进的增长函数。 使用时间的三次函数：接近上次饱和点时增长慢，远离时增长快。 单纯激进会损害与 Reno 的公平性，因此保留 TCP-friendly 区域。 新流需要更快获得带宽，因此加入 fast convergence 机制。\ndecision: 三次窗口增长函数 + Reno-friendly 区域 + 乘性减小因子 β + fast convergence。\n Reno AIMD：高 BDP 下增长过慢。 BIC-TCP：CUBIC 的直接前身，使用二分搜索式增长，CUBIC 将其简化为三次函数。 HSTCP/STCP 等高带宽算法：改变 AIMD 参数或使用不同增长律。 三次函数在靠近上次饱和点时降低增长速率，减少丢包；远离饱和点时加快增长，\n便于利用空闲带宽。Reno-friendly 区域保证在窗口较小时不劣于标准 TCP。\n\nmechanism: CUBIC 维护 W_max（上次拥塞事件前的窗口）、epoch 起始时间和 K。\n收到新 ACK 时计算 target = W_cubic(t + RTT)。若当前 cwnd 低于 Reno\n在同一时刻应达到的窗口 W_est，则进入 Reno-friendly 区域，按等价 AIMD\n增长；否则根据 cwnd 与 W_max 的关系处于凹区（cwnd < W_max）或凸区\n（cwnd > W_max），按三次函数更新窗口。检测到丢包或 ECN 时，W_max 更新\n（启用 fast convergence 时进一步下调），cwnd 乘以 β。论文使用 C=0.4、\nβ=0.2；RFC 9438 推荐 C=0.4、β=0.7。\n 新 ACK 确认的数据量 平滑 RTT 距上次拥塞事件的时间 丢包或 ECN 拥塞事件 更新 cwnd 更新 ssthresh 更新 W_max 与 epoch 状态 在 TCP-friendly/凹区/凸区之间切换 W_max W_last_max K epoch_start origin_point W_est cwnd\ntradeoffs: 高 BDP 路径上的窗口增长显著快于 Reno 接近 W_max 时增长放缓，降低丢包概率 Reno-friendly 区域保持与标准 TCP 的兼容性 fast convergence 让新流更快获得带宽 β 小于 0.5 会减慢收敛速度，论文明确承认这一副作用 仍然以丢包/ECN 为主要拥塞信号，不能避免缓冲区膨胀 需要维护 W_max、K、epoch 等状态，实现比 Reno 复杂 三次根计算在早期实现中成本较高，需要使用 Newton-Raphson 等优化 对 RTT 公平性的改善是相对的，不是严格 RTT 公平 依赖准确的丢包或 ECN 事件检测 β 的选择在收敛速度与丢包持续时间之间存在权衡\nfailure_modes: 浅缓冲区路径上，窗口增长过快仍可能先造成丢包。 多流 RTT 差异很大时，CUBIC 不能完全消除 RTT 不公平。 fast convergence 设计用于多流环境；单流且无其他流量时应关闭（RFC 9438）。 应用受限或 flight_size 远小于 cwnd 时，用 cwnd 计算新 ssthresh 可能把窗口压得过低（RFC 9438 讨论）。\napplicability: 高速长距或高 BDP 路径 丢包或 ECN 能作为主要拥塞信号 需要与 Reno 共存并保持兼容性 以低时延为第一目标的数据中心网络（DCTCP 等更合适） 非拥塞丢包严重的无线路径，需要额外的丢包区分机制 丢包或 ECN 事件能够反映拥塞 RTT 可测量且网络允许窗口式控制 发送方能够维护每次拥塞事件的历史状态\nparameters: C beta_cubic alpha_cubic fast_convergence CUBIC 增长常数，RFC 9438 推荐 C=0.4；论文也使用 0.4。 论文使用 β=0.2；RFC 9438 推荐 β=0.7，部署时必须明确采用的版本。 Reno-friendly 区域的等价 AIMD 加性因子取 α = 3(1-β)/(1+β)。 在多流环境启用；当 cwnd < W_max 时把 W_max 下调为 cwnd·(1+β)/2。 决定远离饱和点时的增长速度，需要在高 BDP 利用率与稳定性之间平衡。 β 越小，丢包后窗口降得越多、收敛越慢；β 越大，恢复更快但丢包可能持续多个 RTT。 使 CUBIC 在 TCP-friendly 区域的平均窗口与 Reno 相当。 向新流释放带宽，加速新流收敛；单流环境启用会带来不必要的窗口收缩。\nevaluation: 吞吐量 丢包率 Jain 公平性指数 收敛时间 高 BDP 路径上吞吐量高于 Reno 相比 BIC 具有更平滑的窗口曲线 与 Reno 共存时保持 Reno-friendly 论文中的仿真与实验，包括高 BDP 链路和与 Reno/BIC/HSTCP 的对比 RFC 9438 总结的部署与互操作经验\ntags: high-bdp congestion-loss rtt-variation cwnd-control loss-response multiplicative-decrease-factor tcp-cubic throughput fairness convergence stability control-oscillation queue-buildup\nstatus: cross_source_synthesis\ntype: mechanism_design",
+      "summary": "标准 AIMD 的线性增长在高速长距网络中不足；窗口增长应当与真实时间挂钩， 而不是与 RTT 次数挂钩，同时仍要保留与 Reno 竞争时的公平下界。 三次窗口增长函数 + Reno-friendly 区域 + 乘性减小因子 β + fast convergence。"
+    },
+    {
+      "id": "exp-003",
+      "title": "从单比特 ECN 标记中恢复多比特拥塞程度（DCTCP）",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "datacenter-low-latency",
+          "incast",
+          "queue-buildup",
+          "shallow-buffer"
+        ],
+        "observed_symptoms": [
+          "数据中心交换机缓冲区浅，队列一堆积就会丢包或造成毫秒级排队时延",
+          "标准 TCP 对单个拥塞标记就窗口减半，造成队列大幅振荡和吞吐损失",
+          "多个端口共享缓冲区时，少数拥塞端口的队列会挤压其他端口的可用缓冲",
+          "Incast 场景下大量同步短流冲击同一队列，容易超时"
+        ],
+        "underlying_cause": "标准 TCP 把拥塞标记当作二值信号，只反应“是否拥塞”，不反应“拥塞程度”。\n在浅缓冲区、高线速的数据中心网络中，队列波动很快，二值反应会导致\n窗口和队列大幅振荡，并浪费共享缓冲区。\n"
+      },
+      "design_rationale": {
+        "motivation": "在商品化浅缓冲区交换机上同时获得高突发容忍度、低时延和高吞吐。\n",
+        "problem_analysis": "作者指出，关键不是某个固定的控制律，而是从单比特 CE 标记序列中恢复\n“队列超过标记阈值的概率”，即多比特的拥塞程度信息。接收方准确回传\n标记序列，发送方据此估计标记比例 α，并按比例减小窗口。\n",
+        "reasoning_chain": [
+          "队列长度超过阈值 K 即标记 CE，使发送方尽早获知队列超调。",
+          "接收方逐包反馈是否被标记，保留标记序列而不是只回传一个二值信号。",
+          "发送方估计最近一个窗口的标记比例 α。",
+          "窗口按 (1 - α/2) 减小：轻微拥塞时轻微降速，严重拥塞时接近减半。",
+          "低队列占用为突发流量保留缓冲区余量，减少丢包和超时。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "基于 ECN 的多比特反馈：交换机按瞬时队列阈值标记 CE，接收方精确回传标记，\n发送方维护标记比例 α 并按比例减小窗口。\n",
+        "alternatives_considered": [
+          "标准 TCP 的 ECN 反应：每次标记都窗口减半，反应过强。",
+          "基于排队时延的控制器：高线速下测量微小队列时延噪声大。",
+          "调整 RED 参数：仍只提供二值反应。"
+        ],
+        "why_selected": "复用现有 ECN 机制，只需交换机按固定阈值标记、接收方如实回传，\n就能把单比特序列转化为拥塞程度估计；无需修改交换机硬件语义。\n"
+      },
+      "mechanism": {
+        "description": "DCTCP 有三部分。交换机：到达包的瞬时队列占用超过固定阈值 K 时标记 CE，\n否则不标记。接收方：使用 ECN-Echo 精确反映标记序列；在延迟 ACK 下用\n两状态状态机决定是否设置 ECE，发送方可据此重建标记游程。发送方：\n每个窗口更新一次 α ← (1-g)·α + g·F，其中 F 是本窗口被标记包的比例，\ng 是平滑权重；收到标记 ACK 时执行 cwnd ← cwnd·(1 - α/2)。其余 TCP\n机制（慢启动、加性增长、丢包恢复）保持不变。\n",
+        "control_signals": [
+          "CE 标记序列（由接收方通过 ECN-Echo 回传）",
+          "每个窗口的标记比例 F",
+          "平滑后的标记概率 α"
+        ],
+        "control_actions": [
+          "按 α 比例减小拥塞窗口",
+          "保持加性增长与标准恢复机制"
+        ],
+        "state_variables": [
+          "α（标记概率估计）",
+          "g（EWMA 权重）",
+          "K（交换机标记阈值）"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "在浅缓冲区交换机上维持低队列占用和低时延",
+          "按拥塞程度比例降速，窗口振荡远小于标准 TCP",
+          "提前标记减少突发导致的丢包与超时",
+          "复用标准 ECN 头字段与交换机能力，部署改动小"
+        ],
+        "costs": [
+          "需要支持 ECN 的交换机和正确配置的标记阈值 K",
+          "需要接收方准确回传标记序列，延迟 ACK 实现更复杂",
+          "α 是统计估计，参数 g 和 K 会影响响应速度和稳定性",
+          "主要针对 RTT 较小、流数量有限的数据中心环境"
+        ],
+        "limitations": [
+          "交换机必须支持按瞬时队列长度标记 CE",
+          "标记阈值与缓冲区配置耦合，跨厂商配置需要校准",
+          "对非 DCTCP 的竞争流不具备同样的比例反应能力"
+        ]
+      },
+      "failure_modes": [
+        "Incast 规模超过缓冲区可吸收范围时，DCTCP 也无法避免丢包。",
+        "K 设置过高会延迟拥塞反馈，导致队列堆积；过低则频繁标记、降低吞吐。",
+        "ECN 配置或回传错误会使 α 估计失真。",
+        "RTT 差异大或流数量很多时，按窗口估计 α 的假设变弱。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "数据中心等低 RTT、浅缓冲区、支持 ECN 的网络",
+          "多短流、Incast 和共享缓冲区的场景",
+          "希望同时降低排队时延并保持吞吐的部署"
+        ],
+        "unsuitable_conditions": [
+          "网络设备不支持 ECN 或无法配置标记阈值",
+          "RTT 很大且流数量极多的广域网络（DCTCP 的设计假设不成立）"
+        ],
+        "assumptions": [
+          "交换机可按瞬时队列长度设置 CE",
+          "接收方能够回传每个包的标记信息",
+          "发送方每个窗口可统计一次标记比例"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "K",
+          "guidance": "交换机标记阈值，按瞬时队列占用超过 K 即标记 CE。",
+          "rationale": "K 决定开始反馈的队列水平；论文在浅缓冲区数据中心场景中选择很小的 K。",
+          "source_ids": [
+            "src-008"
+          ]
+        },
+        {
+          "parameter": "g",
+          "guidance": "α 的 EWMA 权重，0 < g < 1，每个窗口更新一次。",
+          "rationale": "g 越大，对最近一个窗口的拥塞程度反应越快，但估计噪声也越大。",
+          "source_ids": [
+            "src-008"
+          ]
+        },
+        {
+          "parameter": "window_decrease",
+          "guidance": "cwnd ← cwnd·(1 - α/2)。",
+          "rationale": "α 接近 0 时轻微降速，α=1 时等价于 TCP 的减半，实现按拥塞程度比例反应。",
+          "source_ids": [
+            "src-008"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "排队时延",
+          "吞吐量",
+          "丢包率与超时",
+          "短流完成时间"
+        ],
+        "expected_effects": [
+          "队列占用保持在标记阈值 K 附近",
+          "相比 TCP+RED 显著降低排队时延和丢包",
+          "在 Incast 和缓冲区压力场景中减少超时"
+        ],
+        "evaluation_conditions": [
+          "论文中的数据中心实验、Incast、队列堆积与缓冲区压力微基准",
+          "与 TCP、TCP+RED 等基线对比"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-008",
+          "source_type": "paper",
+          "locator": "3.1. Algorithm; 3.2. Benefits; 3.3. Analysis; 3.4. Guidelines for choosing parameters",
+          "supports": [
+            "交换机按瞬时队列阈值标记 CE 的设计",
+            "接收方精确回传标记序列、发送方估计 α",
+            "cwnd ← cwnd·(1 - α/2) 的比例反应",
+            "浅缓冲区、Incast 与低时延场景的收益"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-003",
+          "source_type": "rfc",
+          "locator": "5. Explicit Congestion Notification in IP; 6.1. TCP; 6.1.2. The TCP Sender; 6.1.3. The TCP Receiver",
+          "supports": [
+            "DCTCP 复用的 CE、ECN-Echo 与 CWR 机制",
+            "标准 ECN 接收方与发送方的基线行为"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "cross_source_synthesis",
+      "related_experiences": [
+        "exp-005",
+        "exp-007"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "datacenter-low-latency",
+          "incast",
+          "queue-buildup",
+          "shallow-buffer",
+          "ecn-handling",
+          "multi-bit-feedback",
+          "explicit-signal",
+          "cwnd-control",
+          "marking-threshold",
+          "smoothing-coefficient",
+          "dctcp",
+          "low-latency",
+          "throughput",
+          "queue-control"
+        ]
+      },
+      "search_text": "title: 从单比特 ECN 标记中恢复多比特拥塞程度（DCTCP）\nproblem: datacenter-low-latency incast queue-buildup shallow-buffer 数据中心交换机缓冲区浅，队列一堆积就会丢包或造成毫秒级排队时延 标准 TCP 对单个拥塞标记就窗口减半，造成队列大幅振荡和吞吐损失 多个端口共享缓冲区时，少数拥塞端口的队列会挤压其他端口的可用缓冲 Incast 场景下大量同步短流冲击同一队列，容易超时 标准 TCP 把拥塞标记当作二值信号，只反应“是否拥塞”，不反应“拥塞程度”。\n在浅缓冲区、高线速的数据中心网络中，队列波动很快，二值反应会导致\n窗口和队列大幅振荡，并浪费共享缓冲区。\n\nrationale: 在商品化浅缓冲区交换机上同时获得高突发容忍度、低时延和高吞吐。\n 作者指出，关键不是某个固定的控制律，而是从单比特 CE 标记序列中恢复\n“队列超过标记阈值的概率”，即多比特的拥塞程度信息。接收方准确回传\n标记序列，发送方据此估计标记比例 α，并按比例减小窗口。\n 队列长度超过阈值 K 即标记 CE，使发送方尽早获知队列超调。 接收方逐包反馈是否被标记，保留标记序列而不是只回传一个二值信号。 发送方估计最近一个窗口的标记比例 α。 窗口按 (1 - α/2) 减小：轻微拥塞时轻微降速，严重拥塞时接近减半。 低队列占用为突发流量保留缓冲区余量，减少丢包和超时。\ndecision: 基于 ECN 的多比特反馈：交换机按瞬时队列阈值标记 CE，接收方精确回传标记，\n发送方维护标记比例 α 并按比例减小窗口。\n 标准 TCP 的 ECN 反应：每次标记都窗口减半，反应过强。 基于排队时延的控制器：高线速下测量微小队列时延噪声大。 调整 RED 参数：仍只提供二值反应。 复用现有 ECN 机制，只需交换机按固定阈值标记、接收方如实回传，\n就能把单比特序列转化为拥塞程度估计；无需修改交换机硬件语义。\n\nmechanism: DCTCP 有三部分。交换机：到达包的瞬时队列占用超过固定阈值 K 时标记 CE，\n否则不标记。接收方：使用 ECN-Echo 精确反映标记序列；在延迟 ACK 下用\n两状态状态机决定是否设置 ECE，发送方可据此重建标记游程。发送方：\n每个窗口更新一次 α ← (1-g)·α + g·F，其中 F 是本窗口被标记包的比例，\ng 是平滑权重；收到标记 ACK 时执行 cwnd ← cwnd·(1 - α/2)。其余 TCP\n机制（慢启动、加性增长、丢包恢复）保持不变。\n CE 标记序列（由接收方通过 ECN-Echo 回传） 每个窗口的标记比例 F 平滑后的标记概率 α 按 α 比例减小拥塞窗口 保持加性增长与标准恢复机制 α（标记概率估计） g（EWMA 权重） K（交换机标记阈值）\ntradeoffs: 在浅缓冲区交换机上维持低队列占用和低时延 按拥塞程度比例降速，窗口振荡远小于标准 TCP 提前标记减少突发导致的丢包与超时 复用标准 ECN 头字段与交换机能力，部署改动小 需要支持 ECN 的交换机和正确配置的标记阈值 K 需要接收方准确回传标记序列，延迟 ACK 实现更复杂 α 是统计估计，参数 g 和 K 会影响响应速度和稳定性 主要针对 RTT 较小、流数量有限的数据中心环境 交换机必须支持按瞬时队列长度标记 CE 标记阈值与缓冲区配置耦合，跨厂商配置需要校准 对非 DCTCP 的竞争流不具备同样的比例反应能力\nfailure_modes: Incast 规模超过缓冲区可吸收范围时，DCTCP 也无法避免丢包。 K 设置过高会延迟拥塞反馈，导致队列堆积；过低则频繁标记、降低吞吐。 ECN 配置或回传错误会使 α 估计失真。 RTT 差异大或流数量很多时，按窗口估计 α 的假设变弱。\napplicability: 数据中心等低 RTT、浅缓冲区、支持 ECN 的网络 多短流、Incast 和共享缓冲区的场景 希望同时降低排队时延并保持吞吐的部署 网络设备不支持 ECN 或无法配置标记阈值 RTT 很大且流数量极多的广域网络（DCTCP 的设计假设不成立） 交换机可按瞬时队列长度设置 CE 接收方能够回传每个包的标记信息 发送方每个窗口可统计一次标记比例\nparameters: K g window_decrease 交换机标记阈值，按瞬时队列占用超过 K 即标记 CE。 α 的 EWMA 权重，0 < g < 1，每个窗口更新一次。 cwnd ← cwnd·(1 - α/2)。 K 决定开始反馈的队列水平；论文在浅缓冲区数据中心场景中选择很小的 K。 g 越大，对最近一个窗口的拥塞程度反应越快，但估计噪声也越大。 α 接近 0 时轻微降速，α=1 时等价于 TCP 的减半，实现按拥塞程度比例反应。\nevaluation: 排队时延 吞吐量 丢包率与超时 短流完成时间 队列占用保持在标记阈值 K 附近 相比 TCP+RED 显著降低排队时延和丢包 在 Incast 和缓冲区压力场景中减少超时 论文中的数据中心实验、Incast、队列堆积与缓冲区压力微基准 与 TCP、TCP+RED 等基线对比\ntags: datacenter-low-latency incast queue-buildup shallow-buffer ecn-handling multi-bit-feedback explicit-signal cwnd-control marking-threshold smoothing-coefficient dctcp low-latency throughput queue-control\nstatus: cross_source_synthesis\ntype: mechanism_design",
+      "summary": "标准 TCP 把拥塞标记当作二值信号，只反应“是否拥塞”，不反应“拥塞程度”。 在浅缓冲区、高线速的数据中心网络中，队列波动很快，二值反应会导致 窗口和队列大幅振荡，并浪费共享缓冲区。 基于 ECN 的多比特反馈：交换机按瞬时队列阈值标记 CE，接收方精确回传标记， 发送方维护标记比例 α 并按比例减小窗口。"
+    },
+    {
+      "id": "exp-004",
+      "title": "以排队时延目标和速率反馈控制窗口（Copa）",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "bufferbloat",
+          "queue-buildup",
+          "bandwidth-variation",
+          "rtt-variation"
+        ],
+        "observed_symptoms": [
+          "以填满缓冲区为目标的拥塞控制造成持续高排队时延",
+          "纯时延控制器（如 Vegas）在缓冲区填满型算法竞争下失去带宽",
+          "不同 RTT 的流在吞吐上存在不公平",
+          "应用既希望低时延，又希望在多种网络下保持吞吐"
+        ],
+        "underlying_cause": "现有算法或者只优化吞吐（填满队列），或者只优化时延而在竞争中吃亏。\nCopa 从网络效用最大化目标出发，把吞吐和排队时延放进同一个目标函数，\n并用目标速率与当前速率的比较来调整窗口。\n"
+      },
+      "design_rationale": {
+        "motivation": "提出一种既能在多种网络条件下保持高吞吐、又能维持很低排队时延的\n端到端拥塞控制，并在与缓冲区填充型算法竞争时不处于劣势。\n",
+        "problem_analysis": "Copa 选择效用函数 U = log λ - δ·log d，其中 λ 是平均吞吐，d 是\n（超出传播时延的）排队时延，δ 控制时延相对吞吐的权重。在该模型下，\n最大化 U 的目标速率为 λ_t = 1/(δ·d_q)，d_q 是测得的平均排队时延。\nCopa 通过比较当前速率 λ = cwnd/RTT_standing 与 λ_t，决定增加还是减小 cwnd。\n",
+        "reasoning_chain": [
+          "显式建模吞吐与时延的效用权衡，而不是把丢包当作唯一信号。",
+          "用近期最小 RTT 估计 standing queue，用长期最小 RTT 估计传播时延。",
+          "以目标速率 λ_t 为反馈目标，向它调整 cwnd。",
+          "用 velocity 参数加快离开稳态时的收敛，稳态时 v=1。",
+          "检测到缓冲区填充型竞争流时切换到 competitive mode，调整 δ。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "基于排队时延的目标速率控制：用 RTT_standing 与 RTT_min 估计 d_q，\n计算 λ_t = 1/(δ·d_q)，按 (λ - λ_t) 的符号调整 cwnd，并配合 velocity\n参数、pacing 与 competitive mode。\n",
+        "alternatives_considered": [
+          "Cubic/NewReno 等缓冲区填充型算法：时延高。",
+          "Vegas 等纯时延算法：在与填满型算法竞争时吞吐吃亏。",
+          "BBR 等基于带宽/RTT 模型的算法：Copa 认为其目标不同，且论文报告其在某些公平性指标上的差异。"
+        ],
+        "why_selected": "目标函数直接表达吞吐与时延的权衡；目标速率只依赖可观测的 RTT 与 cwnd；\n竞争模式使低时延策略在存在填满型流时仍能获得带宽。\n"
+      },
+      "mechanism": {
+        "description": "Copa 在每个 ACK 上估计 RTT_standing（最近 srtt/2 时间窗口内的最小 RTT）\n和 RTT_min（较长时间窗口内的最小 RTT，论文取 10 秒与流龄的较小值），\n得到 d_q = RTT_standing - RTT_min 与 λ_t = 1/(δ·d_q)。若 λ = cwnd/RTT_standing\n不超过 λ_t，则 cwnd ← cwnd + v/(δ·cwnd)；否则 cwnd ← cwnd - v/(δ·cwnd)。\nvelocity v 初始为 1，方向连续保持三个 RTT 后翻倍，方向改变则重置为 1。\n发送方以约 2·cwnd/RTT_standing 的速率 pacing。默认模式 δ=0.5；\n若最近 5 个 RTT 内没有观察到“接近空队列”，则切换到 competitive mode，\n对 1/δ 做 AIMD，以匹配缓冲区填充型算法的激进程度。\n",
+        "control_signals": [
+          "RTT_standing（近期最小 RTT）",
+          "RTT_min（长期最小 RTT）",
+          "排队时延 d_q",
+          "当前速率 λ = cwnd/RTT_standing",
+          "最近 5 个 RTT 的队列空置情况"
+        ],
+        "control_actions": [
+          "按目标速率调整 cwnd",
+          "设置 pacing 速率",
+          "在默认模式与 competitive mode 之间切换",
+          "对 1/δ 执行 AIMD"
+        ],
+        "state_variables": [
+          "cwnd",
+          "δ",
+          "v（velocity）",
+          "RTT_standing",
+          "RTT_min",
+          "direction",
+          "mode"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "在稳态下维持很低的排队时延",
+          "通过速度参数在离开稳态时快速收敛",
+          "论文报告与 Cubic 共存时 Copa 获益而 Cubic 平均吞吐不受显著损害",
+          "在 RTT 公平性实验中优于 Cubic 等基线"
+        ],
+        "costs": [
+          "依赖对 RTT_min 与 RTT_standing 的可靠估计；ACK 压缩和路径抖动会影响判断",
+          "competitive mode 需要对 1/δ 做额外控制，增加状态和参数",
+          "pacing 需要发送端支持较细粒度的发送调度",
+          "目标速率模型假设排队时延可测且与拥塞相关"
+        ],
+        "limitations": [
+          "在路径变化频繁时，长期 RTT_min 可能过期（论文用 10 秒窗口处理路径变化）",
+          "与高度不同的 RTT 或极端无线环境下的表现需要额外验证",
+          "competitive mode 的切换依赖启发式空队列检测"
+        ]
+      },
+      "failure_modes": [
+        "ACK 压缩或反向路径排队会抬高 RTT_standing，使 d_q 估计偏大。",
+        "路径改变后 RTT_min 未及时刷新，目标速率计算出现偏差。",
+        "竞争流存在但空队列检测误判时，Copa 可能在默认模式与竞争模式间振荡。",
+        "δ 设置不当会在时延与吞吐之间偏离期望工作点。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "能够测量 RTT 并区分传播时延与排队时延的路径",
+          "希望显式控制排队时延、同时保持吞吐的通用互联网场景",
+          "存在 Cubic/NewReno 等缓冲区填充型竞争流的部署"
+        ],
+        "unsuitable_conditions": [
+          "路径排队时延不可观测或 RTT 测量严重失真的环境",
+          "需要严格控制发送突发但无法 pacing 的实现"
+        ],
+        "assumptions": [
+          "排队时延近似等于 RTT_standing - RTT_min",
+          "发送速率可由 cwnd/RTT_standing 表示",
+          "接收端 ACK 能及时反映数据交付"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "delta",
+          "guidance": "默认模式 δ=0.5；competitive mode 中 δ ≤ 0.5，并随竞争检测动态调整。",
+          "rationale": "δ 决定吞吐与时延的相对权重；δ 越大越偏好低时延，但可能降低吞吐。",
+          "source_ids": [
+            "src-009"
+          ]
+        },
+        {
+          "parameter": "velocity",
+          "guidance": "v 初始为 1；方向连续保持三个 RTT 后翻倍，方向改变则重置。",
+          "rationale": "加速远离稳态时的收敛，同时在稳态保持 v=1 以避免过度振荡。",
+          "source_ids": [
+            "src-009"
+          ]
+        },
+        {
+          "parameter": "rtt_windows",
+          "guidance": "RTT_standing 取最近 srtt/2 窗口的最小值；RTT_min 取 10 秒与流龄的较小值。",
+          "rationale": "近期窗口用于抵御 ACK 压缩和抖动，长期窗口用于估计传播时延并适应路径变化。",
+          "source_ids": [
+            "src-009"
+          ]
+        },
+        {
+          "parameter": "pacing_rate",
+          "guidance": "以约 2·cwnd/RTT_standing 的速率 pacing。",
+          "rationale": "避免突发；2 倍系数用于补偿 pacing 实现的不精确。",
+          "source_ids": [
+            "src-009"
+          ]
+        },
+        {
+          "parameter": "empty_queue_detector",
+          "guidance": "若最近 5 个 RTT 内出现 d_q < 0.1·(RTT_max - RTT_min)，视为接近空队列。",
+          "rationale": "仅 Copa 流共存时队列应周期性接近空；若长期不空，说明存在填满型竞争流。",
+          "source_ids": [
+            "src-009"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "吞吐量",
+          "排队时延",
+          "Jain 公平性指数",
+          "RTT 公平性"
+        ],
+        "expected_effects": [
+          "稳态排队时延显著低于缓冲区填充型算法",
+          "与 Cubic 共存时获得较好带宽份额",
+          "在 RTT 不同的流之间实现更好的公平性"
+        ],
+        "evaluation_conditions": [
+          "论文中的仿真、Mahimahi 模拟链路与真实网络实验",
+          "与 Cubic、Vegas、BBR、PCC 等基线比较"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-009",
+          "source_type": "paper",
+          "locator": "2. Copa Algorithm; 2.1. Target Rate and Update Rule; 2.2. Competing with Buffer-Filling Schemes; 3. Dynamics of Copa; 5.3. RTT-fairness",
+          "supports": [
+            "效用函数与目标速率 λ_t = 1/(δ·d_q)",
+            "cwnd 调整规则、velocity 参数与 pacing",
+            "competitive mode 与空队列检测",
+            "论文报告的吞吐、时延、公平性与共存实验结果"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "source_reported",
+      "related_experiences": [
+        "exp-001",
+        "exp-005",
+        "exp-007"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "bufferbloat",
+          "queue-buildup",
+          "bandwidth-variation",
+          "rtt-variation",
+          "rtt-measurement",
+          "min-rtt-estimation",
+          "rate-control",
+          "cwnd-control",
+          "pacing",
+          "gain-control",
+          "copa",
+          "low-latency",
+          "fairness",
+          "coexistence"
+        ]
+      },
+      "search_text": "title: 以排队时延目标和速率反馈控制窗口（Copa）\nproblem: bufferbloat queue-buildup bandwidth-variation rtt-variation 以填满缓冲区为目标的拥塞控制造成持续高排队时延 纯时延控制器（如 Vegas）在缓冲区填满型算法竞争下失去带宽 不同 RTT 的流在吞吐上存在不公平 应用既希望低时延，又希望在多种网络下保持吞吐 现有算法或者只优化吞吐（填满队列），或者只优化时延而在竞争中吃亏。\nCopa 从网络效用最大化目标出发，把吞吐和排队时延放进同一个目标函数，\n并用目标速率与当前速率的比较来调整窗口。\n\nrationale: 提出一种既能在多种网络条件下保持高吞吐、又能维持很低排队时延的\n端到端拥塞控制，并在与缓冲区填充型算法竞争时不处于劣势。\n Copa 选择效用函数 U = log λ - δ·log d，其中 λ 是平均吞吐，d 是\n（超出传播时延的）排队时延，δ 控制时延相对吞吐的权重。在该模型下，\n最大化 U 的目标速率为 λ_t = 1/(δ·d_q)，d_q 是测得的平均排队时延。\nCopa 通过比较当前速率 λ = cwnd/RTT_standing 与 λ_t，决定增加还是减小 cwnd。\n 显式建模吞吐与时延的效用权衡，而不是把丢包当作唯一信号。 用近期最小 RTT 估计 standing queue，用长期最小 RTT 估计传播时延。 以目标速率 λ_t 为反馈目标，向它调整 cwnd。 用 velocity 参数加快离开稳态时的收敛，稳态时 v=1。 检测到缓冲区填充型竞争流时切换到 competitive mode，调整 δ。\ndecision: 基于排队时延的目标速率控制：用 RTT_standing 与 RTT_min 估计 d_q，\n计算 λ_t = 1/(δ·d_q)，按 (λ - λ_t) 的符号调整 cwnd，并配合 velocity\n参数、pacing 与 competitive mode。\n Cubic/NewReno 等缓冲区填充型算法：时延高。 Vegas 等纯时延算法：在与填满型算法竞争时吞吐吃亏。 BBR 等基于带宽/RTT 模型的算法：Copa 认为其目标不同，且论文报告其在某些公平性指标上的差异。 目标函数直接表达吞吐与时延的权衡；目标速率只依赖可观测的 RTT 与 cwnd；\n竞争模式使低时延策略在存在填满型流时仍能获得带宽。\n\nmechanism: Copa 在每个 ACK 上估计 RTT_standing（最近 srtt/2 时间窗口内的最小 RTT）\n和 RTT_min（较长时间窗口内的最小 RTT，论文取 10 秒与流龄的较小值），\n得到 d_q = RTT_standing - RTT_min 与 λ_t = 1/(δ·d_q)。若 λ = cwnd/RTT_standing\n不超过 λ_t，则 cwnd ← cwnd + v/(δ·cwnd)；否则 cwnd ← cwnd - v/(δ·cwnd)。\nvelocity v 初始为 1，方向连续保持三个 RTT 后翻倍，方向改变则重置为 1。\n发送方以约 2·cwnd/RTT_standing 的速率 pacing。默认模式 δ=0.5；\n若最近 5 个 RTT 内没有观察到“接近空队列”，则切换到 competitive mode，\n对 1/δ 做 AIMD，以匹配缓冲区填充型算法的激进程度。\n RTT_standing（近期最小 RTT） RTT_min（长期最小 RTT） 排队时延 d_q 当前速率 λ = cwnd/RTT_standing 最近 5 个 RTT 的队列空置情况 按目标速率调整 cwnd 设置 pacing 速率 在默认模式与 competitive mode 之间切换 对 1/δ 执行 AIMD cwnd δ v（velocity） RTT_standing RTT_min direction mode\ntradeoffs: 在稳态下维持很低的排队时延 通过速度参数在离开稳态时快速收敛 论文报告与 Cubic 共存时 Copa 获益而 Cubic 平均吞吐不受显著损害 在 RTT 公平性实验中优于 Cubic 等基线 依赖对 RTT_min 与 RTT_standing 的可靠估计；ACK 压缩和路径抖动会影响判断 competitive mode 需要对 1/δ 做额外控制，增加状态和参数 pacing 需要发送端支持较细粒度的发送调度 目标速率模型假设排队时延可测且与拥塞相关 在路径变化频繁时，长期 RTT_min 可能过期（论文用 10 秒窗口处理路径变化） 与高度不同的 RTT 或极端无线环境下的表现需要额外验证 competitive mode 的切换依赖启发式空队列检测\nfailure_modes: ACK 压缩或反向路径排队会抬高 RTT_standing，使 d_q 估计偏大。 路径改变后 RTT_min 未及时刷新，目标速率计算出现偏差。 竞争流存在但空队列检测误判时，Copa 可能在默认模式与竞争模式间振荡。 δ 设置不当会在时延与吞吐之间偏离期望工作点。\napplicability: 能够测量 RTT 并区分传播时延与排队时延的路径 希望显式控制排队时延、同时保持吞吐的通用互联网场景 存在 Cubic/NewReno 等缓冲区填充型竞争流的部署 路径排队时延不可观测或 RTT 测量严重失真的环境 需要严格控制发送突发但无法 pacing 的实现 排队时延近似等于 RTT_standing - RTT_min 发送速率可由 cwnd/RTT_standing 表示 接收端 ACK 能及时反映数据交付\nparameters: delta velocity rtt_windows pacing_rate empty_queue_detector 默认模式 δ=0.5；competitive mode 中 δ ≤ 0.5，并随竞争检测动态调整。 v 初始为 1；方向连续保持三个 RTT 后翻倍，方向改变则重置。 RTT_standing 取最近 srtt/2 窗口的最小值；RTT_min 取 10 秒与流龄的较小值。 以约 2·cwnd/RTT_standing 的速率 pacing。 若最近 5 个 RTT 内出现 d_q < 0.1·(RTT_max - RTT_min)，视为接近空队列。 δ 决定吞吐与时延的相对权重；δ 越大越偏好低时延，但可能降低吞吐。 加速远离稳态时的收敛，同时在稳态保持 v=1 以避免过度振荡。 近期窗口用于抵御 ACK 压缩和抖动，长期窗口用于估计传播时延并适应路径变化。 避免突发；2 倍系数用于补偿 pacing 实现的不精确。 仅 Copa 流共存时队列应周期性接近空；若长期不空，说明存在填满型竞争流。\nevaluation: 吞吐量 排队时延 Jain 公平性指数 RTT 公平性 稳态排队时延显著低于缓冲区填充型算法 与 Cubic 共存时获得较好带宽份额 在 RTT 不同的流之间实现更好的公平性 论文中的仿真、Mahimahi 模拟链路与真实网络实验 与 Cubic、Vegas、BBR、PCC 等基线比较\ntags: bufferbloat queue-buildup bandwidth-variation rtt-variation rtt-measurement min-rtt-estimation rate-control cwnd-control pacing gain-control copa low-latency fairness coexistence\nstatus: source_reported\ntype: mechanism_design",
+      "summary": "现有算法或者只优化吞吐（填满队列），或者只优化时延而在竞争中吃亏。 Copa 从网络效用最大化目标出发，把吞吐和排队时延放进同一个目标函数， 并用目标速率与当前速率的比较来调整窗口。 基于排队时延的目标速率控制：用 RTT_standing 与 RTT_min 估计 d_q， 计算 λ_t = 1/(δ·d_q)，按 (λ - λ_t) 的符号调整 cwnd，并配合 velocity 参数、pacing 与 competitive mode。"
+    },
+    {
+      "id": "exp-005",
+      "title": "加性增长/乘性减小（AIMD）作为拥塞控制基线",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "congestion-loss",
+          "random-loss",
+          "high-bdp",
+          "multi-flow-competition"
+        ],
+        "observed_symptoms": [
+          "网络进入拥塞后若发送方不后退，会出现吞吐崩溃（congestion collapse）",
+          "多个发送方需要一种去中心化的方式共享瓶颈带宽",
+          "突发式增长会迅速把队列推到溢出，造成大量丢包",
+          "发送方无法直接知道可用带宽，只能通过试探发现"
+        ],
+        "underlying_cause": "网络本身不向端主机报告可用带宽；发送方必须通过“增加负载直到出现拥塞信号，\n再后退”的闭环来发现可用容量。丢包（或后来的 ECN）被用作拥塞信号。\n"
+      },
+      "design_rationale": {
+        "motivation": "在不要求网络逐流维护状态的条件下，让互相竞争的发送方稳定、公平地共享\n瓶颈带宽，并避免拥塞崩溃。\n",
+        "problem_analysis": "Jacobson 从一阶时间序列模型出发：拥塞时队列会指数增长，发送方必须至少\n以同样快的速度后退，因此采用乘性减小；而在无拥塞时，乘性增长会导致\n严重过冲和振荡，因为把网络推入饱和容易、恢复难，所以采用加性增长。\n发送方还应以 ACK 自时钟（self-clocking）保持管道中的包数量守恒。\n",
+        "reasoning_chain": [
+          "网络不报告剩余带宽，只能通过丢包等信号间接观察拥塞。",
+          "过估计可用带宽的代价很高，所以一旦拥塞就乘性减小。",
+          "指数增长必然过冲，所以无拥塞时用小而固定的加性增长。",
+          "ACK 返回节奏反映路径速率，可作为发送节拍（self-clocking）。",
+          "慢启动在连接开始时快速找到近似可用窗口，再进入拥塞避免。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "慢启动 + 拥塞避免（AIMD）：每个 ACK 加性增加窗口，检测到丢包时乘性减小窗口；\n配合快速重传/快速恢复减少等待超时。\n",
+        "alternatives_considered": [
+          "乘性增长/乘性减小：增长过快，导致剧烈振荡和吞吐损失。",
+          "纯速率控制：缺少 ACK 自时钟，难以维持管道守恒。",
+          "依赖网关逐流状态的方案：部署成本高。"
+        ],
+        "why_selected": "AIMD 只需端主机状态，能稳定收敛到公平份额；慢启动缩短初始探测时间；\n快速重传避免每次丢包都等待超时。\n"
+      },
+      "mechanism": {
+        "description": "连接以慢启动开始：每收到一个确认新数据的 ACK，窗口按确认字节数增加，\n约每个 RTT 翻倍，直到达到 ssthresh 或检测到拥塞。进入拥塞避免后，\n每个 RTT 窗口约增加一个 MSS（实现上每 ACK 增加约 1/cwnd）。检测到丢包时，\nssthresh 设为当前在途数据的约一半，cwnd 减半；快速重传在收到三个重复 ACK\n时重传丢失段并进入快速恢复，避免等待重传超时。RFC 5681 形式化了这些规则。\n",
+        "control_signals": [
+          "ACK 确认的新数据量",
+          "重复 ACK（三个重复 ACK 触发快速重传）",
+          "重传超时",
+          "丢包事件（后续可用 ECN 替代或补充）"
+        ],
+        "control_actions": [
+          "慢启动阶段指数增长 cwnd",
+          "拥塞避免阶段加性增长 cwnd",
+          "丢包时乘性减小 cwnd 与 ssthresh",
+          "快速重传与快速恢复"
+        ],
+        "state_variables": [
+          "cwnd",
+          "ssthresh",
+          "dup ACK 计数",
+          "在途数据量"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "端到端、无需网络逐流状态，部署极其广泛",
+          "多个 AIMD 流能收敛到大致公平的带宽份额",
+          "对网络变化有基本的自适应能力",
+          "慢启动和快速恢复降低了连接启动与单包丢失的代价"
+        ],
+        "costs": [
+          "吞吐量随 RTT 和丢包率下降，在高 BDP 路径上扩展性差",
+          "为了发现可用带宽必须周期性把队列推到丢包点，造成排队时延和锯齿",
+          "把所有丢包都当作拥塞，随机丢包会导致不必要的降速",
+          "丢包是滞后信号，拥塞已经发生后才反应"
+        ],
+        "limitations": [
+          "标准 AIMD 在高 BDP、长 RTT 或高随机丢包路径上效率低",
+          "与基于时延或显式信号的机制竞争时，可能持续填满缓冲区",
+          "对 ACK 路径和 ACK 时钟的质量有依赖"
+        ]
+      },
+      "failure_modes": [
+        "随机丢包被误判为拥塞，吞吐量显著下降。",
+        "高 BDP 路径上窗口恢复慢，链路利用率低。",
+        "浅缓冲区下，窗口增长过快造成丢包，快速恢复也可能失败。",
+        "ACK 压缩、ACK 丢失或反向路径拥塞会破坏自时钟，导致突发。",
+        "多个流同步减窗时，队列和吞吐出现同步振荡。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "丢包近似反映拥塞的路径",
+          "需要简单、端到端、广泛兼容的基线实现",
+          "中低 BDP 或对时延不敏感的场景"
+        ],
+        "unsuitable_conditions": [
+          "高 BDP 长距路径（需要 CUBIC 等扩展）",
+          "随机丢包严重或需要低排队时延的场景",
+          "数据中心等需要浅缓冲区低时延的环境"
+        ],
+        "assumptions": [
+          "丢包（几乎）总是由拥塞引起",
+          "ACK 能按路径速率返回，提供可用的自时钟",
+          "发送方能够检测丢包（重复 ACK 或超时）"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "multiplicative_decrease",
+          "guidance": "丢包时 cwnd 约减半（d=0.5）。",
+          "rationale": "乘性减小足够快，能在拥塞持续时指数后退；0.5 是 Jacobson 实现的选择。",
+          "source_ids": [
+            "src-010",
+            "src-001"
+          ]
+        },
+        {
+          "parameter": "additive_increase",
+          "guidance": "拥塞避免阶段每个 RTT 约增加一个 MSS（每 ACK 约 1/cwnd）。",
+          "rationale": "小而固定的增长避免指数过冲，使多个流逐步收敛到公平份额。",
+          "source_ids": [
+            "src-010",
+            "src-001"
+          ]
+        },
+        {
+          "parameter": "fast_retransmit_threshold",
+          "guidance": "收到三个重复 ACK 时触发快速重传（RFC 5681）。",
+          "rationale": "在等待超时之前恢复单个丢包，减少吞吐空窗。",
+          "source_ids": [
+            "src-001"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "吞吐量",
+          "丢包率",
+          "公平性",
+          "收敛行为"
+        ],
+        "expected_effects": [
+          "多个流收敛到大致公平的带宽份额",
+          "在丢包式网络中维持稳定吞吐",
+          "相比无拥塞控制的发送方避免拥塞崩溃"
+        ],
+        "evaluation_conditions": [
+          "Jacobson 的仿真与早期互联网测量",
+          "RFC 5681 标准化的行为描述"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-010",
+          "source_type": "paper",
+          "locator": "1 Getting to Equilibrium: Slow-start; 2 Conservation at equilibrium: round-trip timing; 3 Adapting to the path: congestion avoidance",
+          "supports": [
+            "慢启动、包守恒/自时钟与 AIMD 的设计动机",
+            "乘性减小与加性增长的推理链",
+            "丢包作为拥塞信号及 d=0.5、u=1 的选择"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-001",
+          "source_type": "rfc",
+          "locator": "3.1 Slow Start and Congestion Avoidance; 3.2 Fast Retransmit/Fast Recovery",
+          "supports": [
+            "AIMD、慢启动阈值与快速重传/恢复的标准行为"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "cross_source_synthesis",
+      "related_experiences": [
+        "exp-001",
+        "exp-002",
+        "exp-003",
+        "exp-006",
+        "exp-007"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "congestion-loss",
+          "random-loss",
+          "high-bdp",
+          "multi-flow-competition",
+          "loss-response",
+          "cwnd-control",
+          "tcp-reno",
+          "fairness",
+          "stability",
+          "convergence",
+          "throughput",
+          "control-oscillation",
+          "queue-buildup"
+        ]
+      },
+      "search_text": "title: 加性增长/乘性减小（AIMD）作为拥塞控制基线\nproblem: congestion-loss random-loss high-bdp multi-flow-competition 网络进入拥塞后若发送方不后退，会出现吞吐崩溃（congestion collapse） 多个发送方需要一种去中心化的方式共享瓶颈带宽 突发式增长会迅速把队列推到溢出，造成大量丢包 发送方无法直接知道可用带宽，只能通过试探发现 网络本身不向端主机报告可用带宽；发送方必须通过“增加负载直到出现拥塞信号，\n再后退”的闭环来发现可用容量。丢包（或后来的 ECN）被用作拥塞信号。\n\nrationale: 在不要求网络逐流维护状态的条件下，让互相竞争的发送方稳定、公平地共享\n瓶颈带宽，并避免拥塞崩溃。\n Jacobson 从一阶时间序列模型出发：拥塞时队列会指数增长，发送方必须至少\n以同样快的速度后退，因此采用乘性减小；而在无拥塞时，乘性增长会导致\n严重过冲和振荡，因为把网络推入饱和容易、恢复难，所以采用加性增长。\n发送方还应以 ACK 自时钟（self-clocking）保持管道中的包数量守恒。\n 网络不报告剩余带宽，只能通过丢包等信号间接观察拥塞。 过估计可用带宽的代价很高，所以一旦拥塞就乘性减小。 指数增长必然过冲，所以无拥塞时用小而固定的加性增长。 ACK 返回节奏反映路径速率，可作为发送节拍（self-clocking）。 慢启动在连接开始时快速找到近似可用窗口，再进入拥塞避免。\ndecision: 慢启动 + 拥塞避免（AIMD）：每个 ACK 加性增加窗口，检测到丢包时乘性减小窗口；\n配合快速重传/快速恢复减少等待超时。\n 乘性增长/乘性减小：增长过快，导致剧烈振荡和吞吐损失。 纯速率控制：缺少 ACK 自时钟，难以维持管道守恒。 依赖网关逐流状态的方案：部署成本高。 AIMD 只需端主机状态，能稳定收敛到公平份额；慢启动缩短初始探测时间；\n快速重传避免每次丢包都等待超时。\n\nmechanism: 连接以慢启动开始：每收到一个确认新数据的 ACK，窗口按确认字节数增加，\n约每个 RTT 翻倍，直到达到 ssthresh 或检测到拥塞。进入拥塞避免后，\n每个 RTT 窗口约增加一个 MSS（实现上每 ACK 增加约 1/cwnd）。检测到丢包时，\nssthresh 设为当前在途数据的约一半，cwnd 减半；快速重传在收到三个重复 ACK\n时重传丢失段并进入快速恢复，避免等待重传超时。RFC 5681 形式化了这些规则。\n ACK 确认的新数据量 重复 ACK（三个重复 ACK 触发快速重传） 重传超时 丢包事件（后续可用 ECN 替代或补充） 慢启动阶段指数增长 cwnd 拥塞避免阶段加性增长 cwnd 丢包时乘性减小 cwnd 与 ssthresh 快速重传与快速恢复 cwnd ssthresh dup ACK 计数 在途数据量\ntradeoffs: 端到端、无需网络逐流状态，部署极其广泛 多个 AIMD 流能收敛到大致公平的带宽份额 对网络变化有基本的自适应能力 慢启动和快速恢复降低了连接启动与单包丢失的代价 吞吐量随 RTT 和丢包率下降，在高 BDP 路径上扩展性差 为了发现可用带宽必须周期性把队列推到丢包点，造成排队时延和锯齿 把所有丢包都当作拥塞，随机丢包会导致不必要的降速 丢包是滞后信号，拥塞已经发生后才反应 标准 AIMD 在高 BDP、长 RTT 或高随机丢包路径上效率低 与基于时延或显式信号的机制竞争时，可能持续填满缓冲区 对 ACK 路径和 ACK 时钟的质量有依赖\nfailure_modes: 随机丢包被误判为拥塞，吞吐量显著下降。 高 BDP 路径上窗口恢复慢，链路利用率低。 浅缓冲区下，窗口增长过快造成丢包，快速恢复也可能失败。 ACK 压缩、ACK 丢失或反向路径拥塞会破坏自时钟，导致突发。 多个流同步减窗时，队列和吞吐出现同步振荡。\napplicability: 丢包近似反映拥塞的路径 需要简单、端到端、广泛兼容的基线实现 中低 BDP 或对时延不敏感的场景 高 BDP 长距路径（需要 CUBIC 等扩展） 随机丢包严重或需要低排队时延的场景 数据中心等需要浅缓冲区低时延的环境 丢包（几乎）总是由拥塞引起 ACK 能按路径速率返回，提供可用的自时钟 发送方能够检测丢包（重复 ACK 或超时）\nparameters: multiplicative_decrease additive_increase fast_retransmit_threshold 丢包时 cwnd 约减半（d=0.5）。 拥塞避免阶段每个 RTT 约增加一个 MSS（每 ACK 约 1/cwnd）。 收到三个重复 ACK 时触发快速重传（RFC 5681）。 乘性减小足够快，能在拥塞持续时指数后退；0.5 是 Jacobson 实现的选择。 小而固定的增长避免指数过冲，使多个流逐步收敛到公平份额。 在等待超时之前恢复单个丢包，减少吞吐空窗。\nevaluation: 吞吐量 丢包率 公平性 收敛行为 多个流收敛到大致公平的带宽份额 在丢包式网络中维持稳定吞吐 相比无拥塞控制的发送方避免拥塞崩溃 Jacobson 的仿真与早期互联网测量 RFC 5681 标准化的行为描述\ntags: congestion-loss random-loss high-bdp multi-flow-competition loss-response cwnd-control tcp-reno fairness stability convergence throughput control-oscillation queue-buildup\nstatus: cross_source_synthesis\ntype: mechanism_design",
+      "summary": "网络本身不向端主机报告可用带宽；发送方必须通过“增加负载直到出现拥塞信号， 再后退”的闭环来发现可用容量。丢包（或后来的 ECN）被用作拥塞信号。 慢启动 + 拥塞避免（AIMD）：每个 ACK 加性增加窗口，检测到丢包时乘性减小窗口； 配合快速重传/快速恢复减少等待超时。"
+    },
+    {
+      "id": "exp-006",
+      "title": "QUIC 的丢包检测、PTO 与持续拥塞判定",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "path-change",
+          "rtt-variation",
+          "congestion-loss",
+          "burst-traffic"
+        ],
+        "observed_symptoms": [
+          "基于重传的丢包检测存在重传歧义，难以判断 ACK 对应哪次发送",
+          "仅靠重传超时（RTO）恢复会带来长时吞吐空窗",
+          "乱序和 ACK 丢失会让发送方误判丢包或过度等待",
+          "路径切换后旧路径的拥塞状态可能不再适用"
+        ],
+        "underlying_cause": "TCP 的序号与重传机制使丢失检测存在歧义；RTO 与 TLP 等机制分散且难以\n精确描述。QUIC 使用单调递增的包号和 ACK 区间，使丢失检测语义更清晰，\n并需要一套明确的 PTO 与持续拥塞规则来驱动恢复和拥塞控制。\n"
+      },
+      "design_rationale": {
+        "motivation": "为 QUIC 定义一套与传输层解耦、可被不同拥塞控制算法复用的丢包检测与恢复机制，\n减少重传歧义、避免长时间等待 RTO，并在严重拥塞时可靠地重置状态。\n",
+        "problem_analysis": "QUIC 包号单调递增且不重传同一个包号，因此 ACK 能无歧义地确认包；\nACK 帧可携带多个区间，便于在乱序和 ACK 丢失时仍建立丢失事件。\n基于包数阈值和时间阈值检测丢失；当没有足够 ACK 反馈时，用 PTO\n主动探测；当长时间没有确认任何包时，判定持续拥塞并重置拥塞状态。\n",
+        "reasoning_chain": [
+          "单调包号与 ACK 区间消除重传歧义，使丢失检测更明确。",
+          "包阈值适合快速恢复少量丢失；时间阈值适应乱序和不同 RTT。",
+          "PTO 在没有足够 ACK 时探测，替代 RTO/TLP 的分散机制。",
+          "持续拥塞判定允许发送方在长时间无反馈后重置，避免保留失效状态。",
+          "拥塞控制本身可以是 NewReno 类或可替换算法（如 CUBIC）。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "基于 ACK 的丢失检测（包阈值与时间阈值）+ Probe Timeout（PTO）+ 持续拥塞判定；\n默认拥塞控制器为 NewReno 类，慢启动/恢复/拥塞避免状态明确，并建议 pacing。\n",
+        "alternatives_considered": [
+          "仅使用 RTO：恢复慢，且难以覆盖乱序与 ACK 丢失。",
+          "沿用 TCP 的重传序号语义：存在重传歧义。",
+          "固定包数阈值：对不同 RTT 和乱序程度适应性差。"
+        ],
+        "why_selected": "ACK 区间与单调包号使丢失检测更精确；包阈值与时间阈值互补；\nPTO 提供明确的探测机制；持续拥塞判定覆盖长时间无反馈的极端情况。\n"
+      },
+      "mechanism": {
+        "description": "QUIC 维护 RTT 估计（smoothed_rtt、rttvar、min_rtt）。当包号小于某个\n已确认包、且差距达到包阈值（kPacketThreshold=3），或发送时间早于\n当前时间减去时间阈值（约 9/8 × max(smoothed_rtt, latest_rtt)）时，\n判为丢失。若没有足够 ACK，则在 PTO 到期时发送探测包；PTO 由\nsmoothed_rtt、rttvar 与 max_ack_delay 计算。若在持续拥塞持续时间内\n没有任何包被确认，则判定持续拥塞：把 cwnd 重置为最小窗口，\n并以慢启动重新开始。拥塞控制在慢启动、恢复与拥塞避免之间切换，\n默认每丢包事件把 cwnd 减半；发送方应 pacing，避免突发。\n",
+        "control_signals": [
+          "ACK 确认的包号与 ACK 区间",
+          "RTT 样本、smoothed_rtt、rttvar、min_rtt",
+          "PTO 定时器",
+          "持续拥塞持续时间",
+          "ECN-CE 计数（若启用）"
+        ],
+        "control_actions": [
+          "声明丢包并触发恢复",
+          "发送 PTO 探测包",
+          "调整 cwnd 与 ssthresh",
+          "持续拥塞时重置 cwnd",
+          "pacing 发送"
+        ],
+        "state_variables": [
+          "largest_acked",
+          "bytes_in_flight",
+          "congestion_window",
+          "ssthresh",
+          "smoothed_rtt / rttvar / min_rtt",
+          "PTO 定时器",
+          "恢复起始包号"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "单调包号与 ACK 区间消除重传歧义，丢失检测语义清晰",
+          "包阈值与时间阈值互补，兼顾快速恢复与乱序容忍",
+          "PTO 替代分散的 RTO/TLP，机制更统一",
+          "持续拥塞判定避免在长时间无反馈后保留失效的拥塞状态",
+          "拥塞控制器可替换（NewReno、CUBIC 等）"
+        ],
+        "costs": [
+          "需要维护 ACK 区间、PTO 与持续拥塞等额外状态",
+          "默认控制器仍是丢包式，继承其对随机丢包和 bufferbloat 的局限",
+          "PTO 探测可能在拥塞时注入额外包",
+          "时间阈值与持续拥塞阈值是权衡参数"
+        ],
+        "limitations": [
+          "默认 NewReno 类控制器在高 BDP 路径上扩展性有限，需要替换控制器",
+          "乱序严重的路径上，包阈值可能导致误判",
+          "持续拥塞阈值过小会不必要地重置，过大则对严重拥塞反应迟钝"
+        ]
+      },
+      "failure_modes": [
+        "乱序超过包阈值时，正常包被误判为丢失，触发不必要重传和降窗。",
+        "PTO 在严重拥塞时连续探测，可能加重拥塞（需要与拥塞控制协同）。",
+        "持续拥塞阈值配置不当：过小导致吞吐损失，过大导致持续激进发送。",
+        "ACK 反馈长期缺失时，若持续拥塞判定不触发，可能一直保留旧窗口。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "QUIC 端点，且需要明确的丢失检测与恢复语义",
+          "存在乱序、ACK 丢失或路径切换的互联网路径",
+          "希望复用统一恢复机制并替换拥塞控制器的实现"
+        ],
+        "unsuitable_conditions": [
+          "非 QUIC 传输（TCP 有自己的 RFC 5681/6675 等机制）",
+          "无法提供包号单调性与 ACK 区间的自定义传输"
+        ],
+        "assumptions": [
+          "包号单调递增且不重用",
+          "ACK 能确认已接收的包号区间",
+          "RTT 与 max_ack_delay 可估计"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "kPacketThreshold",
+          "guidance": "包阈值 3：包号落后已确认包 3 个即判为丢失。",
+          "rationale": "与 TCP 的三个重复 ACK 经验一致，兼顾快速恢复与少量乱序容忍。",
+          "source_ids": [
+            "src-002"
+          ]
+        },
+        {
+          "parameter": "time_threshold",
+          "guidance": "时间阈值约为 9/8 × max(smoothed_rtt, latest_rtt)。",
+          "rationale": "为 RTT 估计误差和乱序留出余量，避免过早判丢。",
+          "source_ids": [
+            "src-002"
+          ]
+        },
+        {
+          "parameter": "PTO",
+          "guidance": "PTO 由 smoothed_rtt + max(4·rttvar, kGranularity) + max_ack_delay 组成并带指数退避。",
+          "rationale": "在没有足够 ACK 时主动探测；包含 max_ack_delay 以适配延迟 ACK。",
+          "source_ids": [
+            "src-002"
+          ]
+        },
+        {
+          "parameter": "kPersistentCongestionThreshold",
+          "guidance": "推荐值 3；持续拥塞持续时间 = (smoothed_rtt + max(4·rttvar, kGranularity) + max_ack_delay) × 3。",
+          "rationale": "近似等价于 TCP 在两次 TLP 后声明 RTO；过小造成不必要重置，过大造成反应迟钝。",
+          "source_ids": [
+            "src-002"
+          ]
+        },
+        {
+          "parameter": "minimum_window",
+          "guidance": "最小拥塞窗口为 2 个包（约 2 × max_datagram_size）。",
+          "rationale": "允许发送方在恢复期间继续探测，同时避免窗口降到 0 后无法前进。",
+          "source_ids": [
+            "src-002"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "恢复时间",
+          "吞吐量",
+          "丢包误判率",
+          "PTO 触发次数"
+        ],
+        "expected_effects": [
+          "比仅依赖 RTO 更快地从丢包中恢复",
+          "在乱序和 ACK 丢失下减少误判",
+          "长时间无反馈后可靠地重置拥塞状态"
+        ],
+        "evaluation_conditions": [
+          "RFC 9002 的行为规范与伪代码",
+          "QUIC 实现的互操作与实验评估"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-002",
+          "source_type": "rfc",
+          "locator": "5. Estimating the Round-Trip Time; 6.1.1. Packet Threshold; 6.1.2. Time Threshold; 6.2. Probe Timeout; 7.3. Congestion Control States; 7.6. Persistent Congestion; 7.7. Pacing",
+          "supports": [
+            "包阈值与时间阈值的丢失检测规则",
+            "PTO 的组成与探测行为",
+            "持续拥塞持续时间与 kPersistentCongestionThreshold=3",
+            "最小窗口、恢复状态与 pacing 建议"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-001",
+          "source_type": "rfc",
+          "locator": "3.1 Slow Start and Congestion Avoidance; 3.2 Fast Retransmit/Fast Recovery",
+          "supports": [
+            "QUIC 默认控制器所遵循的 NewReno 类丢包响应基线"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "source_reported",
+      "related_experiences": [
+        "exp-005",
+        "exp-008",
+        "exp-007"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "path-change",
+          "rtt-variation",
+          "congestion-loss",
+          "burst-traffic",
+          "loss-detection",
+          "ack-based-recovery",
+          "packet-threshold",
+          "time-threshold",
+          "loss-response",
+          "persistent-congestion",
+          "quic",
+          "rtt-measurement",
+          "pacing",
+          "cwnd-control",
+          "robustness"
+        ]
+      },
+      "search_text": "title: QUIC 的丢包检测、PTO 与持续拥塞判定\nproblem: path-change rtt-variation congestion-loss burst-traffic 基于重传的丢包检测存在重传歧义，难以判断 ACK 对应哪次发送 仅靠重传超时（RTO）恢复会带来长时吞吐空窗 乱序和 ACK 丢失会让发送方误判丢包或过度等待 路径切换后旧路径的拥塞状态可能不再适用 TCP 的序号与重传机制使丢失检测存在歧义；RTO 与 TLP 等机制分散且难以\n精确描述。QUIC 使用单调递增的包号和 ACK 区间，使丢失检测语义更清晰，\n并需要一套明确的 PTO 与持续拥塞规则来驱动恢复和拥塞控制。\n\nrationale: 为 QUIC 定义一套与传输层解耦、可被不同拥塞控制算法复用的丢包检测与恢复机制，\n减少重传歧义、避免长时间等待 RTO，并在严重拥塞时可靠地重置状态。\n QUIC 包号单调递增且不重传同一个包号，因此 ACK 能无歧义地确认包；\nACK 帧可携带多个区间，便于在乱序和 ACK 丢失时仍建立丢失事件。\n基于包数阈值和时间阈值检测丢失；当没有足够 ACK 反馈时，用 PTO\n主动探测；当长时间没有确认任何包时，判定持续拥塞并重置拥塞状态。\n 单调包号与 ACK 区间消除重传歧义，使丢失检测更明确。 包阈值适合快速恢复少量丢失；时间阈值适应乱序和不同 RTT。 PTO 在没有足够 ACK 时探测，替代 RTO/TLP 的分散机制。 持续拥塞判定允许发送方在长时间无反馈后重置，避免保留失效状态。 拥塞控制本身可以是 NewReno 类或可替换算法（如 CUBIC）。\ndecision: 基于 ACK 的丢失检测（包阈值与时间阈值）+ Probe Timeout（PTO）+ 持续拥塞判定；\n默认拥塞控制器为 NewReno 类，慢启动/恢复/拥塞避免状态明确，并建议 pacing。\n 仅使用 RTO：恢复慢，且难以覆盖乱序与 ACK 丢失。 沿用 TCP 的重传序号语义：存在重传歧义。 固定包数阈值：对不同 RTT 和乱序程度适应性差。 ACK 区间与单调包号使丢失检测更精确；包阈值与时间阈值互补；\nPTO 提供明确的探测机制；持续拥塞判定覆盖长时间无反馈的极端情况。\n\nmechanism: QUIC 维护 RTT 估计（smoothed_rtt、rttvar、min_rtt）。当包号小于某个\n已确认包、且差距达到包阈值（kPacketThreshold=3），或发送时间早于\n当前时间减去时间阈值（约 9/8 × max(smoothed_rtt, latest_rtt)）时，\n判为丢失。若没有足够 ACK，则在 PTO 到期时发送探测包；PTO 由\nsmoothed_rtt、rttvar 与 max_ack_delay 计算。若在持续拥塞持续时间内\n没有任何包被确认，则判定持续拥塞：把 cwnd 重置为最小窗口，\n并以慢启动重新开始。拥塞控制在慢启动、恢复与拥塞避免之间切换，\n默认每丢包事件把 cwnd 减半；发送方应 pacing，避免突发。\n ACK 确认的包号与 ACK 区间 RTT 样本、smoothed_rtt、rttvar、min_rtt PTO 定时器 持续拥塞持续时间 ECN-CE 计数（若启用） 声明丢包并触发恢复 发送 PTO 探测包 调整 cwnd 与 ssthresh 持续拥塞时重置 cwnd pacing 发送 largest_acked bytes_in_flight congestion_window ssthresh smoothed_rtt / rttvar / min_rtt PTO 定时器 恢复起始包号\ntradeoffs: 单调包号与 ACK 区间消除重传歧义，丢失检测语义清晰 包阈值与时间阈值互补，兼顾快速恢复与乱序容忍 PTO 替代分散的 RTO/TLP，机制更统一 持续拥塞判定避免在长时间无反馈后保留失效的拥塞状态 拥塞控制器可替换（NewReno、CUBIC 等） 需要维护 ACK 区间、PTO 与持续拥塞等额外状态 默认控制器仍是丢包式，继承其对随机丢包和 bufferbloat 的局限 PTO 探测可能在拥塞时注入额外包 时间阈值与持续拥塞阈值是权衡参数 默认 NewReno 类控制器在高 BDP 路径上扩展性有限，需要替换控制器 乱序严重的路径上，包阈值可能导致误判 持续拥塞阈值过小会不必要地重置，过大则对严重拥塞反应迟钝\nfailure_modes: 乱序超过包阈值时，正常包被误判为丢失，触发不必要重传和降窗。 PTO 在严重拥塞时连续探测，可能加重拥塞（需要与拥塞控制协同）。 持续拥塞阈值配置不当：过小导致吞吐损失，过大导致持续激进发送。 ACK 反馈长期缺失时，若持续拥塞判定不触发，可能一直保留旧窗口。\napplicability: QUIC 端点，且需要明确的丢失检测与恢复语义 存在乱序、ACK 丢失或路径切换的互联网路径 希望复用统一恢复机制并替换拥塞控制器的实现 非 QUIC 传输（TCP 有自己的 RFC 5681/6675 等机制） 无法提供包号单调性与 ACK 区间的自定义传输 包号单调递增且不重用 ACK 能确认已接收的包号区间 RTT 与 max_ack_delay 可估计\nparameters: kPacketThreshold time_threshold PTO kPersistentCongestionThreshold minimum_window 包阈值 3：包号落后已确认包 3 个即判为丢失。 时间阈值约为 9/8 × max(smoothed_rtt, latest_rtt)。 PTO 由 smoothed_rtt + max(4·rttvar, kGranularity) + max_ack_delay 组成并带指数退避。 推荐值 3；持续拥塞持续时间 = (smoothed_rtt + max(4·rttvar, kGranularity) + max_ack_delay) × 3。 最小拥塞窗口为 2 个包（约 2 × max_datagram_size）。 与 TCP 的三个重复 ACK 经验一致，兼顾快速恢复与少量乱序容忍。 为 RTT 估计误差和乱序留出余量，避免过早判丢。 在没有足够 ACK 时主动探测；包含 max_ack_delay 以适配延迟 ACK。 近似等价于 TCP 在两次 TLP 后声明 RTO；过小造成不必要重置，过大造成反应迟钝。 允许发送方在恢复期间继续探测，同时避免窗口降到 0 后无法前进。\nevaluation: 恢复时间 吞吐量 丢包误判率 PTO 触发次数 比仅依赖 RTO 更快地从丢包中恢复 在乱序和 ACK 丢失下减少误判 长时间无反馈后可靠地重置拥塞状态 RFC 9002 的行为规范与伪代码 QUIC 实现的互操作与实验评估\ntags: path-change rtt-variation congestion-loss burst-traffic loss-detection ack-based-recovery packet-threshold time-threshold loss-response persistent-congestion quic rtt-measurement pacing cwnd-control robustness\nstatus: source_reported\ntype: mechanism_design",
+      "summary": "TCP 的序号与重传机制使丢失检测存在歧义；RTO 与 TLP 等机制分散且难以 精确描述。QUIC 使用单调递增的包号和 ACK 区间，使丢失检测语义更清晰， 并需要一套明确的 PTO 与持续拥塞规则来驱动恢复和拥塞控制。 基于 ACK 的丢失检测（包阈值与时间阈值）+ Probe Timeout（PTO）+ 持续拥塞判定； 默认拥塞控制器为 NewReno 类，慢启动/恢复/拥塞避免状态明确，并建议 pacing。"
+    },
+    {
+      "id": "exp-007",
+      "title": "问题分析：为什么“丢包即拥塞”的假设会误导设计",
+      "experience_type": "problem_analysis",
+      "problem_context": {
+        "network_conditions": [
+          "random-loss",
+          "bufferbloat",
+          "high-bdp",
+          "shallow-buffer",
+          "congestion-loss"
+        ],
+        "observed_symptoms": [
+          "同样是一次丢包，随机链路错误与瓶颈队列溢出被发送方同等对待",
+          "以丢包为信号的算法在无线或随机丢包路径上吞吐量骤降",
+          "算法为了探测带宽反复填满队列，造成持续高排队时延",
+          "在高 BDP 路径上，丢包式算法的恢复周期很长，带宽利用率不足"
+        ],
+        "underlying_cause": "丢包是一个滞后、二值且原因含混的信号。它隐含地假设“丢包几乎总是由\n瓶颈拥塞引起”，但该假设在随机丢包、深缓冲区、高 BDP 和浅缓冲区等\n环境中并不成立。信号与真实拥塞程度之间的偏差，是不同算法设计分歧的根源。\n"
+      },
+      "design_rationale": {
+        "motivation": "把“选择什么拥塞信号”本身作为设计问题来分析，说明不同算法为什么在\n不同网络条件下表现不同，并给出面向新设计的问题拆解框架。\n",
+        "problem_analysis": "基于丢包的控制器把路由器的队列溢出当作拥塞的充分信号。该假设在四类\n条件下失效：\n（1）随机丢包：丢包与瓶颈负载无关，降速只会浪费容量；\n（2）深缓冲区：队列必须先膨胀到溢出才产生信号，导致 bufferbloat；\n（3）高 BDP：AIMD 每 RTT 的增长有限，从丢包中恢复需要很多个 RTT；\n（4）浅缓冲区：少量突发即可溢出，丢包可能发生在平均利用率并不高时。\nECN 把信号提前到队列超过阈值时，并把“是否拥塞”扩展为“拥塞程度”；\n时延/排队时延信号直接反映队列；带宽/RTT 模型则不依赖丢包来估计路径容量。\n",
+        "reasoning_chain": [
+          "丢包式控制把‘队列溢出’当作拥塞的唯一证据，这需要丢包主要由拥塞引起的假设。",
+          "随机丢包破坏该假设，导致不必要的降速。",
+          "深缓冲路径上，丢包出现得太晚，算法会先制造大量排队时延。",
+          "高 BDP 路径上，丢包后的 AIMD 恢复速度与 BDP 不匹配。",
+          "ECN、排队时延与带宽/RTT 模型分别提供了更早、更直接或更完整的信号。",
+          "因此不存在对所有环境最优的单一信号；设计应显式列出信号假设与失效条件。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "本条经验不主张单一机制，而是给出信号选择框架：按部署环境评估丢包、\nECN、排队时延、带宽/RTT 模型各自的假设、提前量和可观测性，再选择或组合信号。\n",
+        "alternatives_considered": [
+          "丢包信号：部署最广、无需网络支持，但滞后且原因含混。",
+          "ECN/多比特反馈：信号更早且可表达程度，但需要网络设备支持。",
+          "排队时延：直接反映队列，但测量噪声与 ACK 压缩会影响估计。",
+          "带宽/RTT 模型：不依赖丢包，但对交付速率样本与 pacing 有要求。"
+        ],
+        "why_selected": "不同失效条件对应不同信号；把假设显式化，可以避免把一个环境中的\n成功经验错误迁移到另一个环境，也便于组合多种信号。\n"
+      },
+      "mechanism": {
+        "description": "可用信号谱系：\n- 丢包：二值、滞后，适合“丢包≈拥塞”的路径，代表 Reno/CUBIC 基线；\n- ECN：在队列超过阈值时提前标记，单比特可经 DCTCP 类机制恢复程度信息；\n- 排队时延：由 RTT_standing - RTT_min 估计，直接对应队列，代表 Copa；\n- 带宽/RTT 模型：由交付速率与最小 RTT 估计 BDP，代表 BBR。\n设计新算法时，应先明确目标网络中的主要失效条件，再选择能观测到该条件\n且假设成立的最小信号集合。\n",
+        "control_signals": [
+          "丢包事件（重复 ACK / 超时）",
+          "ECN-CE 标记与标记比例",
+          "排队时延（RTT_standing - RTT_min）",
+          "交付速率与最小 RTT"
+        ],
+        "control_actions": [
+          "按所选信号调整窗口或速率",
+          "在多种信号之间切换或组合",
+          "为信号失效设置降级路径"
+        ],
+        "state_variables": [
+          "丢包计数与恢复状态",
+          "CE 标记比例",
+          "RTT_min / RTT_standing",
+          "BtlBw 估计"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "把算法差异解释为信号假设差异，便于跨场景迁移和比较",
+          "能在设计早期识别失效条件，而不是等实验暴露问题",
+          "支持组合信号：例如用 ECN 提前反馈，用丢包作为后备"
+        ],
+        "costs": [
+          "多信号组合增加状态、参数和实现复杂度",
+          "不同信号的更新周期与噪声特性不同，融合需要额外设计",
+          "信号选择依赖部署条件，难以给出普适最优方案"
+        ],
+        "limitations": [
+          "本条是跨来源综合，不是某一篇论文作者的单一结论",
+          "信号谱系不覆盖所有可能的拥塞指示（如基于机器学习的策略）",
+          "组合信号之间的相互干扰仍需逐案验证"
+        ]
+      },
+      "failure_modes": [
+        "在随机丢包路径上继续使用丢包信号，导致吞吐量与利用率下降。",
+        "在深缓冲路径上只使用丢包信号，长期维持高排队时延。",
+        "在浅缓冲路径上使用激进的窗口增长，突发造成丢包。",
+        "ECN 部署不完整时，算法在 ECN 与丢包模式之间行为不一致。",
+        "时延信号被 ACK 压缩或反向路径排队污染，导致误判。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "设计新拥塞控制算法或把已有算法迁移到新网络环境",
+          "需要解释不同算法在相同场景下表现差异",
+          "需要在丢包、ECN、时延和模型信号之间做选择"
+        ],
+        "unsuitable_conditions": [
+          "只需要复现某个标准算法的具体行为（应直接查阅该标准）",
+          "网络不支持所选信号且无法修改部署"
+        ],
+        "assumptions": [
+          "设计者能够描述目标网络的主要失效条件",
+          "所选信号在目标环境中可观测且测量误差可控"
+        ]
+      },
+      "parameter_guidance": [],
+      "evaluation": {
+        "metrics": [
+          "吞吐量",
+          "排队时延",
+          "丢包率",
+          "公平性",
+          "收敛速度"
+        ],
+        "expected_effects": [
+          "按失效条件选择信号后，算法在目标环境中的关键指标应优于盲目沿用丢包信号",
+          "信号假设被显式记录后，跨环境迁移的风险更可评估"
+        ],
+        "evaluation_conditions": [
+          "需要在包含随机丢包、深缓冲、高 BDP、浅缓冲的多种拓扑上分别验证",
+          "应避免只在单一环境中验证后推广"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-001",
+          "source_type": "rfc",
+          "locator": "3.1 Slow Start and Congestion Avoidance",
+          "supports": [
+            "标准 TCP 把丢包作为拥塞信号并执行 AIMD 的基线行为"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-002",
+          "source_type": "rfc",
+          "locator": "7. Congestion Control",
+          "supports": [
+            "QUIC 默认拥塞控制器仍是 NewReno 类、以丢包为主要信号的证据"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-003",
+          "source_type": "rfc",
+          "locator": "5. Explicit Congestion Notification in IP; 6.1. TCP",
+          "supports": [
+            "ECN 提供比丢包更早的显式拥塞信号"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-004",
+          "source_type": "paper",
+          "locator": "Congestion Control on the Internet; Modeling the Network Path",
+          "supports": [
+            "把丢包等同于拥塞会导致 bufferbloat 和随机丢包下的吞吐损失",
+            "用带宽与 RTT 模型替代丢包信号的设计动机"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-006",
+          "source_type": "paper",
+          "locator": "3. CUBIC Congestion Control",
+          "supports": [
+            "标准 AIMD 在高 BDP 路径上增长过慢，需要改变窗口增长律"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-008",
+          "source_type": "paper",
+          "locator": "3.1. Algorithm",
+          "supports": [
+            "从单比特 ECN 标记恢复拥塞程度，并按程度比例反应"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-009",
+          "source_type": "paper",
+          "locator": "2. Copa Algorithm; 2.2. Competing with Buffer-Filling Schemes",
+          "supports": [
+            "使用排队时延与目标速率作为拥塞信号的设计",
+            "缓冲区填充型算法在时延上的代价"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "cross_source_synthesis",
+      "related_experiences": [
+        "exp-001",
+        "exp-002",
+        "exp-003",
+        "exp-004",
+        "exp-005",
+        "exp-006",
+        "exp-008"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "random-loss",
+          "bufferbloat",
+          "high-bdp",
+          "shallow-buffer",
+          "congestion-loss",
+          "limitation-of-existing",
+          "assumption-limits",
+          "symptom-cause",
+          "key-signal",
+          "goal-conflict",
+          "throughput-vs-latency",
+          "utilization-vs-fairness"
+        ]
+      },
+      "search_text": "title: 问题分析：为什么“丢包即拥塞”的假设会误导设计\nproblem: random-loss bufferbloat high-bdp shallow-buffer congestion-loss 同样是一次丢包，随机链路错误与瓶颈队列溢出被发送方同等对待 以丢包为信号的算法在无线或随机丢包路径上吞吐量骤降 算法为了探测带宽反复填满队列，造成持续高排队时延 在高 BDP 路径上，丢包式算法的恢复周期很长，带宽利用率不足 丢包是一个滞后、二值且原因含混的信号。它隐含地假设“丢包几乎总是由\n瓶颈拥塞引起”，但该假设在随机丢包、深缓冲区、高 BDP 和浅缓冲区等\n环境中并不成立。信号与真实拥塞程度之间的偏差，是不同算法设计分歧的根源。\n\nrationale: 把“选择什么拥塞信号”本身作为设计问题来分析，说明不同算法为什么在\n不同网络条件下表现不同，并给出面向新设计的问题拆解框架。\n 基于丢包的控制器把路由器的队列溢出当作拥塞的充分信号。该假设在四类\n条件下失效：\n（1）随机丢包：丢包与瓶颈负载无关，降速只会浪费容量；\n（2）深缓冲区：队列必须先膨胀到溢出才产生信号，导致 bufferbloat；\n（3）高 BDP：AIMD 每 RTT 的增长有限，从丢包中恢复需要很多个 RTT；\n（4）浅缓冲区：少量突发即可溢出，丢包可能发生在平均利用率并不高时。\nECN 把信号提前到队列超过阈值时，并把“是否拥塞”扩展为“拥塞程度”；\n时延/排队时延信号直接反映队列；带宽/RTT 模型则不依赖丢包来估计路径容量。\n 丢包式控制把‘队列溢出’当作拥塞的唯一证据，这需要丢包主要由拥塞引起的假设。 随机丢包破坏该假设，导致不必要的降速。 深缓冲路径上，丢包出现得太晚，算法会先制造大量排队时延。 高 BDP 路径上，丢包后的 AIMD 恢复速度与 BDP 不匹配。 ECN、排队时延与带宽/RTT 模型分别提供了更早、更直接或更完整的信号。 因此不存在对所有环境最优的单一信号；设计应显式列出信号假设与失效条件。\ndecision: 本条经验不主张单一机制，而是给出信号选择框架：按部署环境评估丢包、\nECN、排队时延、带宽/RTT 模型各自的假设、提前量和可观测性，再选择或组合信号。\n 丢包信号：部署最广、无需网络支持，但滞后且原因含混。 ECN/多比特反馈：信号更早且可表达程度，但需要网络设备支持。 排队时延：直接反映队列，但测量噪声与 ACK 压缩会影响估计。 带宽/RTT 模型：不依赖丢包，但对交付速率样本与 pacing 有要求。 不同失效条件对应不同信号；把假设显式化，可以避免把一个环境中的\n成功经验错误迁移到另一个环境，也便于组合多种信号。\n\nmechanism: 可用信号谱系：\n- 丢包：二值、滞后，适合“丢包≈拥塞”的路径，代表 Reno/CUBIC 基线；\n- ECN：在队列超过阈值时提前标记，单比特可经 DCTCP 类机制恢复程度信息；\n- 排队时延：由 RTT_standing - RTT_min 估计，直接对应队列，代表 Copa；\n- 带宽/RTT 模型：由交付速率与最小 RTT 估计 BDP，代表 BBR。\n设计新算法时，应先明确目标网络中的主要失效条件，再选择能观测到该条件\n且假设成立的最小信号集合。\n 丢包事件（重复 ACK / 超时） ECN-CE 标记与标记比例 排队时延（RTT_standing - RTT_min） 交付速率与最小 RTT 按所选信号调整窗口或速率 在多种信号之间切换或组合 为信号失效设置降级路径 丢包计数与恢复状态 CE 标记比例 RTT_min / RTT_standing BtlBw 估计\ntradeoffs: 把算法差异解释为信号假设差异，便于跨场景迁移和比较 能在设计早期识别失效条件，而不是等实验暴露问题 支持组合信号：例如用 ECN 提前反馈，用丢包作为后备 多信号组合增加状态、参数和实现复杂度 不同信号的更新周期与噪声特性不同，融合需要额外设计 信号选择依赖部署条件，难以给出普适最优方案 本条是跨来源综合，不是某一篇论文作者的单一结论 信号谱系不覆盖所有可能的拥塞指示（如基于机器学习的策略） 组合信号之间的相互干扰仍需逐案验证\nfailure_modes: 在随机丢包路径上继续使用丢包信号，导致吞吐量与利用率下降。 在深缓冲路径上只使用丢包信号，长期维持高排队时延。 在浅缓冲路径上使用激进的窗口增长，突发造成丢包。 ECN 部署不完整时，算法在 ECN 与丢包模式之间行为不一致。 时延信号被 ACK 压缩或反向路径排队污染，导致误判。\napplicability: 设计新拥塞控制算法或把已有算法迁移到新网络环境 需要解释不同算法在相同场景下表现差异 需要在丢包、ECN、时延和模型信号之间做选择 只需要复现某个标准算法的具体行为（应直接查阅该标准） 网络不支持所选信号且无法修改部署 设计者能够描述目标网络的主要失效条件 所选信号在目标环境中可观测且测量误差可控\nevaluation: 吞吐量 排队时延 丢包率 公平性 收敛速度 按失效条件选择信号后，算法在目标环境中的关键指标应优于盲目沿用丢包信号 信号假设被显式记录后，跨环境迁移的风险更可评估 需要在包含随机丢包、深缓冲、高 BDP、浅缓冲的多种拓扑上分别验证 应避免只在单一环境中验证后推广\ntags: random-loss bufferbloat high-bdp shallow-buffer congestion-loss limitation-of-existing assumption-limits symptom-cause key-signal goal-conflict throughput-vs-latency utilization-vs-fairness\nstatus: cross_source_synthesis\ntype: problem_analysis",
+      "summary": "丢包是一个滞后、二值且原因含混的信号。它隐含地假设“丢包几乎总是由 瓶颈拥塞引起”，但该假设在随机丢包、深缓冲区、高 BDP 和浅缓冲区等 环境中并不成立。信号与真实拥塞程度之间的偏差，是不同算法设计分歧的根源。 本条经验不主张单一机制，而是给出信号选择框架：按部署环境评估丢包、 ECN、排队时延、带宽/RTT 模型各自的假设、提前量和可观测性，再选择或组合信号。"
+    },
+    {
+      "id": "exp-008",
+      "title": "用 Pacing 把窗口预算摊平到时间轴上",
+      "experience_type": "mechanism_design",
+      "problem_context": {
+        "network_conditions": [
+          "burst-traffic",
+          "shallow-buffer",
+          "queue-buildup",
+          "datacenter-low-latency"
+        ],
+        "observed_symptoms": [
+          "即使平均速率不超过瓶颈，集中发送的突发也会造成瞬时排队和丢包",
+          "突发在浅缓冲区路径上尤其容易触发丢包",
+          "大量包同时到达会加剧 ACK 压缩和测量偏差",
+          "仅靠拥塞窗口限制在途量，无法约束包在时间上的分布"
+        ],
+        "underlying_cause": "窗口式拥塞控制只限制“在途字节数”，不限制“发送时刻”。当应用或协议栈\n一次把整个窗口交给网络时，即使平均速率合适，瞬时突发也可能超过路径\n可吸收能力，造成短期拥塞、丢包和队列振荡。\n"
+      },
+      "design_rationale": {
+        "motivation": "通过在时间上均匀发送，把窗口预算摊平，降低瞬时突发造成的丢包和排队时延，\n同时保持拥塞窗口所允许的平均发送速率。\n",
+        "problem_analysis": "对窗口式控制器，平均速率可以近似为 cwnd / RTT。若发送方以很短的间隔\n发出一串包，局部速率远高于平均值；在瓶颈处这会形成突发队列。\nPacing 用漏桶或时间片调度按目标速率逐个发送，使到达过程更平滑，\n也降低 ACK 压缩和测量噪声。\n",
+        "reasoning_chain": [
+          "窗口只给出在途预算，不给出包间间隔。",
+          "突发会让瞬时到达速率超过瓶颈，即使长期平均速率合规。",
+          "按 cwnd/RTT 或估计带宽计算包间隔并匀速发送，可消除突发。",
+          "节奏器需要与拥塞控制器协同，不能绕过 cwnd 限制。",
+          "过慢的 pacing 会低估可用带宽，因此需要略高于 1 的补偿系数和突发上限。"
+        ]
+      },
+      "design_decision": {
+        "selected_mechanism": "发送节拍器（pacer）：按拥塞控制器给出的速率计算包间隔，\n使用漏桶/时间片调度发送；限制瞬时突发（如不超过初始窗口），\n并与 cwnd 检查协同。\n",
+        "alternatives_considered": [
+          "不做 pacing，直接在 cwnd 允许时突发发送：实现简单但突发风险高。",
+          "仅依赖 AQM/队列管理吸收突发：需要网络侧支持，且浅缓冲区无法完全吸收。",
+          "固定低速 pacing：会低估可用带宽，降低吞吐。"
+        ],
+        "why_selected": "Pacing 是发送端可独立部署的机制，能与任何窗口式控制器组合；\n它直接作用于突发这一根因，而不是事后依赖队列或丢包反馈。\n"
+      },
+      "mechanism": {
+        "description": "Pacing 为发送队列维护目标速率与下一个可发送时刻。对窗口式控制器，\n目标速率可近似为 N × cwnd / smoothed_rtt（N 略大于 1，例如 1.25），\n或直接采用控制器给出的 pacing rate（如 BBR 的 pacing_gain × BtlBw）。\n发送方按包大小与速率计算包间隔，使用漏桶/时间轮/高精度定时器调度；\n漏桶容量限制最大突发。ACK-only 包通常不应被 pacing，以免延迟 ACK 返回。\n实现上常与 TSO/GSO 等分段卸载协同，避免一次注入过多包。\n",
+        "control_signals": [
+          "拥塞窗口或控制器给出的 pacing rate",
+          "smoothed_rtt",
+          "包大小与可用发送信用",
+          "当前调度时间"
+        ],
+        "control_actions": [
+          "计算并执行包间间隔",
+          "限制瞬时突发大小",
+          "在 cwnd 允许范围内调度发送"
+        ],
+        "state_variables": [
+          "pacing rate",
+          "next send time / 令牌数",
+          "burst budget",
+          "pacing_gain"
+        ]
+      },
+      "tradeoffs": {
+        "benefits": [
+          "显著降低突发造成的瞬时队列和丢包",
+          "在浅缓冲区路径上提高稳定性",
+          "使到达过程更平滑，减少 ACK 压缩与测量偏差",
+          "可与不同拥塞控制器组合"
+        ],
+        "costs": [
+          "需要较细粒度的定时与调度，增加 CPU 和实现复杂度",
+          "定时器精度不足或调度抖动会让实际速率偏离目标",
+          "pacing 速率设置过低会浪费窗口、降低吞吐",
+          "与 TSO/GSO、多队列和中断合并的交互需要小心"
+        ],
+        "limitations": [
+          "pacing 只能平滑发送，不能弥补错误的窗口或速率判断",
+          "过大的突发上限会削弱 pacing 效果",
+          "ACK-only 包不适合 pacing，需单独处理",
+          "路径 RTT 快速变化时，基于 cwnd/RTT 的速率需要及时更新"
+        ]
+      },
+      "failure_modes": [
+        "pacing 速率明显低于可用带宽，导致链路利用率不足。",
+        "定时器粒度粗，包仍以批次发出，突发没有被真正消除。",
+        "漏桶容量过大，允许一次发送过多包。",
+        "pacing 与 cwnd 检查顺序错误，可能绕过拥塞窗口限制。",
+        "对 ACK 包也做 pacing，延迟 ACK 返回并拖慢恢复。"
+      ],
+      "applicability": {
+        "suitable_conditions": [
+          "窗口式拥塞控制且发送端可控制发包时刻",
+          "浅缓冲区、突发敏感或需要低排队时延的路径",
+          "高线速、需要平滑到达过程的数据中心或骨干网络"
+        ],
+        "unsuitable_conditions": [
+          "无法获得可靠时钟或定时精度的实现",
+          "应用本身以极低速率发送且突发不构成问题"
+        ],
+        "assumptions": [
+          "发送端能够按包或按字节调度发送时刻",
+          "cwnd、RTT 或控制器速率估计可用",
+          "pacing 不会绕过拥塞窗口约束"
+        ]
+      },
+      "parameter_guidance": [
+        {
+          "parameter": "pacing_rate",
+          "guidance": "窗口式控制器可令 rate = N × cwnd / smoothed_rtt，N 取略大于 1（RFC 9002 示例为 1.25）。",
+          "rationale": "N>1 补偿 RTT 抖动和调度误差，避免因速率略低而低估窗口；N 过大则增加队列压力。",
+          "source_ids": [
+            "src-002"
+          ]
+        },
+        {
+          "parameter": "burst_limit",
+          "guidance": "突发上限建议不超过初始拥塞窗口；只有确认路径能吸收更大突发时才提高。",
+          "rationale": "限制漏桶瞬时容量，避免 pacing 退化为突发发送。",
+          "source_ids": [
+            "src-002"
+          ]
+        },
+        {
+          "parameter": "bbr_pacing_gain",
+          "guidance": "BBR 以 pacing_gain × BtlBw 作为 pacing rate；不同状态使用不同增益。",
+          "rationale": "把速率控制与状态机结合：Startup 用高增益快速探测，ProbeBW 用 1.25/0.75/1.0 循环。",
+          "source_ids": [
+            "src-004",
+            "src-005"
+          ]
+        },
+        {
+          "parameter": "ack_only_packets",
+          "guidance": "只包含 ACK 的包通常不应被 pacing。",
+          "rationale": "避免延迟 ACK 返回，影响对端恢复和本端测量。",
+          "source_ids": [
+            "src-002"
+          ]
+        }
+      ],
+      "evaluation": {
+        "metrics": [
+          "突发造成的丢包率",
+          "排队时延",
+          "吞吐量与链路利用率",
+          "ACK 压缩程度"
+        ],
+        "expected_effects": [
+          "瞬时队列峰值下降，浅缓冲区丢包减少",
+          "在相同平均速率下获得更平滑的到达过程",
+          "配合 BBR 等速率控制器时减少超发突发"
+        ],
+        "evaluation_conditions": [
+          "RFC 9002 的 pacing 规范与实现建议",
+          "BBR 论文中的部署与测量经验",
+          "Linux 实现的 pacing 与 TSO/GSO 协同"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "src-002",
+          "source_type": "rfc",
+          "locator": "7.7. Pacing",
+          "supports": [
+            "发送方应基于拥塞控制器输入 pacing，并限制突发",
+            "rate = N × cwnd / smoothed_rtt 与 1.25 示例",
+            "ACK-only 包不应被 pacing",
+            "漏桶实现与突发上限"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-004",
+          "source_type": "paper",
+          "locator": "The BBR Algorithm; ProbeBW; Startup",
+          "supports": [
+            "BBR 用 pacing rate 与增益调度实施速率控制"
+          ],
+          "evidence_level": "A"
+        },
+        {
+          "source_id": "src-005",
+          "source_type": "code",
+          "locator": "net/ipv4/tcp_bbr.c::bbr_set_pacing_rate / bbr_update_cycle_phase / bbr_tso_segs_goal",
+          "supports": [
+            "pacing rate 的计算与 ProbeBW 增益循环",
+            "TSO 分段与 pacing 的协同"
+          ],
+          "evidence_level": "A"
+        }
+      ],
+      "knowledge_status": "cross_source_synthesis",
+      "related_experiences": [
+        "exp-001",
+        "exp-006",
+        "exp-007"
+      ],
+      "metadata": {
+        "created_at": "2026-11-09",
+        "updated_at": "2026-11-09",
+        "tags": [
+          "burst-traffic",
+          "shallow-buffer",
+          "queue-buildup",
+          "datacenter-low-latency",
+          "pacing",
+          "rate-control",
+          "low-overhead",
+          "parameter-coupling",
+          "pacing-rate",
+          "bbr",
+          "quic",
+          "low-latency",
+          "throughput"
+        ]
+      },
+      "search_text": "title: 用 Pacing 把窗口预算摊平到时间轴上\nproblem: burst-traffic shallow-buffer queue-buildup datacenter-low-latency 即使平均速率不超过瓶颈，集中发送的突发也会造成瞬时排队和丢包 突发在浅缓冲区路径上尤其容易触发丢包 大量包同时到达会加剧 ACK 压缩和测量偏差 仅靠拥塞窗口限制在途量，无法约束包在时间上的分布 窗口式拥塞控制只限制“在途字节数”，不限制“发送时刻”。当应用或协议栈\n一次把整个窗口交给网络时，即使平均速率合适，瞬时突发也可能超过路径\n可吸收能力，造成短期拥塞、丢包和队列振荡。\n\nrationale: 通过在时间上均匀发送，把窗口预算摊平，降低瞬时突发造成的丢包和排队时延，\n同时保持拥塞窗口所允许的平均发送速率。\n 对窗口式控制器，平均速率可以近似为 cwnd / RTT。若发送方以很短的间隔\n发出一串包，局部速率远高于平均值；在瓶颈处这会形成突发队列。\nPacing 用漏桶或时间片调度按目标速率逐个发送，使到达过程更平滑，\n也降低 ACK 压缩和测量噪声。\n 窗口只给出在途预算，不给出包间间隔。 突发会让瞬时到达速率超过瓶颈，即使长期平均速率合规。 按 cwnd/RTT 或估计带宽计算包间隔并匀速发送，可消除突发。 节奏器需要与拥塞控制器协同，不能绕过 cwnd 限制。 过慢的 pacing 会低估可用带宽，因此需要略高于 1 的补偿系数和突发上限。\ndecision: 发送节拍器（pacer）：按拥塞控制器给出的速率计算包间隔，\n使用漏桶/时间片调度发送；限制瞬时突发（如不超过初始窗口），\n并与 cwnd 检查协同。\n 不做 pacing，直接在 cwnd 允许时突发发送：实现简单但突发风险高。 仅依赖 AQM/队列管理吸收突发：需要网络侧支持，且浅缓冲区无法完全吸收。 固定低速 pacing：会低估可用带宽，降低吞吐。 Pacing 是发送端可独立部署的机制，能与任何窗口式控制器组合；\n它直接作用于突发这一根因，而不是事后依赖队列或丢包反馈。\n\nmechanism: Pacing 为发送队列维护目标速率与下一个可发送时刻。对窗口式控制器，\n目标速率可近似为 N × cwnd / smoothed_rtt（N 略大于 1，例如 1.25），\n或直接采用控制器给出的 pacing rate（如 BBR 的 pacing_gain × BtlBw）。\n发送方按包大小与速率计算包间隔，使用漏桶/时间轮/高精度定时器调度；\n漏桶容量限制最大突发。ACK-only 包通常不应被 pacing，以免延迟 ACK 返回。\n实现上常与 TSO/GSO 等分段卸载协同，避免一次注入过多包。\n 拥塞窗口或控制器给出的 pacing rate smoothed_rtt 包大小与可用发送信用 当前调度时间 计算并执行包间间隔 限制瞬时突发大小 在 cwnd 允许范围内调度发送 pacing rate next send time / 令牌数 burst budget pacing_gain\ntradeoffs: 显著降低突发造成的瞬时队列和丢包 在浅缓冲区路径上提高稳定性 使到达过程更平滑，减少 ACK 压缩与测量偏差 可与不同拥塞控制器组合 需要较细粒度的定时与调度，增加 CPU 和实现复杂度 定时器精度不足或调度抖动会让实际速率偏离目标 pacing 速率设置过低会浪费窗口、降低吞吐 与 TSO/GSO、多队列和中断合并的交互需要小心 pacing 只能平滑发送，不能弥补错误的窗口或速率判断 过大的突发上限会削弱 pacing 效果 ACK-only 包不适合 pacing，需单独处理 路径 RTT 快速变化时，基于 cwnd/RTT 的速率需要及时更新\nfailure_modes: pacing 速率明显低于可用带宽，导致链路利用率不足。 定时器粒度粗，包仍以批次发出，突发没有被真正消除。 漏桶容量过大，允许一次发送过多包。 pacing 与 cwnd 检查顺序错误，可能绕过拥塞窗口限制。 对 ACK 包也做 pacing，延迟 ACK 返回并拖慢恢复。\napplicability: 窗口式拥塞控制且发送端可控制发包时刻 浅缓冲区、突发敏感或需要低排队时延的路径 高线速、需要平滑到达过程的数据中心或骨干网络 无法获得可靠时钟或定时精度的实现 应用本身以极低速率发送且突发不构成问题 发送端能够按包或按字节调度发送时刻 cwnd、RTT 或控制器速率估计可用 pacing 不会绕过拥塞窗口约束\nparameters: pacing_rate burst_limit bbr_pacing_gain ack_only_packets 窗口式控制器可令 rate = N × cwnd / smoothed_rtt，N 取略大于 1（RFC 9002 示例为 1.25）。 突发上限建议不超过初始拥塞窗口；只有确认路径能吸收更大突发时才提高。 BBR 以 pacing_gain × BtlBw 作为 pacing rate；不同状态使用不同增益。 只包含 ACK 的包通常不应被 pacing。 N>1 补偿 RTT 抖动和调度误差，避免因速率略低而低估窗口；N 过大则增加队列压力。 限制漏桶瞬时容量，避免 pacing 退化为突发发送。 把速率控制与状态机结合：Startup 用高增益快速探测，ProbeBW 用 1.25/0.75/1.0 循环。 避免延迟 ACK 返回，影响对端恢复和本端测量。\nevaluation: 突发造成的丢包率 排队时延 吞吐量与链路利用率 ACK 压缩程度 瞬时队列峰值下降，浅缓冲区丢包减少 在相同平均速率下获得更平滑的到达过程 配合 BBR 等速率控制器时减少超发突发 RFC 9002 的 pacing 规范与实现建议 BBR 论文中的部署与测量经验 Linux 实现的 pacing 与 TSO/GSO 协同\ntags: burst-traffic shallow-buffer queue-buildup datacenter-low-latency pacing rate-control low-overhead parameter-coupling pacing-rate bbr quic low-latency throughput\nstatus: cross_source_synthesis\ntype: mechanism_design",
+      "summary": "窗口式拥塞控制只限制“在途字节数”，不限制“发送时刻”。当应用或协议栈 一次把整个窗口交给网络时，即使平均速率合适，瞬时突发也可能超过路径 可吸收能力，造成短期拥塞、丢包和队列振荡。 发送节拍器（pacer）：按拥塞控制器给出的速率计算包间隔， 使用漏桶/时间片调度发送；限制瞬时突发（如不超过初始窗口）， 并与 cwnd 检查协同。"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "src-001",
+      "title": "TCP Congestion Control",
+      "source_type": "rfc",
+      "authors": [
+        "Mark Allman",
+        "Vern Paxson",
+        "Ethan Blanton"
+      ],
+      "year": 2009,
+      "url": "https://www.rfc-editor.org/rfc/rfc5681",
+      "doi": "10.17487/RFC5681",
+      "venue": "IETF RFC 5681",
+      "version": "RFC 5681",
+      "locators": [
+        {
+          "type": "section",
+          "value": "3.1 Slow Start and Congestion Avoidance"
+        },
+        {
+          "type": "section",
+          "value": "3.2 Fast Retransmit/Fast Recovery"
+        },
+        {
+          "type": "section",
+          "value": "4.1 Restarting Idle Connections"
+        }
+      ],
+      "related_experiences": [
+        "exp-005",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Normative description of the loss-based AIMD baseline used by TCP."
+      }
+    },
+    {
+      "source_id": "src-002",
+      "title": "QUIC Loss Detection and Congestion Control",
+      "source_type": "rfc",
+      "authors": [
+        "Jana Iyengar",
+        "Ian Swett"
+      ],
+      "year": 2021,
+      "url": "https://www.rfc-editor.org/rfc/rfc9002",
+      "doi": "10.17487/RFC9002",
+      "venue": "IETF RFC 9002",
+      "version": "RFC 9002",
+      "locators": [
+        {
+          "type": "section",
+          "value": "5. Estimating the Round-Trip Time"
+        },
+        {
+          "type": "section",
+          "value": "6.1.1. Packet Threshold"
+        },
+        {
+          "type": "section",
+          "value": "6.1.2. Time Threshold"
+        },
+        {
+          "type": "section",
+          "value": "6.2. Probe Timeout"
+        },
+        {
+          "type": "section",
+          "value": "7.3. Congestion Control States"
+        },
+        {
+          "type": "section",
+          "value": "7.6. Persistent Congestion"
+        },
+        {
+          "type": "section",
+          "value": "7.7. Pacing"
+        }
+      ],
+      "related_experiences": [
+        "exp-006",
+        "exp-008",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "QUIC recovery and default NewReno-like congestion controller."
+      }
+    },
+    {
+      "source_id": "src-003",
+      "title": "The Addition of Explicit Congestion Notification (ECN) to IP",
+      "source_type": "rfc",
+      "authors": [
+        "Kadangode K. Ramakrishnan",
+        "Sally Floyd",
+        "David Black"
+      ],
+      "year": 2001,
+      "url": "https://www.rfc-editor.org/rfc/rfc3168",
+      "doi": "10.17487/RFC3168",
+      "venue": "IETF RFC 3168",
+      "version": "RFC 3168",
+      "locators": [
+        {
+          "type": "section",
+          "value": "5. Explicit Congestion Notification in IP"
+        },
+        {
+          "type": "section",
+          "value": "6.1. TCP"
+        },
+        {
+          "type": "section",
+          "value": "6.1.2. The TCP Sender"
+        },
+        {
+          "type": "section",
+          "value": "6.1.3. The TCP Receiver"
+        }
+      ],
+      "related_experiences": [
+        "exp-003",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Defines CE marking, ECN-Echo and CWR, the machinery DCTCP reuses."
+      }
+    },
+    {
+      "source_id": "src-004",
+      "title": "BBR: Congestion-Based Congestion Control",
+      "source_type": "paper",
+      "authors": [
+        "Neal Cardwell",
+        "Yuchung Cheng",
+        "C. Stephen Gunn",
+        "Soheil Hassas Yeganeh",
+        "Van Jacobson"
+      ],
+      "year": 2016,
+      "url": "https://doi.org/10.1145/3012426.3022184",
+      "doi": "10.1145/3012426.3022184",
+      "venue": "ACM Queue 14(5)",
+      "version": "ACM Queue, October 2016",
+      "locators": [
+        {
+          "type": "section",
+          "value": "Congestion Control on the Internet"
+        },
+        {
+          "type": "section",
+          "value": "Modeling the Network Path"
+        },
+        {
+          "type": "section",
+          "value": "The BBR Algorithm"
+        },
+        {
+          "type": "section",
+          "value": "Startup"
+        },
+        {
+          "type": "section",
+          "value": "Drain"
+        },
+        {
+          "type": "section",
+          "value": "ProbeBW"
+        },
+        {
+          "type": "section",
+          "value": "ProbeRTT"
+        },
+        {
+          "type": "section",
+          "value": "BBR Deployment"
+        }
+      ],
+      "related_experiences": [
+        "exp-001",
+        "exp-007",
+        "exp-008"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Authors' description of the BBR model, state machine and deployment experience."
+      }
+    },
+    {
+      "source_id": "src-005",
+      "title": "Linux TCP BBR implementation (net/ipv4/tcp_bbr.c)",
+      "source_type": "code",
+      "authors": [
+        "Linux kernel networking community"
+      ],
+      "year": 2026,
+      "url": "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_bbr.c",
+      "doi": "",
+      "venue": "Linux kernel source tree",
+      "version": "Linux master, retrieved 2026-11-09",
+      "locators": [
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_update_bw"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_update_min_rtt"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_check_full_bw_reached"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_check_drain"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_update_cycle_phase"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_check_probe_rtt_done"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_set_pacing_rate"
+        },
+        {
+          "type": "code_location",
+          "value": "net/ipv4/tcp_bbr.c::bbr_set_cwnd"
+        }
+      ],
+      "related_experiences": [
+        "exp-001",
+        "exp-008"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Reference implementation used to verify state names, gains and update rules."
+      }
+    },
+    {
+      "source_id": "src-006",
+      "title": "CUBIC: A New TCP-Friendly High-Speed TCP Variant",
+      "source_type": "paper",
+      "authors": [
+        "Sangtae Ha",
+        "Injong Rhee",
+        "Lisong Xu"
+      ],
+      "year": 2008,
+      "url": "https://doi.org/10.1145/1400097.1400105",
+      "doi": "10.1145/1400097.1400105",
+      "venue": "ACM SIGOPS Operating Systems Review 42(5)",
+      "version": "SIGOPS OSR, July 2008",
+      "locators": [
+        {
+          "type": "section",
+          "value": "3. CUBIC Congestion Control"
+        },
+        {
+          "type": "section",
+          "value": "3.3 TCP-friendly region"
+        },
+        {
+          "type": "section",
+          "value": "3.4 Concave region"
+        },
+        {
+          "type": "section",
+          "value": "3.5 Convex region"
+        },
+        {
+          "type": "section",
+          "value": "3.6 Multiplicative decrease"
+        },
+        {
+          "type": "section",
+          "value": "3.7 Fast Convergence"
+        }
+      ],
+      "related_experiences": [
+        "exp-002",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Original CUBIC design paper; uses C=0.4 and beta=0.2."
+      }
+    },
+    {
+      "source_id": "src-007",
+      "title": "CUBIC for Fast and Long-Distance Networks",
+      "source_type": "rfc",
+      "authors": [
+        "Lisong Xu",
+        "Sangtae Ha",
+        "Injong Rhee",
+        "Vidhi Goel",
+        "Lars Eggert"
+      ],
+      "year": 2023,
+      "url": "https://www.rfc-editor.org/rfc/rfc9438",
+      "doi": "10.17487/RFC9438",
+      "venue": "IETF RFC 9438",
+      "version": "RFC 9438",
+      "locators": [
+        {
+          "type": "section",
+          "value": "3.1. Principle 1 for the CUBIC Increase Function"
+        },
+        {
+          "type": "section",
+          "value": "3.2. Principle 2 for Reno-Friendliness"
+        },
+        {
+          "type": "section",
+          "value": "3.3. Principle 3 for RTT-Fairness"
+        },
+        {
+          "type": "section",
+          "value": "4.2. Window Increase Function"
+        },
+        {
+          "type": "section",
+          "value": "4.3. Reno-Friendly Region"
+        },
+        {
+          "type": "section",
+          "value": "4.6. Multiplicative Decrease"
+        },
+        {
+          "type": "section",
+          "value": "4.7. Fast Convergence"
+        }
+      ],
+      "related_experiences": [
+        "exp-002"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Current IETF CUBIC specification; recommends C=0.4 and beta=0.7."
+      }
+    },
+    {
+      "source_id": "src-008",
+      "title": "Data Center TCP (DCTCP)",
+      "source_type": "paper",
+      "authors": [
+        "Mohammad Alizadeh",
+        "Albert Greenberg",
+        "David A. Maltz",
+        "Jitu Padhye",
+        "Parveen Patel",
+        "Balaji Prabhakar",
+        "Sudipta Sengupta",
+        "Murari Sridharan"
+      ],
+      "year": 2010,
+      "url": "https://doi.org/10.1145/1851182.1851192",
+      "doi": "10.1145/1851182.1851192",
+      "venue": "ACM SIGCOMM 2010",
+      "version": "SIGCOMM '10",
+      "locators": [
+        {
+          "type": "section",
+          "value": "2.3. Data Center Impairments"
+        },
+        {
+          "type": "section",
+          "value": "3.1. Algorithm"
+        },
+        {
+          "type": "section",
+          "value": "3.2. Benefits"
+        },
+        {
+          "type": "section",
+          "value": "3.3. Analysis"
+        },
+        {
+          "type": "section",
+          "value": "3.4. Guidelines for choosing parameters"
+        }
+      ],
+      "related_experiences": [
+        "exp-003",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "DCTCP design, ECN marking scheme and alpha-based proportional response."
+      }
+    },
+    {
+      "source_id": "src-009",
+      "title": "Copa: Practical Delay-Based Congestion Control for the Internet",
+      "source_type": "paper",
+      "authors": [
+        "Venkat Arun",
+        "Hari Balakrishnan"
+      ],
+      "year": 2018,
+      "url": "https://www.usenix.org/conference/nsdi18/presentation/arun",
+      "doi": "",
+      "venue": "USENIX NSDI 2018",
+      "version": "NSDI '18",
+      "locators": [
+        {
+          "type": "section",
+          "value": "2. Copa Algorithm"
+        },
+        {
+          "type": "section",
+          "value": "2.1. Target Rate and Update Rule"
+        },
+        {
+          "type": "section",
+          "value": "2.2. Competing with Buffer-Filling Schemes"
+        },
+        {
+          "type": "section",
+          "value": "3. Dynamics of Copa"
+        },
+        {
+          "type": "section",
+          "value": "5.3. RTT-fairness"
+        }
+      ],
+      "related_experiences": [
+        "exp-004",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Target-rate objective, velocity parameter and competitive mode."
+      }
+    },
+    {
+      "source_id": "src-010",
+      "title": "Congestion Avoidance and Control",
+      "source_type": "paper",
+      "authors": [
+        "Van Jacobson"
+      ],
+      "year": 1988,
+      "url": "https://doi.org/10.1145/52324.52356",
+      "doi": "10.1145/52324.52356",
+      "venue": "ACM SIGCOMM 1988",
+      "version": "SIGCOMM '88",
+      "locators": [
+        {
+          "type": "section",
+          "value": "1 Getting to Equilibrium: Slow-start"
+        },
+        {
+          "type": "section",
+          "value": "2 Conservation at equilibrium: round-trip timing"
+        },
+        {
+          "type": "section",
+          "value": "3 Adapting to the path: congestion avoidance"
+        }
+      ],
+      "related_experiences": [
+        "exp-005",
+        "exp-007"
+      ],
+      "metadata": {
+        "collected_at": "2026-11-09",
+        "notes": "Origin of slow start, self-clocking and AIMD congestion avoidance."
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_id": "exp-001",
+      "to_id": "exp-005",
+      "relation": "alternative_to",
+      "note": "BBR replaces loss-triggered AIMD with bandwidth/RTT model-based control.",
+      "knowledge_status": "source_reported"
+    },
+    {
+      "from_id": "exp-002",
+      "to_id": "exp-005",
+      "relation": "extends",
+      "note": "CUBIC keeps Reno's loss response but replaces the linear window growth law.",
+      "knowledge_status": "source_reported"
+    },
+    {
+      "from_id": "exp-003",
+      "to_id": "exp-005",
+      "relation": "alternative_to",
+      "note": "DCTCP keeps TCP's window structure but uses ECN extent instead of loss as the signal.",
+      "knowledge_status": "source_reported"
+    },
+    {
+      "from_id": "exp-004",
+      "to_id": "exp-001",
+      "relation": "alternative_to",
+      "note": "Copa uses queueing delay and a target-rate objective rather than a bandwidth/RTT model.",
+      "knowledge_status": "source_reported"
+    },
+    {
+      "from_id": "exp-006",
+      "to_id": "exp-005",
+      "relation": "extends",
+      "note": "QUIC's default controller is NewReno-like, with clarified loss detection and recovery.",
+      "knowledge_status": "source_reported"
+    },
+    {
+      "from_id": "exp-007",
+      "to_id": "exp-001",
+      "relation": "synthesizes",
+      "note": "The problem analysis draws on BBR's critique of loss as a congestion proxy.",
+      "knowledge_status": "cross_source_synthesis"
+    },
+    {
+      "from_id": "exp-007",
+      "to_id": "exp-002",
+      "relation": "synthesizes",
+      "note": "CUBIC illustrates a scaled loss-based response on high-BDP paths.",
+      "knowledge_status": "cross_source_synthesis"
+    },
+    {
+      "from_id": "exp-007",
+      "to_id": "exp-003",
+      "relation": "synthesizes",
+      "note": "DCTCP illustrates an explicit, early, proportional congestion signal.",
+      "knowledge_status": "cross_source_synthesis"
+    },
+    {
+      "from_id": "exp-007",
+      "to_id": "exp-004",
+      "relation": "synthesizes",
+      "note": "Copa illustrates delay-based control against buffer-filling behaviour.",
+      "knowledge_status": "cross_source_synthesis"
+    },
+    {
+      "from_id": "exp-007",
+      "to_id": "exp-005",
+      "relation": "synthesizes",
+      "note": "Reno/AIMD defines the loss-based baseline whose assumptions are examined.",
+      "knowledge_status": "cross_source_synthesis"
+    },
+    {
+      "from_id": "exp-007",
+      "to_id": "exp-006",
+      "relation": "synthesizes",
+      "note": "QUIC's default loss-based controller shows the assumption persists in new transports.",
+      "knowledge_status": "cross_source_synthesis"
+    },
+    {
+      "from_id": "exp-008",
+      "to_id": "exp-001",
+      "relation": "complements",
+      "note": "BBR's rate control depends on pacing; pacing is the enforcement mechanism.",
+      "knowledge_status": "source_reported"
+    },
+    {
+      "from_id": "exp-008",
+      "to_id": "exp-006",
+      "relation": "complements",
+      "note": "RFC 9002 recommends pacing alongside window-based congestion control.",
+      "knowledge_status": "source_reported"
+    }
+  ]
+}

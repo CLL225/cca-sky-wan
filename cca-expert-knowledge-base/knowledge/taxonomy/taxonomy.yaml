@@ -1,0 +1,216 @@
+# Knowledge taxonomy (v0.1)
+#
+# Taxonomy is for organisation and retrieval, not for data typing.  An
+# experience may carry tags from several categories.  Tags are stable
+# machine identifiers; labels are human-facing (Chinese + English).
+version: 1
+categories:
+  - id: network_problem
+    name: 网络问题与现象 / Network problems
+    description: 拥塞控制需要处理的网络条件和可观察现象。
+    tags:
+      - id: high-bdp
+        label: 高带宽时延积 / High BDP
+      - id: random-loss
+        label: 随机丢包 / Random loss
+      - id: congestion-loss
+        label: 拥塞丢包 / Congestion loss
+      - id: shallow-buffer
+        label: 浅缓冲区 / Shallow buffer
+      - id: bufferbloat
+        label: 缓冲区膨胀 / Bufferbloat
+      - id: burst-traffic
+        label: 突发流量 / Burst traffic
+      - id: rtt-variation
+        label: RTT 波动 / RTT variation
+      - id: path-change
+        label: 路径变化 / Path change
+      - id: bandwidth-variation
+        label: 可用带宽变化 / Bandwidth variation
+      - id: multi-flow-competition
+        label: 多流竞争 / Multi-flow competition
+      - id: reverse-path-congestion
+        label: 反向路径拥塞 / Reverse-path congestion
+      - id: wireless-loss
+        label: 无线不可靠传输 / Wireless loss
+      - id: datacenter-low-latency
+        label: 数据中心低时延需求 / Datacenter low latency
+      - id: incast
+        label: Incast
+      - id: queue-buildup
+        label: 队列堆积 / Queue buildup
+
+  - id: design_goal
+    name: 设计目标与约束 / Design goals
+    description: 算法需要实现或权衡的目标。
+    tags:
+      - id: throughput
+        label: 吞吐量 / Throughput
+      - id: low-latency
+        label: 低时延 / Low latency
+      - id: fairness
+        label: 公平性 / Fairness
+      - id: convergence
+        label: 收敛速度 / Convergence
+      - id: stability
+        label: 稳定性 / Stability
+      - id: robustness
+        label: 鲁棒性 / Robustness
+      - id: utilization
+        label: 带宽利用率 / Utilization
+      - id: low-overhead
+        label: 低控制开销 / Low overhead
+      - id: adaptability
+        label: 对网络变化的适应能力 / Adaptability
+      - id: coexistence
+        label: 多流共存能力 / Coexistence
+
+  - id: problem_analysis
+    name: 设计动机与问题分析 / Problem analysis
+    description: 专家如何定义问题、解释现象和识别关键信号。
+    tags:
+      - id: limitation-of-existing
+        label: 现有算法的不足 / Limits of existing designs
+      - id: assumption-limits
+        label: 传统设计假设的局限 / Limits of assumptions
+      - id: symptom-cause
+        label: 现象背后的原因 / Symptom-cause analysis
+      - id: key-signal
+        label: 关键观测信号 / Key signal
+      - id: goal-conflict
+        label: 设计目标之间的冲突 / Goal conflict
+
+  - id: mechanism
+    name: 控制机制设计 / Control mechanisms
+    description: 具体的控制机制和设计模式。
+    tags:
+      - id: bandwidth-estimation
+        label: 带宽估计 / Bandwidth estimation
+      - id: rtt-measurement
+        label: RTT 与时延测量 / RTT measurement
+      - id: min-rtt-estimation
+        label: 最小 RTT 估计 / Min-RTT estimation
+      - id: loss-detection
+        label: 丢包检测 / Loss detection
+      - id: loss-response
+        label: 丢包响应 / Loss response
+      - id: ecn-handling
+        label: ECN 信号处理 / ECN handling
+      - id: multi-bit-feedback
+        label: 多比特反馈 / Multi-bit feedback
+      - id: explicit-signal
+        label: 显式拥塞信号 / Explicit signal
+      - id: pacing
+        label: 发送节拍 / Pacing
+      - id: cwnd-control
+        label: 拥塞窗口控制 / Congestion window control
+      - id: rate-control
+        label: 发送速率控制 / Rate control
+      - id: probing
+        label: 探测机制 / Probing
+      - id: queue-control
+        label: 队列控制 / Queue control
+      - id: gain-control
+        label: 增益控制 / Gain control
+      - id: filtering
+        label: 滤波与估计 / Filtering and estimation
+      - id: state-machine
+        label: 状态机设计 / State machine
+      - id: startup-exit
+        label: 启动与退出 / Startup and exit
+      - id: network-state-identification
+        label: 网络状态识别 / Network state identification
+      - id: ack-based-recovery
+        label: 基于 ACK 的恢复 / ACK-based recovery
+      - id: packet-threshold
+        label: 包数阈值检测 / Packet threshold
+      - id: time-threshold
+        label: 时间阈值检测 / Time threshold
+      - id: persistent-congestion
+        label: 持续拥塞判定 / Persistent congestion
+
+  - id: algorithm
+    name: 算法案例 / Algorithm cases
+    description: 作为设计经验案例的代表性算法。
+    tags:
+      - id: tcp-reno
+        label: TCP Reno
+      - id: tcp-cubic
+        label: TCP CUBIC
+      - id: bbr
+        label: BBR
+      - id: copa
+        label: Copa
+      - id: dctcp
+        label: DCTCP
+      - id: quic
+        label: QUIC
+
+  - id: parameter
+    name: 参数与控制策略 / Parameters
+    description: 阈值、增益、周期和状态切换参数。
+    tags:
+      - id: gain-scheduling
+        label: 增益调度 / Gain scheduling
+      - id: threshold-selection
+        label: 阈值选择 / Threshold selection
+      - id: update-period
+        label: 更新周期 / Update period
+      - id: probe-period
+        label: 探测周期 / Probe period
+      - id: smoothing-coefficient
+        label: 平滑系数 / Smoothing coefficient
+      - id: state-transition-condition
+        label: 状态切换条件 / State transition condition
+      - id: parameter-coupling
+        label: 参数耦合 / Parameter coupling
+      - id: multiplicative-decrease-factor
+        label: 乘性减小因子 / Multiplicative decrease factor
+      - id: marking-threshold
+        label: 标记阈值 / Marking threshold
+      - id: pacing-rate
+        label: 节拍速率 / Pacing rate
+
+  - id: tradeoff
+    name: 权衡、失败模式与边界 / Tradeoffs and failure modes
+    description: 收益、代价、失效条件和边界。
+    tags:
+      - id: throughput-vs-latency
+        label: 吞吐量与时延的权衡 / Throughput vs latency
+      - id: utilization-vs-fairness
+        label: 利用率与公平性的权衡 / Utilization vs fairness
+      - id: responsiveness-vs-stability
+        label: 快速响应与稳定性的权衡 / Responsiveness vs stability
+      - id: estimation-error
+        label: 估计误差 / Estimation error
+      - id: control-oscillation
+        label: 控制振荡 / Control oscillation
+      - id: multi-flow-unfairness
+        label: 多流不公平 / Multi-flow unfairness
+      - id: parameter-sensitivity
+        label: 参数敏感性 / Parameter sensitivity
+      - id: environmental-degradation
+        label: 环境变化导致退化 / Environmental degradation
+      - id: mechanism-interference
+        label: 机制相互干扰 / Mechanism interference
+      - id: bufferbloat-risk
+        label: 队列膨胀风险 / Bufferbloat risk
+
+  - id: evaluation
+    name: 评估方法与证据 / Evaluation
+    description: 指标、环境、拓扑和实验条件。
+    tags:
+      - id: simulation
+        label: 仿真 / Simulation
+      - id: emulation
+        label: 模拟器 / Emulation
+      - id: testbed
+        label: 测试床 / Testbed
+      - id: production-trace
+        label: 生产网络测量 / Production trace
+      - id: analytical-model
+        label: 分析模型 / Analytical model
+      - id: metrics-throughput-delay
+        label: 吞吐/时延指标 / Throughput-delay metrics
+      - id: internet-deployment
+        label: 互联网部署 / Internet deployment

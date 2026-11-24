@@ -1,0 +1,5 @@
+algorithm,trace,duration_s,steady_throughput_kbps,threshold_kbps,convergence_time_s,converged
+bbr,5GBeachStationary.csv,20.01069183,14599.589,13139.630,3.07183488,true
+cubic,5GBeachStationary.csv,20.01101371,6203.190,5582.871,5.03947304,true
+copa,5GBeachStationary.csv,20.01032354,14506.718,13056.047,3.07297040,true
+llmgen1,5GBeachStationary.csv,20.01339062,14626.632,13163.968,3.07292743,true

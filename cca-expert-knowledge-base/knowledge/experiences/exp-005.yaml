@@ -1,0 +1,177 @@
+id: exp-005
+title: "加性增长/乘性减小（AIMD）作为拥塞控制基线"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - congestion-loss
+    - random-loss
+    - high-bdp
+    - multi-flow-competition
+  observed_symptoms:
+    - "网络进入拥塞后若发送方不后退，会出现吞吐崩溃（congestion collapse）"
+    - "多个发送方需要一种去中心化的方式共享瓶颈带宽"
+    - "突发式增长会迅速把队列推到溢出，造成大量丢包"
+    - "发送方无法直接知道可用带宽，只能通过试探发现"
+  underlying_cause: |
+    网络本身不向端主机报告可用带宽；发送方必须通过“增加负载直到出现拥塞信号，
+    再后退”的闭环来发现可用容量。丢包（或后来的 ECN）被用作拥塞信号。
+
+design_rationale:
+  motivation: |
+    在不要求网络逐流维护状态的条件下，让互相竞争的发送方稳定、公平地共享
+    瓶颈带宽，并避免拥塞崩溃。
+  problem_analysis: |
+    Jacobson 从一阶时间序列模型出发：拥塞时队列会指数增长，发送方必须至少
+    以同样快的速度后退，因此采用乘性减小；而在无拥塞时，乘性增长会导致
+    严重过冲和振荡，因为把网络推入饱和容易、恢复难，所以采用加性增长。
+    发送方还应以 ACK 自时钟（self-clocking）保持管道中的包数量守恒。
+  reasoning_chain:
+    - "网络不报告剩余带宽，只能通过丢包等信号间接观察拥塞。"
+    - "过估计可用带宽的代价很高，所以一旦拥塞就乘性减小。"
+    - "指数增长必然过冲，所以无拥塞时用小而固定的加性增长。"
+    - "ACK 返回节奏反映路径速率，可作为发送节拍（self-clocking）。"
+    - "慢启动在连接开始时快速找到近似可用窗口，再进入拥塞避免。"
+
+design_decision:
+  selected_mechanism: |
+    慢启动 + 拥塞避免（AIMD）：每个 ACK 加性增加窗口，检测到丢包时乘性减小窗口；
+    配合快速重传/快速恢复减少等待超时。
+  alternatives_considered:
+    - "乘性增长/乘性减小：增长过快，导致剧烈振荡和吞吐损失。"
+    - "纯速率控制：缺少 ACK 自时钟，难以维持管道守恒。"
+    - "依赖网关逐流状态的方案：部署成本高。"
+  why_selected: |
+    AIMD 只需端主机状态，能稳定收敛到公平份额；慢启动缩短初始探测时间；
+    快速重传避免每次丢包都等待超时。
+
+mechanism:
+  description: |
+    连接以慢启动开始：每收到一个确认新数据的 ACK，窗口按确认字节数增加，
+    约每个 RTT 翻倍，直到达到 ssthresh 或检测到拥塞。进入拥塞避免后，
+    每个 RTT 窗口约增加一个 MSS（实现上每 ACK 增加约 1/cwnd）。检测到丢包时，
+    ssthresh 设为当前在途数据的约一半，cwnd 减半；快速重传在收到三个重复 ACK
+    时重传丢失段并进入快速恢复，避免等待重传超时。RFC 5681 形式化了这些规则。
+  control_signals:
+    - "ACK 确认的新数据量"
+    - "重复 ACK（三个重复 ACK 触发快速重传）"
+    - "重传超时"
+    - "丢包事件（后续可用 ECN 替代或补充）"
+  control_actions:
+    - "慢启动阶段指数增长 cwnd"
+    - "拥塞避免阶段加性增长 cwnd"
+    - "丢包时乘性减小 cwnd 与 ssthresh"
+    - "快速重传与快速恢复"
+  state_variables:
+    - "cwnd"
+    - "ssthresh"
+    - "dup ACK 计数"
+    - "在途数据量"
+
+tradeoffs:
+  benefits:
+    - "端到端、无需网络逐流状态，部署极其广泛"
+    - "多个 AIMD 流能收敛到大致公平的带宽份额"
+    - "对网络变化有基本的自适应能力"
+    - "慢启动和快速恢复降低了连接启动与单包丢失的代价"
+  costs:
+    - "吞吐量随 RTT 和丢包率下降，在高 BDP 路径上扩展性差"
+    - "为了发现可用带宽必须周期性把队列推到丢包点，造成排队时延和锯齿"
+    - "把所有丢包都当作拥塞，随机丢包会导致不必要的降速"
+    - "丢包是滞后信号，拥塞已经发生后才反应"
+  limitations:
+    - "标准 AIMD 在高 BDP、长 RTT 或高随机丢包路径上效率低"
+    - "与基于时延或显式信号的机制竞争时，可能持续填满缓冲区"
+    - "对 ACK 路径和 ACK 时钟的质量有依赖"
+
+failure_modes:
+  - "随机丢包被误判为拥塞，吞吐量显著下降。"
+  - "高 BDP 路径上窗口恢复慢，链路利用率低。"
+  - "浅缓冲区下，窗口增长过快造成丢包，快速恢复也可能失败。"
+  - "ACK 压缩、ACK 丢失或反向路径拥塞会破坏自时钟，导致突发。"
+  - "多个流同步减窗时，队列和吞吐出现同步振荡。"
+
+applicability:
+  suitable_conditions:
+    - "丢包近似反映拥塞的路径"
+    - "需要简单、端到端、广泛兼容的基线实现"
+    - "中低 BDP 或对时延不敏感的场景"
+  unsuitable_conditions:
+    - "高 BDP 长距路径（需要 CUBIC 等扩展）"
+    - "随机丢包严重或需要低排队时延的场景"
+    - "数据中心等需要浅缓冲区低时延的环境"
+  assumptions:
+    - "丢包（几乎）总是由拥塞引起"
+    - "ACK 能按路径速率返回，提供可用的自时钟"
+    - "发送方能够检测丢包（重复 ACK 或超时）"
+
+parameter_guidance:
+  - parameter: "multiplicative_decrease"
+    guidance: "丢包时 cwnd 约减半（d=0.5）。"
+    rationale: "乘性减小足够快，能在拥塞持续时指数后退；0.5 是 Jacobson 实现的选择。"
+    source_ids: ["src-010", "src-001"]
+  - parameter: "additive_increase"
+    guidance: "拥塞避免阶段每个 RTT 约增加一个 MSS（每 ACK 约 1/cwnd）。"
+    rationale: "小而固定的增长避免指数过冲，使多个流逐步收敛到公平份额。"
+    source_ids: ["src-010", "src-001"]
+  - parameter: "fast_retransmit_threshold"
+    guidance: "收到三个重复 ACK 时触发快速重传（RFC 5681）。"
+    rationale: "在等待超时之前恢复单个丢包，减少吞吐空窗。"
+    source_ids: ["src-001"]
+
+evaluation:
+  metrics:
+    - "吞吐量"
+    - "丢包率"
+    - "公平性"
+    - "收敛行为"
+  expected_effects:
+    - "多个流收敛到大致公平的带宽份额"
+    - "在丢包式网络中维持稳定吞吐"
+    - "相比无拥塞控制的发送方避免拥塞崩溃"
+  evaluation_conditions:
+    - "Jacobson 的仿真与早期互联网测量"
+    - "RFC 5681 标准化的行为描述"
+
+evidence:
+  - source_id: src-010
+    source_type: paper
+    locator: "1 Getting to Equilibrium: Slow-start; 2 Conservation at equilibrium: round-trip timing; 3 Adapting to the path: congestion avoidance"
+    supports:
+      - "慢启动、包守恒/自时钟与 AIMD 的设计动机"
+      - "乘性减小与加性增长的推理链"
+      - "丢包作为拥塞信号及 d=0.5、u=1 的选择"
+    evidence_level: A
+  - source_id: src-001
+    source_type: rfc
+    locator: "3.1 Slow Start and Congestion Avoidance; 3.2 Fast Retransmit/Fast Recovery"
+    supports:
+      - "AIMD、慢启动阈值与快速重传/恢复的标准行为"
+    evidence_level: A
+
+knowledge_status: cross_source_synthesis
+
+related_experiences:
+  - exp-001
+  - exp-002
+  - exp-003
+  - exp-006
+  - exp-007
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - congestion-loss
+    - random-loss
+    - high-bdp
+    - multi-flow-competition
+    - loss-response
+    - cwnd-control
+    - tcp-reno
+    - fairness
+    - stability
+    - convergence
+    - throughput
+    - control-oscillation
+    - queue-buildup

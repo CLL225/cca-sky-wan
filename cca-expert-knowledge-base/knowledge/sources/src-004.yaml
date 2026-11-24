@@ -1,0 +1,38 @@
+source_id: src-004
+title: "BBR: Congestion-Based Congestion Control"
+source_type: paper
+authors:
+  - Neal Cardwell
+  - Yuchung Cheng
+  - C. Stephen Gunn
+  - Soheil Hassas Yeganeh
+  - Van Jacobson
+year: 2016
+url: "https://doi.org/10.1145/3012426.3022184"
+doi: "10.1145/3012426.3022184"
+venue: "ACM Queue 14(5)"
+version: "ACM Queue, October 2016"
+locators:
+  - type: section
+    value: "Congestion Control on the Internet"
+  - type: section
+    value: "Modeling the Network Path"
+  - type: section
+    value: "The BBR Algorithm"
+  - type: section
+    value: "Startup"
+  - type: section
+    value: "Drain"
+  - type: section
+    value: "ProbeBW"
+  - type: section
+    value: "ProbeRTT"
+  - type: section
+    value: "BBR Deployment"
+related_experiences:
+  - exp-001
+  - exp-007
+  - exp-008
+metadata:
+  collected_at: "2026-11-09"
+  notes: "Authors' description of the BBR model, state machine and deployment experience."

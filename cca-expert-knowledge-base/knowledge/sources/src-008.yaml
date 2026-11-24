@@ -1,0 +1,34 @@
+source_id: src-008
+title: "Data Center TCP (DCTCP)"
+source_type: paper
+authors:
+  - Mohammad Alizadeh
+  - Albert Greenberg
+  - David A. Maltz
+  - Jitu Padhye
+  - Parveen Patel
+  - Balaji Prabhakar
+  - Sudipta Sengupta
+  - Murari Sridharan
+year: 2010
+url: "https://doi.org/10.1145/1851182.1851192"
+doi: "10.1145/1851182.1851192"
+venue: "ACM SIGCOMM 2010"
+version: "SIGCOMM '10"
+locators:
+  - type: section
+    value: "2.3. Data Center Impairments"
+  - type: section
+    value: "3.1. Algorithm"
+  - type: section
+    value: "3.2. Benefits"
+  - type: section
+    value: "3.3. Analysis"
+  - type: section
+    value: "3.4. Guidelines for choosing parameters"
+related_experiences:
+  - exp-003
+  - exp-007
+metadata:
+  collected_at: "2026-11-09"
+  notes: "DCTCP design, ECN marking scheme and alpha-based proportional response."

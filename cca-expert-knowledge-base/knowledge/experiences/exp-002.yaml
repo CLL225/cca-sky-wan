@@ -1,0 +1,181 @@
+id: exp-002
+title: "用时间驱动的三次窗口增长替代线性 AIMD（CUBIC）"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - high-bdp
+    - congestion-loss
+    - rtt-variation
+  observed_symptoms:
+    - "Reno 的窗口每个 RTT 只增加约一个 MSS，高 BDP 路径上恢复和探测带宽极慢"
+    - "窗口增长率以 RTT 次数计量，RTT 不同的流获得不同的增长机会"
+    - "丢包后窗口减半，吞吐呈锯齿状，利用率不稳定"
+  underlying_cause: |
+    标准 AIMD 的线性增长在高速长距网络中不足；窗口增长应当与真实时间挂钩，
+    而不是与 RTT 次数挂钩，同时仍要保留与 Reno 竞争时的公平下界。
+
+design_rationale:
+  motivation: |
+    提高高速长距网络上的吞吐量和带宽利用率，同时保持与 Reno 的兼容性，
+    并改善不同 RTT 流之间的公平性。
+  problem_analysis: |
+    CUBIC 用自上次拥塞事件以来的时间 t 构造窗口目标
+    W_cubic(t) = C · (t - K)^3 + W_max，其中 K 是再次达到 W_max 所需时间。
+    由于增长由真实时间驱动，RTT 不同的流在相同时间内获得更可比的窗口增长；
+    三次曲线在接近 W_max 时增长放缓，在超过 W_max 后重新加速探测新带宽。
+  reasoning_chain:
+    - "Reno 在高 BDP 下窗口增长太慢，需要更激进的增长函数。"
+    - "使用时间的三次函数：接近上次饱和点时增长慢，远离时增长快。"
+    - "单纯激进会损害与 Reno 的公平性，因此保留 TCP-friendly 区域。"
+    - "新流需要更快获得带宽，因此加入 fast convergence 机制。"
+
+design_decision:
+  selected_mechanism: |
+    三次窗口增长函数 + Reno-friendly 区域 + 乘性减小因子 β + fast convergence。
+  alternatives_considered:
+    - "Reno AIMD：高 BDP 下增长过慢。"
+    - "BIC-TCP：CUBIC 的直接前身，使用二分搜索式增长，CUBIC 将其简化为三次函数。"
+    - "HSTCP/STCP 等高带宽算法：改变 AIMD 参数或使用不同增长律。"
+  why_selected: |
+    三次函数在靠近上次饱和点时降低增长速率，减少丢包；远离饱和点时加快增长，
+    便于利用空闲带宽。Reno-friendly 区域保证在窗口较小时不劣于标准 TCP。
+
+mechanism:
+  description: |
+    CUBIC 维护 W_max（上次拥塞事件前的窗口）、epoch 起始时间和 K。
+    收到新 ACK 时计算 target = W_cubic(t + RTT)。若当前 cwnd 低于 Reno
+    在同一时刻应达到的窗口 W_est，则进入 Reno-friendly 区域，按等价 AIMD
+    增长；否则根据 cwnd 与 W_max 的关系处于凹区（cwnd < W_max）或凸区
+    （cwnd > W_max），按三次函数更新窗口。检测到丢包或 ECN 时，W_max 更新
+    （启用 fast convergence 时进一步下调），cwnd 乘以 β。论文使用 C=0.4、
+    β=0.2；RFC 9438 推荐 C=0.4、β=0.7。
+  control_signals:
+    - "新 ACK 确认的数据量"
+    - "平滑 RTT"
+    - "距上次拥塞事件的时间"
+    - "丢包或 ECN 拥塞事件"
+  control_actions:
+    - "更新 cwnd"
+    - "更新 ssthresh"
+    - "更新 W_max 与 epoch 状态"
+    - "在 TCP-friendly/凹区/凸区之间切换"
+  state_variables:
+    - "W_max"
+    - "W_last_max"
+    - "K"
+    - "epoch_start"
+    - "origin_point"
+    - "W_est"
+    - "cwnd"
+
+tradeoffs:
+  benefits:
+    - "高 BDP 路径上的窗口增长显著快于 Reno"
+    - "接近 W_max 时增长放缓，降低丢包概率"
+    - "Reno-friendly 区域保持与标准 TCP 的兼容性"
+    - "fast convergence 让新流更快获得带宽"
+  costs:
+    - "β 小于 0.5 会减慢收敛速度，论文明确承认这一副作用"
+    - "仍然以丢包/ECN 为主要拥塞信号，不能避免缓冲区膨胀"
+    - "需要维护 W_max、K、epoch 等状态，实现比 Reno 复杂"
+    - "三次根计算在早期实现中成本较高，需要使用 Newton-Raphson 等优化"
+  limitations:
+    - "对 RTT 公平性的改善是相对的，不是严格 RTT 公平"
+    - "依赖准确的丢包或 ECN 事件检测"
+    - "β 的选择在收敛速度与丢包持续时间之间存在权衡"
+
+failure_modes:
+  - "浅缓冲区路径上，窗口增长过快仍可能先造成丢包。"
+  - "多流 RTT 差异很大时，CUBIC 不能完全消除 RTT 不公平。"
+  - "fast convergence 设计用于多流环境；单流且无其他流量时应关闭（RFC 9438）。"
+  - "应用受限或 flight_size 远小于 cwnd 时，用 cwnd 计算新 ssthresh 可能把窗口压得过低（RFC 9438 讨论）。"
+
+applicability:
+  suitable_conditions:
+    - "高速长距或高 BDP 路径"
+    - "丢包或 ECN 能作为主要拥塞信号"
+    - "需要与 Reno 共存并保持兼容性"
+  unsuitable_conditions:
+    - "以低时延为第一目标的数据中心网络（DCTCP 等更合适）"
+    - "非拥塞丢包严重的无线路径，需要额外的丢包区分机制"
+  assumptions:
+    - "丢包或 ECN 事件能够反映拥塞"
+    - "RTT 可测量且网络允许窗口式控制"
+    - "发送方能够维护每次拥塞事件的历史状态"
+
+parameter_guidance:
+  - parameter: "C"
+    guidance: "CUBIC 增长常数，RFC 9438 推荐 C=0.4；论文也使用 0.4。"
+    rationale: "决定远离饱和点时的增长速度，需要在高 BDP 利用率与稳定性之间平衡。"
+    source_ids: ["src-006", "src-007"]
+  - parameter: "beta_cubic"
+    guidance: "论文使用 β=0.2；RFC 9438 推荐 β=0.7，部署时必须明确采用的版本。"
+    rationale: "β 越小，丢包后窗口降得越多、收敛越慢；β 越大，恢复更快但丢包可能持续多个 RTT。"
+    source_ids: ["src-006", "src-007"]
+  - parameter: "alpha_cubic"
+    guidance: "Reno-friendly 区域的等价 AIMD 加性因子取 α = 3(1-β)/(1+β)。"
+    rationale: "使 CUBIC 在 TCP-friendly 区域的平均窗口与 Reno 相当。"
+    source_ids: ["src-006", "src-007"]
+  - parameter: "fast_convergence"
+    guidance: "在多流环境启用；当 cwnd < W_max 时把 W_max 下调为 cwnd·(1+β)/2。"
+    rationale: "向新流释放带宽，加速新流收敛；单流环境启用会带来不必要的窗口收缩。"
+    source_ids: ["src-007"]
+
+evaluation:
+  metrics:
+    - "吞吐量"
+    - "丢包率"
+    - "Jain 公平性指数"
+    - "收敛时间"
+  expected_effects:
+    - "高 BDP 路径上吞吐量高于 Reno"
+    - "相比 BIC 具有更平滑的窗口曲线"
+    - "与 Reno 共存时保持 Reno-friendly"
+  evaluation_conditions:
+    - "论文中的仿真与实验，包括高 BDP 链路和与 Reno/BIC/HSTCP 的对比"
+    - "RFC 9438 总结的部署与互操作经验"
+
+evidence:
+  - source_id: src-006
+    source_type: paper
+    locator: "3. CUBIC Congestion Control; 3.3 TCP-friendly region; 3.4 Concave region; 3.5 Convex region; 3.6 Multiplicative decrease; 3.7 Fast Convergence"
+    supports:
+      - "三次窗口增长函数与 K 的定义"
+      - "凹区、凸区与 TCP-friendly 区域的设计"
+      - "论文采用 beta=0.2 及其收敛速度代价"
+      - "fast convergence 的设计动机"
+    evidence_level: A
+  - source_id: src-007
+    source_type: rfc
+    locator: "4.2. Window Increase Function; 4.3. Reno-Friendly Region; 4.6. Multiplicative Decrease; 4.7. Fast Convergence"
+    supports:
+      - "当前标准化 CUBIC 的窗口增长与 Reno-friendly 公式"
+      - "RFC 推荐 C=0.4、beta=0.7"
+      - "fast convergence 的适用条件与 W_max 更新公式"
+    evidence_level: A
+
+knowledge_status: cross_source_synthesis
+
+related_experiences:
+  - exp-005
+  - exp-001
+  - exp-007
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - high-bdp
+    - congestion-loss
+    - rtt-variation
+    - cwnd-control
+    - loss-response
+    - multiplicative-decrease-factor
+    - tcp-cubic
+    - throughput
+    - fairness
+    - convergence
+    - stability
+    - control-oscillation
+    - queue-buildup

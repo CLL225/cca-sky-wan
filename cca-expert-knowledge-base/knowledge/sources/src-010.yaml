@@ -1,0 +1,23 @@
+source_id: src-010
+title: "Congestion Avoidance and Control"
+source_type: paper
+authors:
+  - Van Jacobson
+year: 1988
+url: "https://doi.org/10.1145/52324.52356"
+doi: "10.1145/52324.52356"
+venue: "ACM SIGCOMM 1988"
+version: "SIGCOMM '88"
+locators:
+  - type: section
+    value: "1 Getting to Equilibrium: Slow-start"
+  - type: section
+    value: "2 Conservation at equilibrium: round-trip timing"
+  - type: section
+    value: "3 Adapting to the path: congestion avoidance"
+related_experiences:
+  - exp-005
+  - exp-007
+metadata:
+  collected_at: "2026-11-09"
+  notes: "Origin of slow start, self-clocking and AIMD congestion avoidance."

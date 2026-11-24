@@ -1,0 +1,33 @@
+source_id: src-005
+title: "Linux TCP BBR implementation (net/ipv4/tcp_bbr.c)"
+source_type: code
+authors:
+  - Linux kernel networking community
+year: 2026
+url: "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_bbr.c"
+doi: ""
+venue: "Linux kernel source tree"
+version: "Linux master, retrieved 2026-11-09"
+locators:
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_update_bw"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_update_min_rtt"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_check_full_bw_reached"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_check_drain"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_update_cycle_phase"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_check_probe_rtt_done"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_set_pacing_rate"
+  - type: code_location
+    value: "net/ipv4/tcp_bbr.c::bbr_set_cwnd"
+related_experiences:
+  - exp-001
+  - exp-008
+metadata:
+  collected_at: "2026-11-09"
+  notes: "Reference implementation used to verify state names, gains and update rules."

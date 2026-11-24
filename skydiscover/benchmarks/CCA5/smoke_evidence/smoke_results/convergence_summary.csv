@@ -1,0 +1,6 @@
+algorithm,trace,duration_s,steady_throughput_kbps,threshold_kbps,convergence_time_s,converged
+llmgen-1,5GBeachStationary.csv,5.00402495,16433.863,14790.477,,false
+llmgen-1,TMobile-LTE-driving.down,5.01028988,6082.264,5474.037,1.00042603,true
+llmgen-1,TMobile-LTE-short.down,5.00885411,25094.343,22584.909,,false
+llmgen-1,TMobile-UMTS-driving.down,5.00679754,1632.146,1468.931,1.01814390,true
+llmgen-1,Verizon-LTE-short.down,5.00713443,6953.487,6258.138,1.00816916,true

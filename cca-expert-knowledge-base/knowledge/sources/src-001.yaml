@@ -1,0 +1,25 @@
+source_id: src-001
+title: "TCP Congestion Control"
+source_type: rfc
+authors:
+  - Mark Allman
+  - Vern Paxson
+  - Ethan Blanton
+year: 2009
+url: "https://www.rfc-editor.org/rfc/rfc5681"
+doi: "10.17487/RFC5681"
+venue: "IETF RFC 5681"
+version: "RFC 5681"
+locators:
+  - type: section
+    value: "3.1 Slow Start and Congestion Avoidance"
+  - type: section
+    value: "3.2 Fast Retransmit/Fast Recovery"
+  - type: section
+    value: "4.1 Restarting Idle Connections"
+related_experiences:
+  - exp-005
+  - exp-007
+metadata:
+  collected_at: "2026-11-09"
+  notes: "Normative description of the loss-based AIMD baseline used by TCP."

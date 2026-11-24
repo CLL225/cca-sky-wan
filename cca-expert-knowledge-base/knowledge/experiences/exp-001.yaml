@@ -1,0 +1,188 @@
+id: exp-001
+title: "基于瓶颈带宽与传播时延模型的拥塞控制（BBR）"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - high-bdp
+    - random-loss
+    - bufferbloat
+    - bandwidth-variation
+  observed_symptoms:
+    - "丢包触发的拥塞控制把非拥塞丢包当成拥塞信号，导致吞吐量骤降"
+    - "在高 BDP 路径上，丢包式 AIMD 需要很多个 RTT 才能重新填满管道"
+    - "队列长期处于接近满的状态，排队时延高（bufferbloat）"
+    - "浅缓冲区路径上，少量突发即可造成丢包"
+  underlying_cause: |
+    BBR 作者认为，基于丢包的拥塞控制在建模层面有缺陷：它把丢包等同于拥塞，
+    而可用发送速率实际上由瓶颈带宽和传播时延决定。丢包可能来自随机链路错误、
+    缓冲区不足或突发，而不是瓶颈已经饱和。
+
+design_rationale:
+  motivation: |
+    让发送方稳定运行在“瓶颈带宽 × 传播时延”的 BDP 附近，在保持高吞吐的同时
+    避免把瓶颈队列填满；并且不要求网络侧支持 ECN 或 AQM。
+  problem_analysis: |
+    论文用两个路径参数描述网络：瓶颈带宽 BtlBw 与往返传播时延 RTprop。
+    两者乘积给出在途数据量的最优值。只要持续估计这两个量，并让发送速率与
+    在途数据量跟随估计值，就可以在不依赖丢包信号的情况下接近最优工作点。
+  reasoning_chain:
+    - "丢包只在队列溢出或非拥塞原因下发生，因此丢包是滞后且含混的拥塞信号。"
+    - "路径长期的最大交付速率趋近瓶颈带宽；最小 RTT 趋近传播时延。"
+    - "用 ACK 交付速率样本估计 BtlBw，用最小 RTT 窗口估计 RTprop。"
+    - "用 pacing 速率控制发包时刻，用 cwnd 限制在途字节数。"
+    - "用 Startup/Drain/ProbeBW/ProbeRTT 状态机处理启动、排空、带宽探测和 RTT 刷新。"
+
+design_decision:
+  selected_mechanism: |
+    模型驱动的速率与窗口控制：BtlBw 与 RTprop 估计、pacing rate、
+    cwnd 上限以及 Startup/Drain/ProbeBW/ProbeRTT 四状态机。
+  alternatives_considered:
+    - "基于丢包的 AIMD（Reno/CUBIC）：损失信号滞后，且会把随机丢包误判为拥塞。"
+    - "纯时延/队列控制器：依赖队列时延信号，在缓冲区膨胀时难以区分传播时延与排队时延。"
+  why_selected: |
+    直接建模路径的 BDP，使发送方可以运行在瓶颈速率附近并维持较小队列；
+    同时不要求网络支持 ECN 或 AQM，可由发送端单边部署。
+
+mechanism:
+  description: |
+    BBR 在 ACK 上维护交付速率样本和 RTT 样本：BtlBw 取近期窗口内的最大交付速率，
+    RTprop 取较长时间窗口（Linux 实现约 10 秒）内的最小 RTT。发送时以
+    pacing_rate = pacing_gain × BtlBw 控制发送间隔，以
+    cwnd = cwnd_gain × BtlBw × RTprop 限制在途数据。状态机包括 Startup
+    （以高增益快速提升速率）、Drain（排空启动阶段形成的队列）、ProbeBW
+    （周期性用不同增益探测带宽）和 ProbeRTT（周期性压低在途数据以刷新 RTprop）。
+  control_signals:
+    - "ACK 交付速率样本（delivery rate）"
+    - "RTT 样本与最小 RTT"
+    - "在途字节数 inflight"
+    - "是否达到满带宽 full_bw_reached"
+  control_actions:
+    - "设置 pacing 速率"
+    - "设置拥塞窗口"
+    - "状态机阶段切换"
+    - "ProbeRTT 期间限制在途数据"
+  state_variables:
+    - "BtlBw（瓶颈带宽估计）"
+    - "RTprop（传播时延估计）"
+    - "pacing_gain"
+    - "cwnd_gain"
+    - "cycle phase / cycle index"
+    - "full_bw / full_bw_cnt"
+
+tradeoffs:
+  benefits:
+    - "在高 BDP 路径上可以达到更高的吞吐量"
+    - "在最优工作点附近运行时瓶颈队列较小，排队时延低于丢包式算法"
+    - "不要求网络支持 ECN 或 AQM，便于端到端部署"
+    - "把随机丢包与拥塞区分开，非拥塞丢包不会直接触发窗口减半"
+  costs:
+    - "发送端需要具备 pacing 能力与较细粒度的发送调度"
+    - "依赖 ACK 交付速率样本；ACK 聚合、压缩或反向路径拥塞会污染估计"
+    - "ProbeRTT 周期性排空队列，会带来短时的吞吐下降和时延尖峰"
+    - "Startup 阶段的高增益可能造成短时超发"
+  limitations:
+    - "模型假设瓶颈带宽与传播时延在估计窗口内近似可辨识"
+    - "ACK 时钟不可用或严重失真的路径上，交付速率估计的可靠性下降"
+    - "ProbeRTT 的测量结果有窗口有效期，路径快速变化时可能滞后"
+
+failure_modes:
+  - "Startup 期间 pacing_gain 约为 2.885；若路径缓冲很小，快速提速率可能先造成丢包。"
+  - "ACK 聚合使交付速率样本失真，BtlBw 估计可能偏高或偏低。"
+  - "ProbeRTT 压低在途数据期间，吞吐暂时下降并出现时延尖峰。"
+  - "路径频繁变化时，最小 RTT 窗口可能保留过期的 RTprop，直到 ProbeRTT 刷新。"
+
+applicability:
+  suitable_conditions:
+    - "能够从 ACK 估计交付速率和 RTT 的路径"
+    - "发送端可以 pacing 的传输实现"
+    - "高 BDP、随机丢包或 bufferbloat 明显，且希望降低排队时延的场景"
+  unsuitable_conditions:
+    - "无法获得有意义 ACK 交付速率的场景"
+    - "路径变化极快且无法及时刷新 RTprop 的场景（需要额外验证）"
+  assumptions:
+    - "瓶颈链路速率在估计窗口内近似稳定"
+    - "传播时延存在可观测的下界"
+    - "ACK 能反映数据交付进度"
+
+parameter_guidance:
+  - parameter: "high_gain"
+    guidance: "Startup 阶段使用约 2.885（2/ln2）的 pacing 增益，使每 RTT 带宽约翻倍。"
+    rationale: "在启动阶段快速逼近 BtlBw，同时 Drain 阶段用其倒数排空形成的队列。"
+    source_ids: ["src-005"]
+  - parameter: "cwnd_gain"
+    guidance: "Linux BBR 使用 2 作为 cwnd 增益，允许最多约 2 BDP 的在途数据。"
+    rationale: "为 ACK 聚合和路径波动留出余量，避免因在途不足而低估带宽。"
+    source_ids: ["src-005"]
+  - parameter: "probe_bw_cycle"
+    guidance: "ProbeBW 使用 8 个相位的增益序列（1.25、0.75、1.0 …），周期性地探测更高带宽。"
+    rationale: "先轻微超发探测带宽，再回落到估计速率，避免长期填满队列。"
+    source_ids: ["src-004", "src-005"]
+  - parameter: "probe_rtt_interval"
+    guidance: "Linux 实现约每 10 秒进入一次 ProbeRTT，持续约 200 ms，并限制在途数据。"
+    rationale: "刷新 RTprop 的下界；若长期不刷新，最小 RTT 可能包含旧路径的排队时延。"
+    source_ids: ["src-005"]
+  - parameter: "min_rtt_window"
+    guidance: "RTprop 使用约 10 秒的滑动窗口最小值。"
+    rationale: "窗口太短会受瞬时排队污染，太长则无法及时反映路径变化。"
+    source_ids: ["src-005"]
+
+evaluation:
+  metrics:
+    - "吞吐量"
+    - "排队时延"
+    - "丢包率"
+    - "带宽利用率"
+  expected_effects:
+    - "在高 BDP 路径上接近瓶颈带宽"
+    - "相比丢包式算法降低稳态排队时延"
+    - "在存在随机丢包时避免吞吐量大幅下降"
+  evaluation_conditions:
+    - "论文报告的蜂窝网络、WiFi 与骨干网测量"
+    - "论文报告的 YouTube 部署数据"
+    - "Linux 实现与参考代码行为"
+
+evidence:
+  - source_id: src-004
+    source_type: paper
+    locator: "Modeling the Network Path; The BBR Algorithm; Startup; Drain; ProbeBW; ProbeRTT"
+    supports:
+      - "用 BtlBw 与 RTprop 建模路径并定义 BDP"
+      - "四状态机的设计动机与行为"
+      - "论文报告的高 BDP 与 bufferbloat 场景收益"
+    evidence_level: A
+  - source_id: src-005
+    source_type: code
+    locator: "net/ipv4/tcp_bbr.c::bbr_update_bw / bbr_update_min_rtt / bbr_check_full_bw_reached / bbr_check_drain / bbr_update_cycle_phase / bbr_check_probe_rtt_done / bbr_set_pacing_rate / bbr_set_cwnd"
+    supports:
+      - "BtlBw、min-RTT、full_bw 与状态机的具体实现"
+      - "pacing 增益、cwnd 增益与 ProbeRTT 周期等参数取值"
+    evidence_level: A
+
+knowledge_status: source_reported
+
+related_experiences:
+  - exp-005
+  - exp-007
+  - exp-008
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - high-bdp
+    - random-loss
+    - bufferbloat
+    - bandwidth-variation
+    - bandwidth-estimation
+    - min-rtt-estimation
+    - pacing
+    - rate-control
+    - gain-control
+    - state-machine
+    - startup-exit
+    - bbr
+    - throughput
+    - low-latency
+    - production-trace
+    - metrics-throughput-delay

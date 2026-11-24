@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/cca-kb/source.schema.json",
+  "title": "Source",
+  "description": "A paper, RFC, code file, report or experiment used as evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source_id", "title", "source_type", "locators", "metadata"],
+  "properties": {
+    "source_id": { "type": "string", "pattern": "^src-[0-9]{3}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "source_type": {
+      "type": "string",
+      "enum": ["paper", "rfc", "code", "technical_report", "experiment", "other"]
+    },
+    "authors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "year": { "type": ["integer", "null"] },
+    "url": { "type": "string" },
+    "doi": { "type": "string" },
+    "venue": { "type": "string" },
+    "version": { "type": "string" },
+    "locators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "value"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "section",
+              "page",
+              "figure",
+              "table",
+              "code_location",
+              "url_fragment",
+              "line"
+            ]
+          },
+          "value": { "type": "string" }
+        }
+      }
+    },
+    "related_experiences": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^exp-[0-9]{3}$" }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "collected_at": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

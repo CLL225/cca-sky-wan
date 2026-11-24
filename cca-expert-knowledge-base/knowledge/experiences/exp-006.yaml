@@ -1,0 +1,194 @@
+id: exp-006
+title: "QUIC 的丢包检测、PTO 与持续拥塞判定"
+experience_type: mechanism_design
+
+problem_context:
+  network_conditions:
+    - path-change
+    - rtt-variation
+    - congestion-loss
+    - burst-traffic
+  observed_symptoms:
+    - "基于重传的丢包检测存在重传歧义，难以判断 ACK 对应哪次发送"
+    - "仅靠重传超时（RTO）恢复会带来长时吞吐空窗"
+    - "乱序和 ACK 丢失会让发送方误判丢包或过度等待"
+    - "路径切换后旧路径的拥塞状态可能不再适用"
+  underlying_cause: |
+    TCP 的序号与重传机制使丢失检测存在歧义；RTO 与 TLP 等机制分散且难以
+    精确描述。QUIC 使用单调递增的包号和 ACK 区间，使丢失检测语义更清晰，
+    并需要一套明确的 PTO 与持续拥塞规则来驱动恢复和拥塞控制。
+
+design_rationale:
+  motivation: |
+    为 QUIC 定义一套与传输层解耦、可被不同拥塞控制算法复用的丢包检测与恢复机制，
+    减少重传歧义、避免长时间等待 RTO，并在严重拥塞时可靠地重置状态。
+  problem_analysis: |
+    QUIC 包号单调递增且不重传同一个包号，因此 ACK 能无歧义地确认包；
+    ACK 帧可携带多个区间，便于在乱序和 ACK 丢失时仍建立丢失事件。
+    基于包数阈值和时间阈值检测丢失；当没有足够 ACK 反馈时，用 PTO
+    主动探测；当长时间没有确认任何包时，判定持续拥塞并重置拥塞状态。
+  reasoning_chain:
+    - "单调包号与 ACK 区间消除重传歧义，使丢失检测更明确。"
+    - "包阈值适合快速恢复少量丢失；时间阈值适应乱序和不同 RTT。"
+    - "PTO 在没有足够 ACK 时探测，替代 RTO/TLP 的分散机制。"
+    - "持续拥塞判定允许发送方在长时间无反馈后重置，避免保留失效状态。"
+    - "拥塞控制本身可以是 NewReno 类或可替换算法（如 CUBIC）。"
+
+design_decision:
+  selected_mechanism: |
+    基于 ACK 的丢失检测（包阈值与时间阈值）+ Probe Timeout（PTO）+ 持续拥塞判定；
+    默认拥塞控制器为 NewReno 类，慢启动/恢复/拥塞避免状态明确，并建议 pacing。
+  alternatives_considered:
+    - "仅使用 RTO：恢复慢，且难以覆盖乱序与 ACK 丢失。"
+    - "沿用 TCP 的重传序号语义：存在重传歧义。"
+    - "固定包数阈值：对不同 RTT 和乱序程度适应性差。"
+  why_selected: |
+    ACK 区间与单调包号使丢失检测更精确；包阈值与时间阈值互补；
+    PTO 提供明确的探测机制；持续拥塞判定覆盖长时间无反馈的极端情况。
+
+mechanism:
+  description: |
+    QUIC 维护 RTT 估计（smoothed_rtt、rttvar、min_rtt）。当包号小于某个
+    已确认包、且差距达到包阈值（kPacketThreshold=3），或发送时间早于
+    当前时间减去时间阈值（约 9/8 × max(smoothed_rtt, latest_rtt)）时，
+    判为丢失。若没有足够 ACK，则在 PTO 到期时发送探测包；PTO 由
+    smoothed_rtt、rttvar 与 max_ack_delay 计算。若在持续拥塞持续时间内
+    没有任何包被确认，则判定持续拥塞：把 cwnd 重置为最小窗口，
+    并以慢启动重新开始。拥塞控制在慢启动、恢复与拥塞避免之间切换，
+    默认每丢包事件把 cwnd 减半；发送方应 pacing，避免突发。
+  control_signals:
+    - "ACK 确认的包号与 ACK 区间"
+    - "RTT 样本、smoothed_rtt、rttvar、min_rtt"
+    - "PTO 定时器"
+    - "持续拥塞持续时间"
+    - "ECN-CE 计数（若启用）"
+  control_actions:
+    - "声明丢包并触发恢复"
+    - "发送 PTO 探测包"
+    - "调整 cwnd 与 ssthresh"
+    - "持续拥塞时重置 cwnd"
+    - "pacing 发送"
+  state_variables:
+    - "largest_acked"
+    - "bytes_in_flight"
+    - "congestion_window"
+    - "ssthresh"
+    - "smoothed_rtt / rttvar / min_rtt"
+    - "PTO 定时器"
+    - "恢复起始包号"
+
+tradeoffs:
+  benefits:
+    - "单调包号与 ACK 区间消除重传歧义，丢失检测语义清晰"
+    - "包阈值与时间阈值互补，兼顾快速恢复与乱序容忍"
+    - "PTO 替代分散的 RTO/TLP，机制更统一"
+    - "持续拥塞判定避免在长时间无反馈后保留失效的拥塞状态"
+    - "拥塞控制器可替换（NewReno、CUBIC 等）"
+  costs:
+    - "需要维护 ACK 区间、PTO 与持续拥塞等额外状态"
+    - "默认控制器仍是丢包式，继承其对随机丢包和 bufferbloat 的局限"
+    - "PTO 探测可能在拥塞时注入额外包"
+    - "时间阈值与持续拥塞阈值是权衡参数"
+  limitations:
+    - "默认 NewReno 类控制器在高 BDP 路径上扩展性有限，需要替换控制器"
+    - "乱序严重的路径上，包阈值可能导致误判"
+    - "持续拥塞阈值过小会不必要地重置，过大则对严重拥塞反应迟钝"
+
+failure_modes:
+  - "乱序超过包阈值时，正常包被误判为丢失，触发不必要重传和降窗。"
+  - "PTO 在严重拥塞时连续探测，可能加重拥塞（需要与拥塞控制协同）。"
+  - "持续拥塞阈值配置不当：过小导致吞吐损失，过大导致持续激进发送。"
+  - "ACK 反馈长期缺失时，若持续拥塞判定不触发，可能一直保留旧窗口。"
+
+applicability:
+  suitable_conditions:
+    - "QUIC 端点，且需要明确的丢失检测与恢复语义"
+    - "存在乱序、ACK 丢失或路径切换的互联网路径"
+    - "希望复用统一恢复机制并替换拥塞控制器的实现"
+  unsuitable_conditions:
+    - "非 QUIC 传输（TCP 有自己的 RFC 5681/6675 等机制）"
+    - "无法提供包号单调性与 ACK 区间的自定义传输"
+  assumptions:
+    - "包号单调递增且不重用"
+    - "ACK 能确认已接收的包号区间"
+    - "RTT 与 max_ack_delay 可估计"
+
+parameter_guidance:
+  - parameter: "kPacketThreshold"
+    guidance: "包阈值 3：包号落后已确认包 3 个即判为丢失。"
+    rationale: "与 TCP 的三个重复 ACK 经验一致，兼顾快速恢复与少量乱序容忍。"
+    source_ids: ["src-002"]
+  - parameter: "time_threshold"
+    guidance: "时间阈值约为 9/8 × max(smoothed_rtt, latest_rtt)。"
+    rationale: "为 RTT 估计误差和乱序留出余量，避免过早判丢。"
+    source_ids: ["src-002"]
+  - parameter: "PTO"
+    guidance: "PTO 由 smoothed_rtt + max(4·rttvar, kGranularity) + max_ack_delay 组成并带指数退避。"
+    rationale: "在没有足够 ACK 时主动探测；包含 max_ack_delay 以适配延迟 ACK。"
+    source_ids: ["src-002"]
+  - parameter: "kPersistentCongestionThreshold"
+    guidance: "推荐值 3；持续拥塞持续时间 = (smoothed_rtt + max(4·rttvar, kGranularity) + max_ack_delay) × 3。"
+    rationale: "近似等价于 TCP 在两次 TLP 后声明 RTO；过小造成不必要重置，过大造成反应迟钝。"
+    source_ids: ["src-002"]
+  - parameter: "minimum_window"
+    guidance: "最小拥塞窗口为 2 个包（约 2 × max_datagram_size）。"
+    rationale: "允许发送方在恢复期间继续探测，同时避免窗口降到 0 后无法前进。"
+    source_ids: ["src-002"]
+
+evaluation:
+  metrics:
+    - "恢复时间"
+    - "吞吐量"
+    - "丢包误判率"
+    - "PTO 触发次数"
+  expected_effects:
+    - "比仅依赖 RTO 更快地从丢包中恢复"
+    - "在乱序和 ACK 丢失下减少误判"
+    - "长时间无反馈后可靠地重置拥塞状态"
+  evaluation_conditions:
+    - "RFC 9002 的行为规范与伪代码"
+    - "QUIC 实现的互操作与实验评估"
+
+evidence:
+  - source_id: src-002
+    source_type: rfc
+    locator: "5. Estimating the Round-Trip Time; 6.1.1. Packet Threshold; 6.1.2. Time Threshold; 6.2. Probe Timeout; 7.3. Congestion Control States; 7.6. Persistent Congestion; 7.7. Pacing"
+    supports:
+      - "包阈值与时间阈值的丢失检测规则"
+      - "PTO 的组成与探测行为"
+      - "持续拥塞持续时间与 kPersistentCongestionThreshold=3"
+      - "最小窗口、恢复状态与 pacing 建议"
+    evidence_level: A
+  - source_id: src-001
+    source_type: rfc
+    locator: "3.1 Slow Start and Congestion Avoidance; 3.2 Fast Retransmit/Fast Recovery"
+    supports:
+      - "QUIC 默认控制器所遵循的 NewReno 类丢包响应基线"
+    evidence_level: A
+
+knowledge_status: source_reported
+
+related_experiences:
+  - exp-005
+  - exp-008
+  - exp-007
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - path-change
+    - rtt-variation
+    - congestion-loss
+    - burst-traffic
+    - loss-detection
+    - ack-based-recovery
+    - packet-threshold
+    - time-threshold
+    - loss-response
+    - persistent-congestion
+    - quic
+    - rtt-measurement
+    - pacing
+    - cwnd-control
+    - robustness

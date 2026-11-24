@@ -1,0 +1,127 @@
+# Example of a valid DesignExperience record.
+#
+# This file is illustrative only. It is NOT loaded by the knowledge base:
+# records live under knowledge/experiences/. Use it as a template when
+# extracting a new design experience from a source, and validate a real copy
+# with `cca-kb validate --strict`.
+#
+# The example deliberately shows:
+#   - a source_reported record (single-source, direct claim)
+#   - an experience of type "parameter_design"
+#   - evidence with a precise locator
+#   - parameter guidance that points back to a source
+
+id: exp-901
+title: "示例：为连接启动选择初始拥塞窗口"
+experience_type: parameter_design
+
+problem_context:
+  network_conditions:
+    - high-bdp
+    - bufferbloat
+  observed_symptoms:
+    - "初始窗口过小会浪费首轮 RTT，过大则可能在浅缓冲区上造成突发丢包"
+    - "首轮 RTT 内没有任何拥塞反馈可供判断"
+  underlying_cause: |
+    新建连接对路径容量没有先验知识，首个飞行（flight）的大小决定了
+    启动阶段的最坏突发，也决定了首个 RTT 的利用率。
+
+design_rationale:
+  motivation: |
+    在启动延迟与突发风险之间取一个可解释的折中：既不从单个报文慢启动，
+    也不用一个与路径无关的大窗口。
+  problem_analysis: |
+    初始窗口只影响连接启动阶段。它不是一个容量估计，而是一个突发上限：
+    首个飞行的大小应当受路径 MTU 与浅缓冲区容量的约束，随后交给慢启动
+    和 ACK 时钟接管。
+  reasoning_chain:
+    - "首个 RTT 内没有拥塞信号，因此初始窗口不能依赖反馈。"
+    - "窗口过小会让每个连接都多等若干 RTT，窗口过大则会在浅缓冲区造成丢包。"
+    - "把初始飞行限制在少量报文内，可以在两者之间取得有界的最坏情况。"
+    - "后续增长由 ACK 时钟和慢启动负责，初始值不应成为长期工作点。"
+
+design_decision:
+  selected_mechanism: |
+    使用由路径 MTU 与少量报文数共同限定的有界初始窗口，随后进入慢启动。
+  alternatives_considered:
+    - "从 1 个 MSS 开始：最安全，但启动慢。"
+    - "使用固定的较大窗口：启动快，但在浅缓冲区上容易突发丢包。"
+  why_selected: |
+    有界窗口把首个飞行限制在常见浅缓冲区可吸收的范围内，同时避免
+    每连接多等一个 RTT 的冷启动代价。
+
+mechanism:
+  description: |
+    发送方在收到任何 ACK 之前，按有界初始窗口发送第一个飞行。每个 ACK
+    到达后，拥塞窗口按慢启动规则增长，ACK 时钟接管发送节奏。初始窗口
+    只是启动条件；一旦有反馈，窗口大小由拥塞控制算法决定。
+  control_signals:
+    - "首个飞行内是否有 ACK 返回"
+    - "路径 MTU"
+  control_actions:
+    - "设定初始拥塞窗口"
+    - "进入慢启动"
+  state_variables:
+    - "cwnd"
+    - "ssthresh"
+
+tradeoffs:
+  benefits:
+    - "避免每连接额外的启动 RTT。"
+    - "把首个飞行限制在有界范围内。"
+  costs:
+    - "在极浅缓冲区的路径上仍可能造成首轮丢包。"
+    - "窗口上限是部署相关的，需要保持一致。"
+  limitations:
+    - "初始窗口不是容量估计，不能据此推断稳态吞吐。"
+
+failure_modes:
+  - "初始飞行超过瓶颈缓冲区时，即使路径未拥塞也会丢掉尾部报文。"
+  - "实现把初始窗口当成固定工作点、不再增长时，会造成长期欠利用。"
+
+applicability:
+  suitable_conditions:
+    - "未知路径上的新建连接。"
+    - "发送端能够从 ACK 驱动窗口增长。"
+  unsuitable_conditions:
+    - "已明确知道瓶颈缓冲区极小的路径（需要更保守的配置）。"
+  assumptions:
+    - "首个 RTT 内没有可用的拥塞反馈。"
+    - "路径 MTU 可被合理估计。"
+
+parameter_guidance:
+  - parameter: "initial_window"
+    guidance: "把首个飞行限制在少量报文内，并确保上限与长期窗口解耦。"
+    rationale: "初始窗口是突发控制决策，不是容量估计。"
+    source_ids:
+      - src-001
+
+evaluation:
+  metrics:
+    - "启动完成时间"
+    - "首轮 RTT 的丢包率"
+  expected_effects:
+    - "缩短启动时间，同时不显著提高首轮丢包。"
+  evaluation_conditions:
+    - "在浅缓冲区与深缓冲区路径上分别比较，其余协议栈配置保持不变。"
+
+evidence:
+  - source_id: src-001
+    source_type: rfc
+    locator: "RFC 5681, Section 3.1"
+    supports:
+      - "初始窗口的取值与其对首个飞行的影响。"
+    evidence_level: A
+
+knowledge_status: source_reported
+
+related_experiences:
+  - exp-005
+
+metadata:
+  created_at: "2026-11-09"
+  updated_at: "2026-11-09"
+  tags:
+    - congestion-loss
+    - cwnd-control
+    - tcp-reno

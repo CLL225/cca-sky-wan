@@ -1,0 +1,196 @@
+# =============================================================================
+# CCA5 — QUIC 拥塞控制算法进化（tquic + mahimahi 真实 trace）
+# =============================================================================
+
+# 进化语言
+language: rust
+
+# 候选文件扩展名。
+file_suffix: ".rs"
+
+# true = 让 LLM 输出 <<<<<<< SEARCH / ======= / >>>>>>> REPLACE 补丁，而非整个文件。
+# 省 token、改动局部化、不易改坏无关代码。该格式与语言无关，Rust 同样适用。
+diff_based_generation: true
+
+# 进化总轮数。CCA 一次评测要 cargo build + 跑基线 + 跑 trace（几到十几分钟），
+max_iterations: 100
+
+# 每 N 轮存一次断点，进程中断后可续跑。评测昂贵，间隔取小。
+checkpoint_interval: 2
+
+# 候选程序字符上限。注意这是「拒绝」阈值，不是「截断」：超了直接判
+# parse_error、子代作废重试（default_discovery_controller.py:576）。
+# 而且 diff_based_generation 下子代 = 父本全文 + 补丁，体积约等于父本，
+# 所以这个值必须明显大于种子。种子 25940 B，给 1.7 倍、留约 19KB 生长余量。
+max_solution_length: 45000
+
+# ─── llm：模型端点（教研室本地服务，保持不变）───────────────────────────────
+
+llm:
+  # 采样温度。默认 0.7 偏高，代码进化容易产出编译不过的代码；
+  # 现有 mutate_algorithm.py 用的是 0.2，这里 0.4 兼顾探索与稳定。
+  temperature: 0.4
+  # 单次回复 token 上限。
+  max_tokens: 32000
+  # 单次 LLM 请求超时（秒）。这是整个请求（含流式接收）的总超时。
+  # mimo + reasoning_effort=high 在 50KB 提示词上一次生成实测 580s，600s 只剩
+  # 20s 余量；加上 KB 小节后连续三轮在 600s 超时。给到 1800s。
+  timeout: 1800
+  # 请求失败的重试次数与重试间隔（秒）。
+  retries: 3
+  retry_delay: 5
+
+  # 候选生成用的模型池，按 weight 加权随机抽样。
+  models:
+    - name: "mimo-v2.6-flash"
+      weight: 1.0
+      api_base: "http://192.168.1.19:4000/v1"
+      api_key: "sk-tfpyrUy-WvfGKpYcAP1a9w"
+      stream: true
+      reasoning_effort: "high"
+      max_tokens: 131072
+
+  # models:
+  #   - name: "deepseek-v4-flash"
+  #     weight: 1.0
+  #     api_base: "https://api.deepseek.com"
+  #     api_key: "sk-c12dbed05da14d489f594d4c5fb81277" 
+
+  # models:
+  #   - name: "Qwen/Qwen3.8-27B"
+  #     weight: 1.0
+  #     # 推理端点，不是 modelscope.cn/openapi/v1（那个是模型仓库 API，会 404）
+  #     api_base: "https://api-inference.modelscope.cn/v1"
+  #     api_key: "ms-f583d92c-031c-4625-aace-614fed83e403"
+
+# ─── evaluator：评测器 ──────────────────────────────────────────────────────
+
+evaluator:
+  # 单次评测子进程的超时（秒），默认 360。
+  # 需覆盖 cargo build --release + 基线（bbr/cubic/copa，分数按 trace 对基线归一化）
+  # + llmgen 跑完所有 trace。
+  timeout: 1800
+  # 评测失败重试次数。重建重跑很贵，失败大概率是真失败，故取 1。
+  max_retries: 1
+  # 级联评测：低分程序跳过完整评测以省时间。
+  # CCA 必须整包跑完才知道分数，无法分批省钱。
+  cascade_evaluation: false
+
+  # 是否把 evaluator 源码塞进系统提示，让模型看到打分逻辑。
+  # null = 自动（有种子程序时关闭）。此处已在 system_message 手工写明规则，不写即保持自动。
+  # inject_evaluator_context: null
+  # 额外用一个 LLM 打分，暂不使用。
+  # llm_as_judge: false
+
+monitor:
+  enabled: true
+
+# ─── search：搜索策略 ──────────────────────────────────────────────────────
+
+search:
+  type: "adaevolve"
+  #搜寻机制
+  # topk,beam_search,best_of_n,adaevolve,evox,openevolve,gepa,shinkaevolve,alphaevolve
+
+  num_context_programs: 4
+  #每次让 LLM 生成新候选算法时，额外提供 4 个已有程序作为参考上下文。
+
+  #种群设置
+  database:
+    population_size: 25 #每个 island 最多 30 个候选
+    num_islands: 2  
+
+    # --- 自适应搜索强度 ---
+    # 控制搜索强度如何根据改进信号（G）自适应调整
+    # 高 G（高产岛屿）-> 低强度（利用/exploit）
+    # 低 G（停滞岛屿）-> 高强度（探索/explore）
+    decay: 0.9                        # 更新 G 时保留 90% 的历史信号，加入 10% 的本次改进信号
+    intensity_min: 0.15               # G高时仍有15%的概率进行探索（exploration）  
+    intensity_max: 0.5                # G低时有50%的概率进行探索（exploration）
+
+    # --- 消融开关 ---
+    # 设为 false 可禁用特定自适应机制，用于消融实验
+    # 是否让每个小组根据最近表现自动调整探索程度
+    use_adaptive_search: true         # 基于 G 的强度 vs fixed_intensity
+    # 决定每轮选择哪个 island 工作
+    use_ucb_selection: true           # UCB 岛屿选择 vs 轮询（round-robin）
+    use_migration: true               # 岛屿间迁移
+    # 决定每个 island 如何保存候选程序
+    use_unified_archive: true         # 质量-多样性归档 vs 简单列表
+    # fixed_intensity: 0.4            # 当 use_adaptive_search=false 时使用
+    
+    # --- 迁移 ---
+    migration_interval: 30            # 每 N 次迭代迁移一次
+    migration_count: 3               # 迁移的 top 程序数量
+
+    # --- 归档设置（当 use_unified_archive=true 时）---
+    fitness_weight: 0.5               # 精英评分中适应度排名的权重
+    novelty_weight: 0.5              # 精英评分中新颖性排名的权重
+    diversity_strategy: "code"        # 多样性度量："code"、"metric" 或 "hybrid"
+
+    # --- 可选的 Pareto 多目标模式 ---
+    # 将 pareto_objectives 留空以保持当前标量 combined_score 行为。
+    # 启用时，从评估器返回原始目标指标并设置：
+    # pareto_objectives:
+    #   - accuracy
+    #   - latency
+    # higher_is_better:
+    #   accuracy: true
+    #   latency: false
+    # fitness_key: accuracy              # 可选：用于自适应状态/平局打破的标量代理
+    # pareto_objectives_weight: 0.4      # Pareto 百分位在归档精英评分中的权重
+
+    # --- 动态岛屿生成 ---
+    use_dynamic_islands: true
+    max_islands: 5                    # 最大岛屿数量
+    spawn_productivity_threshold: 0.20   # 若全局生产力低于此值则生成新岛屿。
+                                         # 注意该 productivity 是「累计改进 / 累计评测」的全程
+                                         # 平均值（分母只统计被存档接收的程序），会收敛到平台值
+                                         # 而非衰减到 0。实测平台值随 run 而异（0.03~0.20），
+                                         # 原值 0.015 在所有 run 中都永不触发。
+    spawn_cooldown_iterations: 20     # 两次生成之间等待 N 次迭代
+
+    # --- 范式突破 ---
+    use_paradigm_breakthrough: true
+    paradigm_window_size: 10          # 用于计算改进率的窗口大小
+    paradigm_improvement_threshold: 0.12  # 停滞阈值
+    paradigm_max_uses: 2              # 每个范式最大使用次数
+    paradigm_max_tried: 10            # 最多跟踪的已尝试范式数量
+    paradigm_num_to_generate: 3       # 每次触发时生成的范式数量
+
+    # --- 错误重试 ---
+    enable_error_retry: true
+    max_error_retries: 2
+# ─── prompt：系统提示（整个配置最重要的部分）────────────────────────────────
+
+prompt:
+  # 会被拼进每次生成请求的系统提示。
+  # 注意：若写成一行且短于 256 字符，会被当成「相对本 config 的文件名」去读取；
+  # 用 |- 写成多行块则按字面量处理。也可写成 "system_prompt.txt" 外置成文件。
+  system_message: "satellite_video_prompt.txt"
+  # 程序字符数超过该值后，提示词会开始引导模型「简化」。
+  # 默认 500 过于激进。种子 25940 B，阈值设 30000：平时不触发，只有模型把
+  # 文件堆到明显臃肿时才出来提醒，免得它把精力花在删代码上。
+  suggest_simplification_after_chars: 30000
+
+  # ─── 专家知识库检索（cca-expert-knowledge-base）────────────────────────────
+  # 每轮生成前，按父本这一轮的评测指标（公平性诊断、排队时延、吞吐差距、
+  # 收敛惩罚）拼一个设计问题，检索 top-k 条专家设计经验，作为
+  # 「EXPERT DESIGN EXPERIENCE」小节插进 search_guidance（紧跟 evaluator
+  # feedback 之后）。经验条目自带 exp-ID、knowledge_status、证据等级，提示词
+  # 要求模型只把它当参考、注明借鉴了哪条。
+  #
+  # 代价：每次生成多约 4K tokens；检索走子进程，失败/超时会静默跳过，
+  # 不影响进化流程（最多打 3 条 warning）。
+  knowledge_base:
+    enabled: true
+    # 相对本 config 文件所在目录解析；容器内即
+    # /workspace/cca-expert-knowledge-base/skill/cca_kb.py
+    script: "../../../cca-expert-knowledge-base/skill/cca_kb.py"
+    top_k: 3
+    # 整个小节折进提示词的字符上限；超出后在最后一条完整经验处截断。
+    max_chars: 12000
+    timeout_s: 15
+    # 可选过滤（对应 cca_kb.py 的参数），默认不过滤：
+    # status: source_reported
+    # min_evidence: A

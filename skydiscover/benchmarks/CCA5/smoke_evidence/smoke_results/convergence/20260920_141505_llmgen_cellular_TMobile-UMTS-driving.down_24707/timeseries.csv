@@ -1,0 +1,6 @@
+algorithm,trace,elapsed_s,interval_s,acked_bytes_total,interval_acked_bytes,throughput_kbps,srtt_ms,min_rtt_ms,rttvar_ms,cwnd_bytes,max_cwnd_bytes,min_cwnd_bytes,pacing_rate_bps,lost_bytes,lost_count,in_slow_start
+llmgen-1,TMobile-UMTS-driving.down,1.01814390,1.01814390,296662,296662,2331.003,127.334,31.726,5.139,42918,63928,12000,5555808,4416,3,false
+llmgen-1,TMobile-UMTS-driving.down,2.02776216,1.00961827,633849,337187,2671.798,139.588,31.726,10.581,42853,64033,12000,6722896,8832,6,false
+llmgen-1,TMobile-UMTS-driving.down,3.04796938,1.02020721,870907,237058,1858.901,181.746,31.726,8.563,38576,64033,12000,3302368,14720,10,false
+llmgen-1,TMobile-UMTS-driving.down,4.05898477,1.01101540,1044704,173797,1375.227,243.970,31.726,51.597,35860,64033,12000,2872560,16192,11,false
+llmgen-1,TMobile-UMTS-driving.down,5.00679754,0.94781276,1268514,223810,1889.065,133.923,31.726,10.723,41856,64033,12000,5446464,16192,11,false

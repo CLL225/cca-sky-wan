@@ -1,0 +1,28 @@
+source_id: src-009
+title: "Copa: Practical Delay-Based Congestion Control for the Internet"
+source_type: paper
+authors:
+  - Venkat Arun
+  - Hari Balakrishnan
+year: 2018
+url: "https://www.usenix.org/conference/nsdi18/presentation/arun"
+doi: ""
+venue: "USENIX NSDI 2018"
+version: "NSDI '18"
+locators:
+  - type: section
+    value: "2. Copa Algorithm"
+  - type: section
+    value: "2.1. Target Rate and Update Rule"
+  - type: section
+    value: "2.2. Competing with Buffer-Filling Schemes"
+  - type: section
+    value: "3. Dynamics of Copa"
+  - type: section
+    value: "5.3. RTT-fairness"
+related_experiences:
+  - exp-004
+  - exp-007
+metadata:
+  collected_at: "2026-11-09"
+  notes: "Target-rate objective, velocity parameter and competitive mode."
