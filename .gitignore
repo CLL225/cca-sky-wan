@@ -29,3 +29,6 @@ CCA5/bin/tquic_client
 CCA5/bin/tquic_server
 CCA5/bin/cert.key
 CCA5/bin/cert.crt
+
+# Local backups
+backup_*/

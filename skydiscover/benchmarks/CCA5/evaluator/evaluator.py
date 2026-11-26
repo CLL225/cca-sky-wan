@@ -38,6 +38,7 @@ import io
 import json
 import os
 import shutil
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -68,8 +69,13 @@ _ALGOS = "bbr cubic copa llmgen"
 #: a drift check.
 _BASELINE_ALGOS = ("bbr", "cubic", "copa")
 _LLMGEN_ONLY = "llmgen"
-_BASELINE_REFRESH_EVERY = 20
-_BASELINE_MAX_AGE_S = 12 * 3600
+#: Baselines are a fixed-version performance library: measured
+#: ``_BASELINE_REPEATS`` times, reduced to a per-(algorithm, trace) median and
+#: kept until the network code or traces change.  Setting either value to 0
+#: disables that refresh trigger (pinned mode).
+_BASELINE_REPEATS = 3
+_BASELINE_REFRESH_EVERY = 0
+_BASELINE_MAX_AGE_S = 0
 _BASELINE_CACHE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), ".baseline_cache"
 )
@@ -289,6 +295,21 @@ def _baseline_cache_key():
         if os.path.isfile(path):
             digest.update(f"{name}:{stat.st_size}:{int(stat.st_mtime)}".encode())
 
+    for name in ("replay_wan.py", "replay_lens.py", "run_tc.sh",
+                 "run_evaluation.sh", "analyze_convergence.py",
+                 "run_fairness.sh", "run_fairness_suite.sh"):
+        path = _cca5(name)
+        try:
+            stat = os.stat(path)
+        except OSError:
+            continue
+        digest.update(f"{name}:{stat.st_size}:{int(stat.st_mtime)}".encode())
+
+    for knob in ("WAN_PROFILE", "WAN_RATE_MBIT", "WAN_RTT_MS", "WAN_LOSS_PCT",
+                 "WAN_QUEUE_BDP", "TRACE_START_S", "SATELLITE_LOSS_PCT",
+                 "SATELLITE_QUEUE_BDP"):
+        digest.update(f"{knob}={os.environ.get(knob, '')}".encode())
+
     src_root = _cca5("tquic", "src")
     for root, dirs, files in os.walk(src_root):
         dirs.sort()
@@ -319,26 +340,84 @@ def _load_baseline_cache(key):
         return None
     if payload.get("key") != key:
         return None
-    if time.time() - float(payload.get("created_at", 0)) > _BASELINE_MAX_AGE_S:
+    if _BASELINE_MAX_AGE_S and time.time() - float(payload.get("created_at", 0)) > _BASELINE_MAX_AGE_S:
         return None
-    if int(payload.get("uses", 0)) >= _BASELINE_REFRESH_EVERY:
+    if _BASELINE_REFRESH_EVERY and int(payload.get("uses", 0)) >= _BASELINE_REFRESH_EVERY:
         return None
     return payload if payload.get("lines") else None
 
 
-def _save_baseline_cache(key, lines, uses=0):
+def _save_baseline_cache(key, lines, uses=0, meta=None):
     try:
         os.makedirs(_BASELINE_CACHE_DIR, exist_ok=True)
         path = _baseline_cache_path(key)
         tmp = path + ".tmp"
         with open(tmp, "w", encoding="utf-8") as handle:
             json.dump(
-                {"key": key, "created_at": time.time(), "uses": uses, "lines": lines},
+                {"key": key, "created_at": time.time(), "uses": uses,
+                 "lines": lines, "meta": meta or {}},
                 handle,
             )
         os.replace(tmp, path)
     except OSError as exc:
         print(f"[cca5] baseline cache write failed: {exc}", flush=True)
+
+
+def _aggregate_baseline_lines(samples):
+    """Reduce repeated baseline measurements to per-(algorithm, trace) medians.
+
+    Returns ``(lines, meta)`` where ``lines`` are CSV rows holding the median of
+    each numeric field and ``meta`` records the sample count and standard
+    deviation so the score log can show how stable the reference is.
+    """
+    grouped = {}
+    for lines in samples:
+        for line in lines:
+            fields = line.split(",")
+            key = (fields[0].strip(), fields[1].strip())
+            grouped.setdefault(key, []).append([float(x) for x in fields[2:]])
+
+    out_lines = []
+    meta = {}
+    for (algo, trace), values in sorted(grouped.items()):
+        n = len(values)
+        fields = []
+        spreads = []
+        for col in range(len(values[0])):
+            column = sorted(v[col] for v in values)
+            fields.append(statistics.median(column))
+            spreads.append(statistics.pstdev(column) if n > 1 else 0.0)
+        out_lines.append(",".join(
+            [algo, trace] + [f"{fields[0]:.8f}"] + [f"{v:.3f}" for v in fields[1:]]
+        ))
+        meta[f"{algo}/{trace}"] = {"n": n, "median": fields, "sd": spreads}
+    return out_lines, meta
+
+
+def _expected_trace_count():
+    """Number of trace scenarios the replay script will run for _NETWORK."""
+    if _NETWORK == "wan":
+        return 1
+    trace_dir = _cca5("bin", "traces", _NETWORK)
+    try:
+        names = [n for n in sorted(os.listdir(trace_dir))
+                 if os.path.isfile(os.path.join(trace_dir, n))]
+    except OSError:
+        return 0
+    if _NETWORK == "satellite":
+        return len([n for n in names if n.endswith(".csv")])
+    # cellular: paired traces use *.down as the scenario label
+    micro = [n for n in names if n.endswith((".csv", ".down"))]
+    return len(micro)
+
+
+def _count_baseline_traces(content):
+    traces = set()
+    for line in content.splitlines():
+        fields = line.strip().split(",")
+        if len(fields) == 7 and fields[0].strip() in _BASELINE_ALGOS:
+            traces.add(fields[1].strip())
+    return traces
 
 
 def _extract_baseline_lines(output_csv):
@@ -527,6 +606,18 @@ def _score(results_dir):
     if llmgen_rows == 0:
         return None, "no llmgen rows in output.csv -- every trace run failed"
 
+    # A partial run must not be scored as if it were complete: a candidate that
+    # only completes the easy traces would otherwise look better than one that
+    # completes all of them.
+    expected_traces = _expected_trace_count()
+    if expected_traces and llmgen_rows < expected_traces:
+        return None, (f"incomplete candidate coverage: {llmgen_rows}/"
+                      f"{expected_traces} traces produced a row")
+    baseline_traces = _count_baseline_traces(output_csv)
+    if expected_traces and len(baseline_traces) < expected_traces:
+        return None, (f"incomplete baseline coverage: {len(baseline_traces)}/"
+                      f"{expected_traces} traces")
+
     # Without fairness evidence the score would silently drop the fairness
     # penalty, which is not the CCA5 objective. Treat it as a harness failure so
     # it is visible rather than quietly inflating the candidate's score.
@@ -542,6 +633,7 @@ def _score(results_dir):
         fairness_content=fairness_csv or None,
         convergence_content=convergence_csv or None,
         filename_prefix="cca_generated",
+        require_convergence=True,
     )
     run = llm_runs[0]
     fairness_metrics = _fairness_diagnostics(
@@ -624,8 +716,9 @@ def _evaluate_locked(source):
             handle.write(source)
         baseline_key = _baseline_cache_key()
         cached_baselines = _load_baseline_cache(baseline_key)
-        algos = _LLMGEN_ONLY if cached_baselines else _ALGOS
-        with open(os.path.join(results_dir, "output.csv"), "w", encoding="utf-8") as handle:
+        algos = _LLMGEN_ONLY
+        output_csv_path = os.path.join(results_dir, "output.csv")
+        with open(output_csv_path, "w", encoding="utf-8") as handle:
             handle.write(_OUTPUT_HEADER)
             if cached_baselines:
                 for line in cached_baselines["lines"]:
@@ -654,6 +747,45 @@ def _evaluate_locked(source):
             trace_script = (
                 "run_tc.sh" if _NETWORK in ("wan", "satellite") else "run_evaluation.sh"
             )
+            if not cached_baselines:
+                samples = []
+                for rep in range(_BASELINE_REPEATS):
+                    rep_dir = os.path.join(work_dir, f"baseline_{rep}")
+                    os.makedirs(rep_dir, exist_ok=True)
+                    os.chmod(rep_dir, 0o777)
+                    rep_env = dict(os.environ, CCA_DIR=cca_dir, RESULTS_DIR=rep_dir)
+                    _run(
+                        [
+                            "bash",
+                            _cca5(trace_script),
+                            _CANDIDATE_FILENAME,
+                            " ".join(_BASELINE_ALGOS),
+                            _APP_TYPE,
+                            _NETWORK,
+                            _DATA_SIZE,
+                            _DURATION,
+                        ],
+                        env=rep_env,
+                        timeout=_TRACE_TIMEOUT_S,
+                        label=f"baseline replay {rep + 1}/{_BASELINE_REPEATS}",
+                    )
+                    samples.append(_extract_baseline_lines(
+                        _read_text(os.path.join(rep_dir, "output.csv"))
+                    ))
+
+                median_lines, meta = _aggregate_baseline_lines(samples)
+                if not median_lines:
+                    return _failure("baseline measurement produced no rows",
+                                    f"{len(samples)} repeats, all empty")
+                with open(output_csv_path, "a", encoding="utf-8") as handle:
+                    for line in median_lines:
+                        handle.write(line + "\n")
+                _save_baseline_cache(baseline_key, median_lines, uses=0, meta=meta)
+                print(
+                    f"[cca5] baselines: measured {_BASELINE_REPEATS}x, pinned median "
+                    f"({len(median_lines)} rows)", flush=True,
+                )
+
             trace_run = _run(
                 [
                     "bash",
@@ -673,24 +805,13 @@ def _evaluate_locked(source):
             if cached_baselines:
                 cached_baselines["uses"] = int(cached_baselines.get("uses", 0)) + 1
                 _save_baseline_cache(
-                    baseline_key, cached_baselines["lines"], uses=cached_baselines["uses"]
+                    baseline_key, cached_baselines["lines"],
+                    uses=cached_baselines["uses"], meta=cached_baselines.get("meta"),
                 )
                 print(
-                    f"[cca5] baselines: reused cache ({len(cached_baselines['lines'])} rows, "
-                    f"use {cached_baselines['uses']}/{_BASELINE_REFRESH_EVERY})",
-                    flush=True,
+                    f"[cca5] baselines: pinned library reused "
+                    f"({len(cached_baselines['lines'])} rows)", flush=True,
                 )
-            else:
-                fresh_baselines = _extract_baseline_lines(
-                    _read_text(os.path.join(results_dir, "output.csv"))
-                )
-                if fresh_baselines:
-                    _save_baseline_cache(baseline_key, fresh_baselines, uses=0)
-                    print(
-                        f"[cca5] baselines: measured and cached "
-                        f"({len(fresh_baselines)} rows)",
-                        flush=True,
-                    )
 
             # Reuse the binaries the trace run just built.
             fairness_run = _run(

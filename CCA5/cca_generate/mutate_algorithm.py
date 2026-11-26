@@ -385,8 +385,14 @@ def calc_convergence_penalty(convergence_rows):
 
     return sum(penalties) / len(penalties)
 
-def apply_external_metric_penalties(llm_runs, fairness_content=None, convergence_content=None, filename_prefix="cca_generated"):
-    """Apply fairness/convergence penalties to final mutation-selection scores."""
+def apply_external_metric_penalties(llm_runs, fairness_content=None, convergence_content=None, filename_prefix="cca_generated", require_convergence=False):
+    """Apply fairness/convergence penalties to final mutation-selection scores.
+
+    ``require_convergence`` makes a missing convergence log cost
+    ``MISSING_CONVERGENCE_EVIDENCE_PENALTY`` instead of scoring as if there were
+    nothing to penalise; the evaluator always sets it because the harness is
+    expected to emit convergence_summary.csv for every run.
+    """
     fairness_has_rows = csv_has_data_rows(fairness_content)
     convergence_has_rows = csv_has_data_rows(convergence_content)
 
@@ -411,6 +417,8 @@ def apply_external_metric_penalties(llm_runs, fairness_content=None, convergence
                 run["convergence_penalty"] = calc_convergence_penalty(convergence_rows)
             else:
                 run["convergence_penalty"] = MISSING_CONVERGENCE_EVIDENCE_PENALTY
+        elif require_convergence:
+            run["convergence_penalty"] = MISSING_CONVERGENCE_EVIDENCE_PENALTY
 
         run["score"] = (
             run["base_score"]
